@@ -3,6 +3,8 @@ import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 
+const isDevelopment = process.env.NODE_ENV !== "production";
+
 const config = {
   target: "web",
   resolve: {
@@ -30,6 +32,13 @@ const config = {
         test: /\.(ts|js)x?$/,
         exclude: /node_modules/,
         loader: "babel-loader",
+        options: {
+          // ... other options
+          plugins: [
+            // ... other plugins
+            isDevelopment && require.resolve("react-refresh/babel"),
+          ].filter(Boolean),
+        },
       },
       {
         test: /\.svg($|\?)/,

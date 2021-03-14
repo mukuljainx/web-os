@@ -1,5 +1,4 @@
-// import webpack from "webpack";
-// import path from "path";
+const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
 import merge from "webpack-merge";
 // @ts-ignore
 import common from "./webpack.common";
@@ -9,6 +8,7 @@ const config = {
   entry: ["./src/index"],
   target: "web",
   devtool: "eval-cheap-module-source-map",
+  plugins: [new ReactRefreshWebpackPlugin()],
   devServer: {
     before: (app: any) => {
       app.use("*", (__: any, res: any, next: any) => {
