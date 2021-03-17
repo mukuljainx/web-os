@@ -55,20 +55,20 @@ const config = {
       },
       {
         test: /\.(png|jpg|gif)($|\?)/,
-        use: [
-          {
-            loader: "file-loader",
-            options: {
-              limit: 65000,
-            },
-          },
-        ],
+        loader: "url-loader",
+        options: {
+          limit: 8192,
+        },
       },
       {
-        test: /\.css?/,
+        test: /\.(sa|sc|c)ss$/,
         use: [
-          { loader: "style-loader", options: { esModule: true } },
+          // Creates `style` nodes from JS strings
+          "style-loader",
+          // Translates CSS into CommonJS
           "css-loader",
+          // Compiles Sass to CSS
+          "sass-loader",
         ],
       },
     ],

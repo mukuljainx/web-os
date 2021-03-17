@@ -1,0 +1,15 @@
+.icon {
+  position: relative;
+  cursor: pointer;
+  z-index: 40;
+}
+
+.icon__label {
+  color: var(--icon-text-color);
+  text-shadow: 2px 2px var(--icon-text-shadow);
+  margin: 0;
+}
+
+.icon__image {
+  -webkit-user-drag: none;
+}
