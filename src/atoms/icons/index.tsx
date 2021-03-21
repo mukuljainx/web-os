@@ -11,17 +11,21 @@ type IProps = ReactHTMLElement<
     type: IconType;
     name: IconName;
     label?: string;
+    innnerRef: any;
   }
 >;
 
 export const sizeChart = { DESKTOP: 64 };
 
-const Icon = ({ type, name, label, ...rest }: IProps) => {
+const Icon = ({ type, name, label, innnerRef, ...rest }: IProps) => {
   if (type === "DESKTOP") {
     return (
       <div
         {...rest}
-        className="inline-flex flex-column horizontal-center column-center icon"
+        ref={innnerRef}
+        className={`inline-flex flex-column horizontal-center column-center icon ${
+          rest.className || ""
+        }`}
       >
         <Image name={name} size={sizeChart["DESKTOP"]} />
         <Label name={label || ""} />

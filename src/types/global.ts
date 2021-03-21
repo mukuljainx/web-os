@@ -6,6 +6,8 @@ export {};
  * Before merging every keys in S will be removed from JSX.IntrinsicElements
  */
 declare global {
+  type Noop = () => void;
+
   type ReactHTMLElement<T extends keyof JSX.IntrinsicElements, S> = Omit<
     JSX.IntrinsicElements[T],
     keyof S

@@ -1,19 +1,20 @@
 import * as React from "react";
-import Icon from "icons";
 
+import IconLayout from "molecules/iconLayout";
 import "./desktop.scss";
 
 const Desktop = () => {
   return (
     <div
       style={{
+        // this should be from redux "display" state
         backgroundImage: `url(${
           require("display/wallpaper/default.jpg").default
         })`,
       }}
       className="desktop"
     >
-      <Icon draggable name="folder" type="DESKTOP" label="Applications" />
+      <IconLayout></IconLayout>
     </div>
   );
 };
