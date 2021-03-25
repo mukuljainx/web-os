@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import IconLayout from "molecules/iconLayout";
+import Folder from "molecules/folder";
 import "./desktop.scss";
 
 const Desktop = () => {
@@ -14,7 +14,7 @@ const Desktop = () => {
       }}
       className="desktop"
     >
-      <IconLayout></IconLayout>
+      <Folder />
     </div>
   );
 };
