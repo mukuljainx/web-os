@@ -3,12 +3,28 @@
   z-index: 40;
 }
 
+.icon__image {
+  -webkit-user-drag: none;
+  margin-bottom: 2px;
+  padding: 2px;
+}
+
+.icon--focus {
+  .icon__image {
+    // margin-bottom: 2px;
+    padding: 0px;
+    border-radius: 4px;
+    border: 2px solid var(--icon-border-color);
+  }
+  .icon__label {
+    background: var(--icon-text-background);
+  }
+}
+
 .icon__label {
   color: var(--icon-text-color);
   text-shadow: 2px 2px var(--icon-text-shadow);
   margin: 0;
-}
-
-.icon__image {
-  -webkit-user-drag: none;
+  padding: 2px 8px;
+  border-radius: 4px;
 }

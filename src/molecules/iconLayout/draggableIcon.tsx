@@ -2,26 +2,62 @@ import * as React from "react";
 
 import useStore from "./store";
 import Icon from "atoms/icons";
-import { MoveHandler } from ".";
+import { ElementHandler } from "./interfaces";
 
 interface IProps {
-  onDragStart: (params: { move: MoveHandler; stop: Noop }) => void;
+  onDragStart: ElementHandler;
+  id: string;
 }
 
-const DraggableIcon = ({ onDragStart }: IProps) => {
-  const store = useStore();
+/**
+ *
+ * Icon interactions, taken from Mac OS
+ *
+ * Case 1
+ * User clicks the icon and drags it
+ * focus: true
+ * `focus` will remain `true` until user
+ * clicks on another icon or anywhere
+ *
+ * Case 2
+ * User selects multiple Icons using cmd or ctrl
+ * and drags them
+ * focus: true
+ * `focus` behavoir same as case 1
+ *
+ */
+
+const DraggableIcon = ({ onDragStart, id }: IProps) => {
+  const store = useStore(id);
   const element = React.useRef(null);
 
-  const handleMouseDown = React.useCallback(({ clientX, clientY }) => {
-    const icon = element.current! as HTMLDivElement;
-    if (icon) {
-      store.start({
-        x: clientX,
-        y: clientY,
-      });
+  const handleMouseDown = React.useCallback((event: React.MouseEvent) => {
+    event.stopPropagation();
+    let multiple = false;
+    if (event.ctrlKey || event.metaKey) {
+      multiple = true;
     }
 
-    onDragStart({ move: store.move, stop: store.stop });
+    // store.start({
+    //   x: event.clientX,
+    //   y: event.clientY,
+    // });
+
+    onDragStart({
+      // for singal element we can start from here
+      // but for other start should be reset using the
+      // last element picked
+      coordinates: {
+        x: event.clientX,
+        y: event.clientY,
+      },
+      start: store.start,
+      move: store.move,
+      stop: store.stop,
+      unselect: store.unselect,
+      multiple,
+      id,
+    });
   }, []);
 
   return (
@@ -30,11 +66,11 @@ const DraggableIcon = ({ onDragStart }: IProps) => {
         transform: `translate(${store.state.translate.x}px, ${store.state.translate.y}px)`,
       }}
       innnerRef={element}
-      className="p-absolute"
+      className={`${store.state.selected ? "icon--focus" : ""}`}
       onMouseDown={handleMouseDown}
       name="folder"
       type="DESKTOP"
-      label="Applications"
+      label={`Applications ${id}`}
     />
   );
 };
