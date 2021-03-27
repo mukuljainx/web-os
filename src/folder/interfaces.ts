@@ -1,5 +1,12 @@
-// folder structure
+// everything is a file
+// folder is a special file
+// it's start with a root directory which can have
+// users and other stuff
+// user will have Desktop, Applications, Settings etc.
+// base file (root) will behave as base for OS to run
 export interface IFile {
+  parent: string | null;
+  id: string;
   // current path
   path: string;
   // is copy/duplicate of
@@ -9,13 +16,5 @@ export interface IFile {
   // useful for drag files/folder into folder
   // default behavoiur of opening other layout
   isFolder: boolean;
-}
-
-// everything is a folder
-// it's start with a root directory which can have
-// users and other stuff
-// user will have Desktop, Applications, Settings etc.
-// Folder will behave as base for OS to run
-export interface IFolder extends IFile {
-  children: IFile[];
+  files?: IFile[];
 }
