@@ -1,0 +1,19 @@
+.auth__button {
+  &:not(:last-child) {
+    margin-right: 40px;
+  }
+  cursor: pointer;
+}
+
+.auth__button__image {
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  background: white;
+}
+
+.auth__button__text {
+  text-transform: capitalize;
+  color: var(--icon-text-color);
+  text-shadow: var(--icon-text-shadow);
+}

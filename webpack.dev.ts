@@ -5,25 +5,19 @@ import common from "./webpack.common";
 
 const config = {
   mode: "development",
+  output: {
+    publicPath: "/",
+  },
   entry: ["./src/index"],
   target: "web",
   devtool: "eval-cheap-module-source-map",
   plugins: [new ReactRefreshWebpackPlugin()],
   devServer: {
-    before: (app: any) => {
-      app.use("*", (__: any, res: any, next: any) => {
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header(
-          "Access-Control-Allow-Headers",
-          "Origin, X-Requested-With, Content-Type, Accept"
-        );
-        next();
-      });
-    },
     clientLogLevel: "warning",
     port: 4444,
     stats: "minimal",
     hot: true,
+    historyApiFallback: true,
   },
 };
 

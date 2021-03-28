@@ -8,11 +8,12 @@ const Desktop = () => {
     <div
       style={{
         // this should be from redux "display" state
+        //// <a href='https://www.freepik.com/photos/abstract'>Abstract photo created by wirestock - www.freepik.com</a>
         backgroundImage: `url(${
           require("display/wallpaper/default.jpg").default
         })`,
       }}
-      className="desktop"
+      className="image-cover"
     >
       <Folder />
     </div>
