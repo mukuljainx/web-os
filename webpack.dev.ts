@@ -13,7 +13,7 @@ const config = {
   devtool: "eval-cheap-module-source-map",
   plugins: [new ReactRefreshWebpackPlugin()],
   devServer: {
-    clientLogLevel: "warning",
+    clientLogLevel: "error",
     port: 4444,
     stats: "minimal",
     hot: true,

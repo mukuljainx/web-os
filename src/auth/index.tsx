@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import Input from "atoms/input";
 import "./auth.scss";
 
 const Auth = () => {
@@ -40,6 +41,12 @@ const Auth = () => {
             >
               <div className="auth__button__image"></div>
               <p className="auth__button__text">{action}</p>
+              <Input
+                withForm
+                onSubmit={(value) => {
+                  console.log(value);
+                }}
+              />
             </div>
           ))}
         </div>
