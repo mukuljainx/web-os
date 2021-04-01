@@ -1,23 +1,14 @@
 import * as React from "react";
+import { useTransition, animated } from "react-spring";
 
-import Input from "atoms/input";
 import "./auth.scss";
 
 const Auth = () => {
-  const actions = ["login", "signup", "guest"] as const;
-  const [selected, setSelected] = React.useState<typeof actions[number] | null>(
-    null
-  );
-
-  const filteredActions = actions.filter((a) =>
-    selected ? a === selected : true
-  );
-
-  const handleActionClick = (event: React.MouseEvent) => {
-    setSelected(
-      event.currentTarget.getAttribute("data-id") as typeof actions[number]
-    );
-  };
+  const transitions = useTransition(items, (item) => item.key, {
+    from: { transform: "translate3d(0,-40px,0)" },
+    enter: { transform: "translate3d(0,0px,0)" },
+    leave: { transform: "translate3d(0,-40px,0)" },
+  });
 
   return (
     <div
@@ -32,22 +23,10 @@ const Auth = () => {
     >
       <div className="flex vertical-center horizontal-center auth h-100">
         <div className="flex">
-          {filteredActions.map((action) => (
-            <div
-              data-id={action}
-              className="auth__button flex flex-column vertical-center"
-              key={action}
-              onClick={handleActionClick}
-            >
-              <div className="auth__button__image"></div>
-              <p className="auth__button__text">{action}</p>
-              <Input
-                withForm
-                onSubmit={(value) => {
-                  console.log(value);
-                }}
-              />
-            </div>
+          {transitions.map(({ item, props, key }) => (
+            <animated.div key={key} style={props}>
+              {item.text}
+            </animated.div>
           ))}
         </div>
       </div>

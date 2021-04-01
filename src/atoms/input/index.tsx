@@ -2,7 +2,7 @@ import MaterialIcon from "atoms/materialIcon";
 import * as React from "react";
 import styled from "styled-components";
 
-const Button = styled.button`
+export const Button = styled.button`
   background: none;
   border: 1px solid;
   position: absolute;
@@ -14,6 +14,9 @@ const Button = styled.button`
     height: ${input.height - 4}px;
     width: ${input.height - 4}px;
   `}
+  &:focus {
+    outline: none;
+  }
 `;
 
 const InputWrapper = styled.div`
