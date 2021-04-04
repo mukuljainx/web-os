@@ -4,12 +4,13 @@ import styled from "styled-components";
 
 export const Button = styled.button`
   background: none;
-  border: 1px solid;
   position: absolute;
   right: 2px;
   top: 2px;
   padding: 1px 0;
   ${({ theme: { input } }) => `
+    border: 2px solid ${input.actionButton.color};
+    color: ${input.actionButton.color};
     border-radius: ${input.actionButton.borderRadius};
     height: ${input.height - 4}px;
     width: ${input.height - 4}px;
@@ -64,7 +65,7 @@ const Input = ({ withForm, onSubmit, ...props }: IProps) => {
       <input {...props}></input>
       {withForm && (
         <Button type="submit">
-          <MaterialIcon type="round" name="east" />
+          <MaterialIcon size={14} bold type="two-tone" name="east" />
         </Button>
       )}
     </InputWrapper>

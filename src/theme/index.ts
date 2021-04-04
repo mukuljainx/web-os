@@ -11,6 +11,7 @@ const theme = {
     fontSize: 14,
     actionButton: {
       borderRadius: "50%",
+      color: "white",
     },
   },
 };
