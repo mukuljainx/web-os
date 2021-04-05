@@ -1,12 +1,14 @@
 import * as React from "react";
 import styled from "styled-components";
 import { useSpring, animated } from "react-spring";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Redirect } from "react-router-dom";
 
 import Input, { Button } from "atoms/input";
 import MaterialIcon from "atoms/materialIcon";
 import If from "atoms/If";
 import { guestAccess } from "auth/store";
+import { RootState } from "store";
 
 const BackButton = styled(Button)`
   position: static;
@@ -46,6 +48,7 @@ const ActionWrapper = styled(animated.div)<{ $show: boolean }>`
 const Auth = () => {
   const actions = ["login", "signup", "guest"] as const;
   const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.auth.user);
   const [selected, setSelected] = React.useState<typeof actions[number] | null>(
     null
   );
@@ -66,6 +69,10 @@ const Auth = () => {
       x.start({ from: 0, to: -242 });
     }
   }, [selected]);
+
+  if (user) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <div

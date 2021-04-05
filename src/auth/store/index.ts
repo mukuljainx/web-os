@@ -11,17 +11,23 @@ interface IAuthState {
   };
 }
 
-const initialState: IAuthState = {};
+const initialState: IAuthState = {
+  user: localStorage.getItem("user")
+    ? JSON.parse(localStorage.getItem("user")!)
+    : undefined,
+};
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
     guestAccess(state, action: PayloadAction<string>) {
-      state.user = {
+      const user = {
         name: action.payload,
         guest: true,
       };
+      localStorage.setItem("user", JSON.stringify(user));
+      state.user = user;
     },
   },
 });
