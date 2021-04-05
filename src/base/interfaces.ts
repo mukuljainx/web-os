@@ -18,3 +18,8 @@ export interface IFile {
   isFolder: boolean;
   files?: IFile[];
 }
+
+export interface IFolderRoutes {
+  path: string;
+  files: IFile[];
+}

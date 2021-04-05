@@ -7,8 +7,11 @@ import { ThemeProvider } from "styled-components";
 import "theme/index.scss";
 import store from "store";
 import theme from "theme";
-// import Desktop from "desktop";
 import Auth from "auth";
+import Base from "base";
+
+Switch;
+Route;
 
 const App = () => {
   return (
@@ -17,6 +20,7 @@ const App = () => {
         <Router>
           <Switch>
             <Route path="/auth" component={Auth} />
+            <Route path="/" component={Base} />
           </Switch>
         </Router>
       </ThemeProvider>

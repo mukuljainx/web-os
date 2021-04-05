@@ -19,7 +19,7 @@ export const initialState: IState = {
         id: "system",
         isFolder: true,
         name: "System",
-        path: "/system",
+        path: "/System",
         files: [],
       },
       {
@@ -28,16 +28,7 @@ export const initialState: IState = {
         id: "system",
         isFolder: true,
         name: "Applications",
-        path: "/system",
-        files: [],
-      },
-      {
-        parent: "/",
-        icon: "system",
-        id: "system",
-        isFolder: true,
-        name: "System",
-        path: "/System",
+        path: "/Applications",
         files: [],
       },
       {
@@ -49,7 +40,7 @@ export const initialState: IState = {
         path: "/Users",
         files: [
           {
-            parent: "/users",
+            parent: "/Users",
             icon: "home",
             id: "home",
             isFolder: true,
@@ -57,7 +48,7 @@ export const initialState: IState = {
             path: "/Users/${user}",
             files: [
               {
-                parent: "/users/${user}",
+                parent: "/Users/${user}",
                 icon: "desktop",
                 id: "desktop",
                 isFolder: true,
@@ -65,7 +56,7 @@ export const initialState: IState = {
                 path: "/Users/${user}/Desktop",
                 files: [
                   {
-                    parent: "/users/${user}/Dekstop",
+                    parent: "/Users/${user}/Desktop",
                     icon: "generic",
                     id: "desktop-1",
                     isFolder: true,
@@ -74,7 +65,7 @@ export const initialState: IState = {
                     files: [],
                   },
                   {
-                    parent: "/users/${user}/Dekstop",
+                    parent: "/Users/${user}/Desktop",
                     icon: "generic",
                     id: "desktop-2",
                     isFolder: true,
@@ -93,8 +84,7 @@ export const initialState: IState = {
 };
 
 export const actionCreators = {
-  getProblemsStarted: () => (state: IState) => ({
+  sampleAction: () => (state: IState): IState => ({
     ...state,
-    loading: true,
   }),
 };
