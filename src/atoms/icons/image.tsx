@@ -1,18 +1,31 @@
 import * as React from "react";
-import { IconName } from "./types";
+
+// this will be generated
+const availableIcons = new Set([
+  "desktop",
+  "folder",
+  "library",
+  "music",
+  "system",
+  "user",
+]);
 
 interface IProps {
-  name: IconName;
+  name: string;
   size: number;
 }
 
 const Image = ({ name, size }: IProps) => {
+  let iconName = "generic";
+  if (availableIcons.has(name)) {
+    iconName = name;
+  }
   return (
     <img
       height={size}
       width={size}
       className="icon__image"
-      src={require(`./assets/${name}.png`).default}
+      src={require(`./assets/${iconName}.png`).default}
     />
   );
 };

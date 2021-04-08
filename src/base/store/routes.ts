@@ -1,11 +1,11 @@
-import { IFile } from "./interfaces";
+import { IFile } from "../interfaces";
 
-interface IState {
-  root: IFile;
-}
+// interface IState {
+//   root: IFile;
+// }
 
-export const initialState: IState = {
-  root: {
+export const getDefaultRoutes = (): IFile[] => [
+  {
     parent: null,
     icon: "root",
     id: "root",
@@ -24,8 +24,8 @@ export const initialState: IState = {
       },
       {
         parent: "/",
-        icon: "system",
-        id: "system",
+        icon: "applications",
+        id: "applications",
         isFolder: true,
         name: "Applications",
         path: "/Applications",
@@ -81,10 +81,4 @@ export const initialState: IState = {
       },
     ],
   },
-};
-
-export const actionCreators = {
-  sampleAction: () => (state: IState): IState => ({
-    ...state,
-  }),
-};
+];

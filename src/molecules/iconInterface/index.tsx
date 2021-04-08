@@ -1,17 +1,34 @@
+import styled from "styled-components";
 import * as React from "react";
 
-import DraggableIcon from "./draggableIcon";
+import DraggableIcon from "./DraggableIcon";
 import { MoveHandler, ElementHandler } from "./interfaces";
+import { IFile } from "base/interfaces";
+import { interpolate } from "utils/string";
+import { getPath } from "base/helper";
+import { isInside } from "utils/dom";
 
-interface IProps {}
+const Wrapper = styled.div`
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+`;
 
-const IconLayout = ({}: IProps) => {
+interface IProps {
+  files: IFile[];
+  user: string;
+  fileAction?: (path: string) => void;
+}
+
+const IconLayout = ({ files, user, fileAction }: IProps) => {
   const dragging = React.useRef<
     Map<
       string,
       { move: MoveHandler; stop: Noop; unselect: Noop; start: MoveHandler }
     >
   >(new Map());
+
+  const wrapperRef = React.useRef<HTMLDivElement>(null);
 
   const handleItemDragStart = React.useCallback<ElementHandler>(
     ({ multiple, id, coordinates, ...elementHandler }) => {
@@ -49,10 +66,15 @@ const IconLayout = ({}: IProps) => {
   );
 
   const handleMouseMove = React.useCallback(({ clientX, clientY }) => {
+    if (!isInside(wrapperRef, { x: clientX, y: clientY })) {
+      handleMouseDown();
+      return;
+    }
     dragging.current.forEach(({ move }) => {
       move({ x: clientX, y: clientY });
     });
   }, []);
+
   const handleMouseUp = React.useCallback(() => {
     dragging.current.forEach((elementHandle) => {
       elementHandle.stop();
@@ -62,8 +84,9 @@ const IconLayout = ({}: IProps) => {
   }, []);
 
   const handleMouseDown = React.useCallback(() => {
-    dragging.current.forEach(({ unselect }) => {
+    dragging.current.forEach(({ unselect, stop }) => {
       unselect();
+      stop();
     });
     dragging.current.clear();
   }, []);
@@ -76,13 +99,39 @@ const IconLayout = ({}: IProps) => {
       window.removeEventListener("mouseup", handleMouseUp);
       window.removeEventListener("mousedown", handleMouseDown);
     };
-  });
+  }, []);
+
+  React.useEffect(() => {
+    // on each files change this component remains mounted
+    // but sometimes it may keep a ref to a fucntion in dragging ref
+    dragging.current.clear();
+  }, [files]);
 
   return (
-    <div>
-      <DraggableIcon key={1} id="1" onDragStart={handleItemDragStart} />
-      <DraggableIcon key={2} id="2" onDragStart={handleItemDragStart} />
-    </div>
+    <Wrapper data-id="icon-interface" ref={wrapperRef}>
+      {files.map((file) => {
+        const fileName = interpolate(file.name, { user });
+        const path = getPath(file, user);
+        return (
+          <DraggableIcon
+            onDoubleClick={() => {
+              fileAction
+                ? fileAction(path)
+                : window.os.openApp({
+                    id: "folder",
+                    name: "folder",
+                    sleepTimeout: 1000,
+                    data: { path },
+                  });
+            }}
+            icon={{ name: file.icon, label: fileName, path }}
+            key={file.id}
+            id={file.id}
+            onDragStart={handleItemDragStart}
+          />
+        );
+      })}
+    </Wrapper>
   );
 };
 

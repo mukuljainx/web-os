@@ -9,11 +9,19 @@ import store from "store";
 import theme from "theme";
 import Auth from "auth";
 import Base from "base";
-
-Switch;
-Route;
+import { openApp } from "base/store";
 
 const App = () => {
+  // move to more apporpiate place
+  React.useEffect(() => {
+    window.os = {
+      ...window.os,
+      openApp: (params) => {
+        store.dispatch(openApp(params));
+        // store.
+      },
+    };
+  }, []);
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>

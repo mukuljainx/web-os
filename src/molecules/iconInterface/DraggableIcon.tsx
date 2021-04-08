@@ -4,10 +4,18 @@ import useStore from "./store";
 import Icon from "atoms/icons";
 import { ElementHandler } from "./interfaces";
 
-interface IProps {
-  onDragStart: ElementHandler;
-  id: string;
-}
+type IProps = ReactHTMLElement<
+  "div",
+  {
+    onDragStart: ElementHandler;
+    id: string;
+    icon: {
+      name: string;
+      path: string;
+      label: string;
+    };
+  }
+>;
 
 /**
  *
@@ -27,7 +35,7 @@ interface IProps {
  *
  */
 
-const DraggableIcon = ({ onDragStart, id }: IProps) => {
+const DraggableIcon = ({ onDragStart, id, icon, ...rest }: IProps) => {
   const store = useStore(id);
   const element = React.useRef(null);
 
@@ -37,11 +45,6 @@ const DraggableIcon = ({ onDragStart, id }: IProps) => {
     if (event.ctrlKey || event.metaKey) {
       multiple = true;
     }
-
-    // store.start({
-    //   x: event.clientX,
-    //   y: event.clientY,
-    // });
 
     onDragStart({
       // for singal element we can start from here
@@ -62,15 +65,16 @@ const DraggableIcon = ({ onDragStart, id }: IProps) => {
 
   return (
     <Icon
+      {...rest}
       style={{
         transform: `translate(${store.state.translate.x}px, ${store.state.translate.y}px)`,
       }}
       innnerRef={element}
       className={`${store.state.selected ? "icon--focus" : ""}`}
       onMouseDown={handleMouseDown}
-      name="folder"
+      name={icon.name}
       type="DESKTOP"
-      label={`Applications ${id}`}
+      label={icon.label}
     />
   );
 };

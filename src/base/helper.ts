@@ -7,13 +7,17 @@ export const getPath = (file: IFile, user: string) => {
 };
 
 export const getRoutes = (root: IFile, user: string): IFolderRoutes[] => {
-  let routes: IFolderRoutes[] = [];
-  root.files!.forEach((file: IFile) => {
-    if (file.isFolder) {
-      routes.push({ path: getPath(file, user), files: file.files! });
-      routes.push(...getRoutes(file, user));
-    }
-  });
+  const inner = (root: IFile, user: string) => {
+    let routes: IFolderRoutes[] = [];
+    root.files!.forEach((file: IFile) => {
+      if (file.isFolder) {
+        routes.push({ path: getPath(file, user), files: file.files!, file });
+        routes.push(...inner(file, user));
+      }
+    });
 
-  return routes;
+    return routes;
+  };
+
+  return [...inner(root, user), { path: "/", file: root, files: root.files! }];
 };

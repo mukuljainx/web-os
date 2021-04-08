@@ -22,4 +22,16 @@ export interface IFile {
 export interface IFolderRoutes {
   path: string;
   files: IFile[];
+  file: IFile;
+}
+
+export interface IApp {
+  id: string;
+  name: string;
+  sleepTimeout: number;
+  data: Record<string, any>;
+}
+
+export interface IAppGroup extends Pick<IApp, "id" | "name"> {
+  instances: IApp[];
 }

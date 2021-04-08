@@ -3,13 +3,13 @@ import * as React from "react";
 import "./icons.scss";
 import Image from "./image";
 import Label from "./label";
-import { IconName, IconType } from "./types";
+import { IconType } from "./types";
 
 type IProps = ReactHTMLElement<
   "div",
   {
     type: IconType;
-    name: IconName;
+    name: string;
     label?: string;
     innnerRef: any;
   }
@@ -30,6 +30,7 @@ const Icon = ({ type, name, label, innnerRef, ...rest }: IProps) => {
         <Image name={name} size={sizeChart["DESKTOP"]} />
         <Label name={label || ""} />
       </div>
+      // </Link>
     );
   }
 
