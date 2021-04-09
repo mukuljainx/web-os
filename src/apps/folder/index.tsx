@@ -2,6 +2,13 @@ import * as React from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 
+import SideBar from "./SideBar";
+import TopBar from "./TopBar";
+import Content from "./Content";
+import { getRoutes } from "base/helper";
+import { useHistory } from "utils/hooks/useHistroy";
+import { interpolate } from "utils/string";
+
 const Wrapper = styled.div`
   height: 100%;
 `;
@@ -14,18 +21,12 @@ const Draggable = styled.div`
   background: white;
 `;
 
-// import { IFile } from "base/interfaces";
-import SideBar from "./SideBar";
-import TopBar from "./TopBar";
-import Content from "./Content";
-import { getRoutes } from "base/helper";
-
 interface IProps {
   path: string;
 }
 
 const Folder = ({ path }: IProps) => {
-  const [currentPath, setCurentPath] = React.useState("/");
+  const { getCurrent, push, navigate } = useHistory("/");
   const routesMap = useSelector((state) => state.base.routes);
   const userName = useSelector((state) => state.auth.user!.name);
 
@@ -37,13 +38,23 @@ const Folder = ({ path }: IProps) => {
     [routesMap]
   );
 
-  const currentRoute = routes.find((r) => r.path === currentPath);
+  const currentRoute = routes.find((r) => r.path === getCurrent());
 
-  const fileAction = React.useCallback((path: string) => {
-    setCurentPath(path);
-  }, []);
+  const fileAction = React.useCallback(
+    (path: string) => {
+      console.log({ path });
+      push(interpolate(path, { user: userName }));
+    },
+    [push]
+  );
+  path;
 
-  console.log(path);
+  const previousRoute = React.useCallback(() => {
+    navigate(-1);
+  }, [navigate]);
+  const nextRoute = React.useCallback(() => {
+    navigate(1);
+  }, [navigate]);
 
   if (!currentRoute) {
     throw Error("No matching route");
@@ -54,7 +65,10 @@ const Folder = ({ path }: IProps) => {
       <Wrapper className="flex">
         <SideBar></SideBar>
         <Wrapper className="flex flex-column flex-grow">
-          <TopBar></TopBar>
+          <TopBar
+            onNextClick={nextRoute}
+            onPreviousClick={previousRoute}
+          ></TopBar>
           <Content
             fileAction={fileAction}
             user={userName}

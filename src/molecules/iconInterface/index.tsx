@@ -115,14 +115,16 @@ const IconLayout = ({ files, user, fileAction }: IProps) => {
         return (
           <DraggableIcon
             onDoubleClick={() => {
-              fileAction
-                ? fileAction(path)
-                : window.os.openApp({
-                    id: "folder",
-                    name: "folder",
-                    sleepTimeout: 1000,
-                    data: { path },
-                  });
+              if (fileAction) {
+                fileAction(path);
+              } else {
+                window.os.openApp({
+                  id: "folder",
+                  name: "folder",
+                  sleepTimeout: 1000,
+                  data: { path },
+                });
+              }
             }}
             icon={{ name: file.icon, label: fileName, path }}
             key={file.id}

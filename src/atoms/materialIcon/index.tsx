@@ -7,16 +7,20 @@ const Icon = styled.i<{ size: number; bold?: boolean }>`
   ${({ bold }) => bold && `font-weight: bold`};
 `;
 
-interface IProps {
-  type?: "outlined" | "two-tone" | "round" | "sharp";
-  size?: number;
-  name: IconNameType;
-  bold?: boolean;
-}
+type IProps = ReactHTMLElement<
+  "i",
+  {
+    type?: "outlined" | "two-tone" | "round" | "sharp";
+    size?: number;
+    name: IconNameType;
+    bold?: boolean;
+  }
+>;
 
-const MaterialIcon = ({ size, type, name, bold }: IProps) => {
+const MaterialIcon = ({ size, type, name, bold, ref: __, ...rest }: IProps) => {
   return (
     <Icon
+      {...rest}
       size={size || 16}
       bold={bold}
       className={`material-icons ${type ? "material-icons-" + type : ""}`}
