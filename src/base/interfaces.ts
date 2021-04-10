@@ -3,6 +3,7 @@
 // it's start with a root directory which can have
 // users and other stuff
 // user will have Desktop, Applications, Settings etc.
+
 // base file (root) will behave as base for OS to run
 export interface IFile {
   parent: string | null;
@@ -25,11 +26,19 @@ export interface IFolderRoutes {
   file: IFile;
 }
 
+export type IMetaData = Partial<{
+  mousePosition: {
+    x: number;
+    y: number;
+  };
+}>;
+
 export interface IApp {
   id: string;
   name: string;
   sleepTimeout: number;
   data: Record<string, any>;
+  metaData?: IMetaData;
 }
 
 export interface IAppGroup extends Pick<IApp, "id" | "name"> {

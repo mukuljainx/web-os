@@ -85,14 +85,14 @@ const Auth = () => {
       }}
       className="image-cover"
     >
-      <div className="flex vertical-center horizontal-center auth h-100">
+      <div className="flex align-items-center justify-content-center auth h-100">
         <div className="flex">
           {actions.map((action) => (
             <ActionWrapper
               $show={!selected || selected === action}
               style={action === "guest" ? { x } : {}}
               data-id={action}
-              className="flex flex-column vertical-center"
+              className="flex flex-column align-items-center"
               key={action}
               onClick={handleActionClick}
             >
@@ -101,7 +101,7 @@ const Auth = () => {
                 {action}
               </AuthDisplayString>
               <If condition={selected === "guest" && action === "guest"}>
-                <div className="flex vertical-center">
+                <div className="flex align-items-center">
                   <BackButton onClick={handleBackClick}>
                     <MaterialIcon name="west" bold type="round" size={14} />
                   </BackButton>

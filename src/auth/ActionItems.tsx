@@ -46,7 +46,7 @@ const ActionItems = ({}: IProps) => {
   return filteredActions.map((action) => (
     <div
       data-id={action}
-      className="auth__button flex flex-column vertical-center"
+      className="auth__button flex flex-column align-items-center"
       key={action}
       onClick={handleActionClick}
     >
@@ -55,7 +55,7 @@ const ActionItems = ({}: IProps) => {
         {action}
       </AuthDisplayString>
       <If condition={selected === "guest"}>
-        <div className="flex vertical-center">
+        <div className="flex align-items-center">
           <BackButton onClick={handleBackClick}>
             <MaterialIcon name="west" />
           </BackButton>

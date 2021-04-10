@@ -9,17 +9,15 @@ import store from "store";
 import theme from "theme";
 import Auth from "auth";
 import Base from "base";
-import { openApp } from "base/store";
+import { openApp, closeApp } from "base/store";
 
 const App = () => {
   // move to more apporpiate place
   React.useEffect(() => {
     window.os = {
       ...window.os,
-      openApp: (params) => {
-        store.dispatch(openApp(params));
-        // store.
-      },
+      openApp: (param) => store.dispatch(openApp(param)),
+      closeApp: (param) => store.dispatch(closeApp(param)),
     };
   }, []);
   return (

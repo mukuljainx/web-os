@@ -9,7 +9,7 @@ interface IBaseState {
 
 const initialState: IBaseState = { apps: {}, routes: getDefaultRoutes() };
 
-const authSlice = createSlice({
+const baseSlice = createSlice({
   name: "base",
   initialState,
   reducers: {
@@ -27,10 +27,25 @@ const authSlice = createSlice({
         };
       }
     },
+    closeApp: (
+      state,
+      action: PayloadAction<{ appId: string; instanceId: string }>
+    ) => {
+      const app = state.apps[action.payload.appId];
+      if (!app) {
+        return;
+      }
+
+      if (app.instances.length === 1) {
+        delete state.apps[action.payload.appId];
+      } else {
+        app.instances = app.instances.filter(
+          (instance) => instance.id !== action.payload.instanceId
+        );
+      }
+    },
   },
 });
 
-const { openApp } = authSlice.actions;
-
-export { openApp };
-export default authSlice.reducer;
+export const { openApp, closeApp } = baseSlice.actions;
+export default baseSlice.reducer;

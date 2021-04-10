@@ -23,7 +23,7 @@ const Icon = ({ type, name, label, innnerRef, ...rest }: IProps) => {
       <div
         {...rest}
         ref={innnerRef}
-        className={`inline-flex flex-column horizontal-center vertical-center icon ${
+        className={`inline-flex flex-column justify-content-center align-items-center icon ${
           rest.className || ""
         }`}
       >

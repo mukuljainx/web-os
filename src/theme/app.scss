@@ -52,14 +52,14 @@ html {
 
 .flex,
 .inline-flex {
-  &.horizontal-center {
+  &.justify-content-center {
     justify-content: center;
   }
 }
 
 .flex,
 .inline-flex {
-  &.vertical-center {
+  &.align-items-center {
     align-items: center;
   }
 }

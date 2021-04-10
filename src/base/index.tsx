@@ -6,13 +6,18 @@ import IconInterface from "molecules/iconInterface";
 import { getRoutes } from "base/helper";
 import Desktop from "base/desktop";
 import App from "apps";
+import styled from "styled-components";
 
 interface IProps {}
+
+const Wrapper = styled.div`
+  width: 100%;
+  height: 100%;
+`;
 
 const Base = ({}: IProps) => {
   let user = useSelector((state) => state.auth.user);
   const routesMap = useSelector((state) => state.base.routes);
-
   const openedApps = useSelector((state) => state.base.apps);
 
   if (!user) {
@@ -32,8 +37,17 @@ const Base = ({}: IProps) => {
     [routesMap]
   );
 
+  const wrapperRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    window.os = {
+      ...window.os,
+      wrapper: wrapperRef.current!,
+    };
+  }, []);
+
   return (
-    <>
+    <Wrapper ref={wrapperRef}>
       {Object.values(openedApps).map((app) => {
         return (
           <>
@@ -42,7 +56,9 @@ const Base = ({}: IProps) => {
                 key={instance.id}
                 name={app.name}
                 data={instance.data}
+                appId={app.id}
                 id={instance.id}
+                metaData={instance.metaData!}
               />
             ))}
           </>
@@ -51,7 +67,7 @@ const Base = ({}: IProps) => {
       <Desktop>
         <IconInterface user={user!.name} files={desktopRoutes!.files} />
       </Desktop>
-    </>
+    </Wrapper>
     // <BrowserRouter>
     //   <Switch>
 

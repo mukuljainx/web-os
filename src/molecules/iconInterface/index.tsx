@@ -66,7 +66,7 @@ const IconLayout = ({ files, user, fileAction }: IProps) => {
   );
 
   const handleMouseMove = React.useCallback(({ clientX, clientY }) => {
-    if (!isInside(wrapperRef, { x: clientX, y: clientY })) {
+    if (!isInside(wrapperRef.current!, { left: clientX, top: clientY })) {
       handleMouseDown();
       return;
     }
@@ -114,7 +114,7 @@ const IconLayout = ({ files, user, fileAction }: IProps) => {
         const path = getPath(file, user);
         return (
           <DraggableIcon
-            onDoubleClick={() => {
+            onDoubleClick={(event) => {
               if (fileAction) {
                 fileAction(path);
               } else {
@@ -123,6 +123,12 @@ const IconLayout = ({ files, user, fileAction }: IProps) => {
                   name: "folder",
                   sleepTimeout: 1000,
                   data: { path },
+                  metaData: {
+                    mousePosition: {
+                      x: event.clientX,
+                      y: event.clientY,
+                    },
+                  },
                 });
               }
             }}
