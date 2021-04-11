@@ -19,7 +19,7 @@ interface IProps {
 }
 
 const Label = ({ name }: IProps) => {
-  return <Text>{name}</Text>;
+  return <Text className="icon__label">{name}</Text>;
 };
 
 export default Label;
