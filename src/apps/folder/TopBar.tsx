@@ -8,15 +8,24 @@ const Wrapper = styled.div`
   justify-content: space-between;
 `;
 
-interface IProps {
-  onPreviousClick: () => void;
-  onNextClick: () => void;
-  onCloseClick: () => void;
-}
+type IProps = ReactHTMLElement<
+  "div",
+  {
+    onPreviousClick: () => void;
+    onNextClick: () => void;
+    onCloseClick: () => void;
+  }
+>;
 
-const TopBar = ({ onPreviousClick, onNextClick, onCloseClick }: IProps) => {
+const TopBar = ({
+  onPreviousClick,
+  onNextClick,
+  onCloseClick,
+  ref: __,
+  ...rest
+}: IProps) => {
   return (
-    <Wrapper className="flex align-items-center">
+    <Wrapper {...rest} className="flex align-items-center">
       <div className="flex align-items-center">
         <MaterialIcon onClick={onPreviousClick} size={32} name="arrow_left" />
         <MaterialIcon onClick={onNextClick} size={32} name="arrow_right" />

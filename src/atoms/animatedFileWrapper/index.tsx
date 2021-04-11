@@ -10,19 +10,16 @@ const AnimatedWrapper = styled(animated.div)`
   position: fixed;
 `;
 
-const TransitFolder = ({
-  children,
-  x,
-  y,
-  left,
-  top,
-}: {
+interface IProps {
   children: React.ReactNode;
   x: number;
   y: number;
   left: number;
   top: number;
-}) => {
+  styleX: React.CSSProperties;
+}
+
+const TransitFolder = ({ children, x, y, left, top, styleX }: IProps) => {
   const transition = useTransition(true, {
     from: {
       scale: 0.01,
@@ -33,8 +30,10 @@ const TransitFolder = ({
     leave: { opacity: 0.33 },
   });
 
+  const transform = styleX.transform;
+
   return transition((style) => (
-    <AnimatedWrapper style={{ ...style, left, top }}>
+    <AnimatedWrapper style={{ ...style, left, top, transform }}>
       {children}
     </AnimatedWrapper>
   ));
@@ -43,9 +42,13 @@ const TransitFolder = ({
 const AnimatedFileWrapper = ({
   children,
   metaData,
-}: {
+  style,
+}: // onMouseDown,
+{
   children: React.ReactNode;
   metaData: IMetaData;
+  style: React.CSSProperties;
+  // onMouseDown: (event: React.MouseEvent) => void;
 }) => {
   const [state, setState] = React.useState({
     show: false,
@@ -104,6 +107,7 @@ const AnimatedFileWrapper = ({
 
   return (
     <TransitFolder
+      styleX={style}
       left={position.x}
       top={position.y}
       x={state.adjust.left}

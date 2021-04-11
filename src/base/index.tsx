@@ -7,6 +7,7 @@ import { getRoutes } from "base/helper";
 import Desktop from "base/desktop";
 import App from "apps";
 import styled from "styled-components";
+import useDraggable from "utils/hooks/useDraggable";
 
 interface IProps {}
 
@@ -16,9 +17,11 @@ const Wrapper = styled.div`
 `;
 
 const Base = ({}: IProps) => {
+  const wrapperRef = React.useRef<HTMLDivElement>(null);
   let user = useSelector((state) => state.auth.user);
   const routesMap = useSelector((state) => state.base.routes);
   const openedApps = useSelector((state) => state.base.apps);
+  const { store, handleMouseDown } = useDraggable({ wrapperRef });
 
   if (!user) {
     return <Redirect to="/auth" />;
@@ -37,8 +40,6 @@ const Base = ({}: IProps) => {
     [routesMap]
   );
 
-  const wrapperRef = React.useRef<HTMLDivElement>(null);
-
   React.useEffect(() => {
     window.os = {
       ...window.os,
@@ -51,16 +52,25 @@ const Base = ({}: IProps) => {
       {Object.values(openedApps).map((app) => {
         return (
           <>
-            {app.instances.map((instance) => (
-              <App
-                key={instance.id}
-                name={app.name}
-                data={instance.data}
-                appId={app.id}
-                id={instance.id}
-                metaData={instance.metaData!}
-              />
-            ))}
+            {app.instances.map((instance, index) => {
+              const dragId = `${app.id}-${instance.id}-${index}`;
+              return (
+                <App
+                  onMouseDown={(event) => handleMouseDown(event, dragId)}
+                  style={{
+                    transform: store.elements[dragId]?.translate.x
+                      ? `translate(${store.elements[dragId]?.translate.x}px, ${store.elements[dragId]?.translate.y}px)`
+                      : undefined,
+                  }}
+                  key={dragId}
+                  name={app.name}
+                  data={instance.data}
+                  appId={app.id}
+                  id={instance.id}
+                  metaData={instance.metaData!}
+                />
+              );
+            })}
           </>
         );
       })}
@@ -68,37 +78,6 @@ const Base = ({}: IProps) => {
         <IconInterface user={user!.name} files={desktopRoutes!.files} />
       </Desktop>
     </Wrapper>
-    // <BrowserRouter>
-    //   <Switch>
-
-    //     {routes.map((route) => (
-    //       <Route
-    //         key={route.path}
-    //         path={route.path}
-    //         render={(props) => {
-    //           if (route.file.id === "desktop") {
-    //             return (
-    //               <Desktop>
-    //                 <Folder {...props} user={user!.name} files={route.files} />
-    //               </Desktop>
-    //             );
-    //           }
-
-    //           return (
-    //             <Folder {...props} user={user!.name} files={route.files} />
-    //           );
-    //         }}
-    //       />
-    //     ))}
-    //     <Route
-    //       path="/"
-    //       exact
-    //       render={(props) => (
-    //         <Folder {...props} user={user!.name} files={state.root.files!} />
-    //       )}
-    //     ></Route>
-    //   </Switch>
-    //  </BrowserRouter>
   );
 };
 

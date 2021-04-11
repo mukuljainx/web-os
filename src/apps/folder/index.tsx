@@ -9,7 +9,6 @@ import { getRoutes } from "base/helper";
 import { useHistory } from "utils/hooks/useHistroy";
 import { interpolate } from "utils/string";
 import { IMetaData } from "base/interfaces";
-import AnimatedFileWrapper from "atoms/animatedFileWrapper";
 
 const Wrapper = styled.div`
   height: 100%;
@@ -27,9 +26,10 @@ interface IProps {
   appId: string;
   id: string;
   metaData: IMetaData;
+  onMouseDown: (event: React.MouseEvent) => void;
 }
 
-const Folder = ({ path, appId, id, metaData }: IProps) => {
+const Folder = ({ path, appId, id, onMouseDown }: IProps) => {
   const { getCurrent, push, navigate } = useHistory("/");
   const routesMap = useSelector((state) => state.base.routes);
   const userName = useSelector((state) => state.auth.user!.name);
@@ -69,25 +69,24 @@ const Folder = ({ path, appId, id, metaData }: IProps) => {
   }
 
   return (
-    <AnimatedFileWrapper metaData={metaData}>
-      <Draggable>
-        <Wrapper className="flex">
-          <SideBar></SideBar>
-          <Wrapper className="flex flex-column flex-grow">
-            <TopBar
-              onNextClick={nextRoute}
-              onPreviousClick={previousRoute}
-              onCloseClick={handleClose}
-            ></TopBar>
-            <Content
-              fileAction={fileAction}
-              user={userName}
-              files={currentRoute.files}
-            ></Content>
-          </Wrapper>
+    <Draggable>
+      <Wrapper className="flex">
+        <SideBar></SideBar>
+        <Wrapper className="flex flex-column flex-grow">
+          <TopBar
+            onMouseDown={onMouseDown}
+            onNextClick={nextRoute}
+            onPreviousClick={previousRoute}
+            onCloseClick={handleClose}
+          ></TopBar>
+          <Content
+            fileAction={fileAction}
+            user={userName}
+            files={currentRoute.files}
+          ></Content>
         </Wrapper>
-      </Draggable>
-    </AnimatedFileWrapper>
+      </Wrapper>
+    </Draggable>
   );
 };
 export default Folder;
