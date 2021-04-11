@@ -95,6 +95,36 @@ const AnimatedWrapper = styled(animated.div)`
   position: fixed;
 `;
 
+const TransitFolder = ({
+  children,
+  x,
+  y,
+  left,
+  top,
+}: {
+  children: React.ReactNode;
+  x: number;
+  y: number;
+  left: number;
+  top: number;
+}) => {
+  const transition = useTransition(true, {
+    from: {
+      scale: 0.01,
+      x: 0,
+      y: 0,
+    },
+    enter: { scale: 1, x: 100 + x, y: 100 + y },
+    leave: { opacity: 0.33 },
+  });
+
+  return transition((style) => (
+    <AnimatedWrapper style={{ ...style, left, top }}>
+      {children}
+    </AnimatedWrapper>
+  ));
+};
+
 const AnimatedFolder = (props: IProps) => {
   const [state, setState] = React.useState({
     show: false,
@@ -116,6 +146,7 @@ const AnimatedFolder = (props: IProps) => {
       y: 100 + state.adjust.top,
     },
   });
+  spring;
 
   const ref = React.useRef<HTMLDivElement>(null);
 
@@ -184,25 +215,38 @@ const AnimatedFolder = (props: IProps) => {
     );
   }
 
-  // return transition((style) => (
   return (
-    <>
-      {true && (
-        <AnimatedWrapper
-          style={{
-            ...spring,
-            left: position.x,
-            top: position.y,
-          }}
-        >
-          <div style={{ position: "fixed" }} ref={ref}>
-            <Folder {...props} />
-          </div>
-        </AnimatedWrapper>
-      )}
-    </>
+    <TransitFolder
+      left={position.x}
+      top={position.y}
+      x={state.adjust.left}
+      y={state.adjust.top}
+    >
+      <div style={{ position: "fixed" }} ref={ref}>
+        <Folder {...props} />
+      </div>
+    </TransitFolder>
   );
-  // ));
+
+  // // return transition((style) => (
+  // return (
+  //   <>
+  //     {true && (
+  //       <AnimatedWrapper
+  //         style={{
+  //           ...spring,
+  //           left: position.x,
+  //           top: position.y,
+  //         }}
+  //       >
+  // <div style={{ position: "fixed" }} ref={ref}>
+  //   <Folder {...props} />
+  // </div>
+  //       </AnimatedWrapper>
+  //     )}
+  //   </>
+  // );
+  // // ));
 };
 
 export default AnimatedFolder;
