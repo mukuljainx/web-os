@@ -6,7 +6,7 @@ import SideBar from "./SideBar";
 import TopBar from "./TopBar";
 import Content from "./Content";
 import { getRoutes } from "base/helper";
-import { useHistory } from "utils/hooks/useHistroy";
+import useHistory from "utils/hooks/useHistory";
 import { interpolate } from "utils/string";
 import { IMetaData } from "base/interfaces";
 

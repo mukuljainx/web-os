@@ -1,6 +1,6 @@
 import * as React from "react";
 
-export const useHistory = (initialPath: string) => {
+const useHistory = (initialPath: string) => {
   const [history, setHistory] = React.useState([initialPath]);
   const [current, setCurrent] = React.useState(0);
 
@@ -24,7 +24,7 @@ export const useHistory = (initialPath: string) => {
       setCurrent((c) => {
         let next = c + step;
         // if c was positive, forward movement
-        if (step) {
+        if (step > -1) {
           next = Math.min(history.length - 1, next);
         } else {
           next = Math.max(0, next);
@@ -36,5 +36,15 @@ export const useHistory = (initialPath: string) => {
     [history]
   );
 
-  return { getCurrent, push, navigate };
+  return {
+    getCurrent,
+    push,
+    navigate,
+    __: {
+      history,
+      current,
+    },
+  };
 };
+
+export default useHistory;
