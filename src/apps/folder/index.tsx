@@ -33,8 +33,9 @@ interface IProps {
 }
 
 const Folder = ({ path, appId, id, onMouseDown }: IProps) => {
-  const { getCurrent, push, navigate } = useHistory("/");
+  const { getCurrent, push, navigate } = useHistory(path);
   const isMetaKey = React.useRef(false);
+  const wrapperRef = React.useRef<HTMLDivElement>(null);
   const routesMap = useSelector((state) => state.base.routes);
   const userName = useSelector((state) => state.auth.user!.name);
 
@@ -50,12 +51,15 @@ const Folder = ({ path, appId, id, onMouseDown }: IProps) => {
 
   const fileAction = React.useCallback(
     (path: string) => {
-      console.log({ path });
       push(interpolate(path, { user: userName }));
     },
     [push]
   );
-  path;
+
+  React.useEffect(() => {
+    // to focus on path change so keyboard shortcut will work
+    wrapperRef.current?.focus();
+  }, [getCurrent()]);
 
   const previousRoute = React.useCallback(() => {
     navigate(-1);
@@ -77,8 +81,6 @@ const Folder = ({ path, appId, id, onMouseDown }: IProps) => {
       event.preventDefault();
       event.stopPropagation();
 
-      console.log("down", event.code);
-
       if (isMetaKey.current) {
         switch (event.code) {
           case "KeyW": {
@@ -86,28 +88,37 @@ const Folder = ({ path, appId, id, onMouseDown }: IProps) => {
             return;
           }
           case "ArrowUp": {
-            navigate(-1);
+            const currentRoute = getCurrent();
+            if (currentRoute === "/") return;
+            const newRoute = getCurrent().split("/");
+            newRoute.pop();
+            push(newRoute.join("/") || "/");
             return;
           }
         }
       }
 
-      if (event.code === "MetaLeft") {
+      if (event.code === "MetaLeft" || event.code === "MetaRight") {
         isMetaKey.current = true;
       }
     },
-    [navigate]
+    [navigate, push, getCurrent]
   );
 
   const handleKeyUp = React.useCallback((event: React.KeyboardEvent) => {
     event.preventDefault();
-    if (event.code === "MetaLeft") {
+    if (event.code === "MetaLeft" || event.code === "MetaRight") {
       isMetaKey.current = false;
     }
   }, []);
 
   return (
-    <Container tabIndex={0} onKeyUp={handleKeyUp} onKeyDown={handleKeyDown}>
+    <Container
+      ref={wrapperRef}
+      tabIndex={0}
+      onKeyUp={handleKeyUp}
+      onKeyDown={handleKeyDown}
+    >
       <Wrapper className="flex">
         <SideBar></SideBar>
         <Wrapper className="flex flex-column flex-grow">
