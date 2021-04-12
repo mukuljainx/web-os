@@ -7,6 +7,15 @@ import Label from "./label";
 import { IconType } from "./types";
 
 const Wrapper = styled.div<{ highlight?: boolean }>`
+  &:focus {
+    outline: none;
+  }
+  .icon__image,
+  .icon__label {
+    &:focus {
+      outline: none;
+    }
+  }
   ${({ highlight }) =>
     highlight
       ? `

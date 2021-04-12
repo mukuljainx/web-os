@@ -34,6 +34,7 @@ const IconLayout = ({ files, user, fileAction }: IProps) => {
         const dragId = file.id + index;
         return (
           <Icon
+            tabIndex={0}
             type="DESKTOP"
             onMouseDown={(event) => {
               handleMouseDown(event, dragId);

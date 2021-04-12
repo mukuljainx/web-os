@@ -14,7 +14,10 @@ const Wrapper = styled.div`
   height: 100%;
 `;
 
-const Draggable = styled.div`
+const Container = styled.div`
+  &:focus {
+    outline: none;
+  }
   z-index: 11;
   width: 720px;
   height: 480px;
@@ -31,6 +34,7 @@ interface IProps {
 
 const Folder = ({ path, appId, id, onMouseDown }: IProps) => {
   const { getCurrent, push, navigate } = useHistory("/");
+  const isMetaKey = React.useRef(false);
   const routesMap = useSelector((state) => state.base.routes);
   const userName = useSelector((state) => state.auth.user!.name);
 
@@ -65,11 +69,45 @@ const Folder = ({ path, appId, id, onMouseDown }: IProps) => {
   }, []);
 
   if (!currentRoute) {
-    throw Error("No matching route");
+    throw Error("No matching route for: " + getCurrent());
   }
 
+  const handleKeyDown = React.useCallback(
+    (event: React.KeyboardEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      console.log("down", event.code);
+
+      if (isMetaKey.current) {
+        switch (event.code) {
+          case "KeyW": {
+            handleClose();
+            return;
+          }
+          case "ArrowUp": {
+            navigate(-1);
+            return;
+          }
+        }
+      }
+
+      if (event.code === "MetaLeft") {
+        isMetaKey.current = true;
+      }
+    },
+    [navigate]
+  );
+
+  const handleKeyUp = React.useCallback((event: React.KeyboardEvent) => {
+    event.preventDefault();
+    if (event.code === "MetaLeft") {
+      isMetaKey.current = false;
+    }
+  }, []);
+
   return (
-    <Draggable>
+    <Container tabIndex={0} onKeyUp={handleKeyUp} onKeyDown={handleKeyDown}>
       <Wrapper className="flex">
         <SideBar></SideBar>
         <Wrapper className="flex flex-column flex-grow">
@@ -86,7 +124,7 @@ const Folder = ({ path, appId, id, onMouseDown }: IProps) => {
           ></Content>
         </Wrapper>
       </Wrapper>
-    </Draggable>
+    </Container>
   );
 };
 export default Folder;
