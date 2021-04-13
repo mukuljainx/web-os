@@ -19,6 +19,11 @@ const App = () => {
       openApp: (param) => store.dispatch(openApp(param)),
       closeApp: (param) => store.dispatch(closeApp(param)),
     };
+
+    // housekeeping
+    return () => {
+      (window.os as any) = undefined;
+    };
   }, []);
   return (
     <Provider store={store}>

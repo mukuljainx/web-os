@@ -8,6 +8,7 @@ import Desktop from "base/desktop";
 import App from "apps";
 import styled from "styled-components";
 import useDraggable from "utils/hooks/useDraggable";
+import ContextMenu from "molecules/contextMenu";
 
 interface IProps {}
 
@@ -47,8 +48,23 @@ const Base = ({}: IProps) => {
     };
   }, []);
 
+  const MenuItemAction = React.useCallback((label: string, id: string) => {
+    console.log(label, id);
+  }, []);
+
+  const menuItems = [
+    { label: "New Folder", action: MenuItemAction, id: "new-folder" },
+    { label: "Get Info", action: MenuItemAction, id: "get-info" },
+    {
+      label: "Change Desktop Background",
+      action: MenuItemAction,
+      id: "change-desktop-background",
+    },
+  ];
+
   return (
     <Wrapper ref={wrapperRef}>
+      <ContextMenu wrapperRef={wrapperRef} items={menuItems} />
       {Object.values(openedApps).map((app) => {
         return (
           <>

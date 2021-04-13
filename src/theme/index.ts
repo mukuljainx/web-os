@@ -1,4 +1,9 @@
 const theme = {
+  colors: { plain: "white", plainHover: "gray" },
+  borderRadius: 4,
+  zIndex: {
+    contextMenu: 1000,
+  },
   icon: {
     textColor: " white",
     textShadow: " 1px 1px black",
