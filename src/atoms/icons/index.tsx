@@ -35,7 +35,7 @@ const Wrapper = styled.div<{ highlight?: boolean }>`
 type IProps = ReactHTMLElement<
   "div",
   {
-    type: IconType;
+    type?: IconType;
     name: string;
     label?: string;
     innnerRef?: any;
@@ -55,13 +55,13 @@ const Icon = ({ type, name, label, innnerRef, ...rest }: IProps) => {
           rest.className || ""
         }`}
       >
-        <Image name={name} size={sizeChart["DESKTOP"]} />
+        <Image name={name} size={sizeChart[type]} />
         <Label name={label || ""} />
       </Wrapper>
     );
   }
 
-  return null;
+  return <Image name={name} size={sizeChart["DESKTOP"] || 24} />;
 };
 
 export default Icon;

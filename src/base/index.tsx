@@ -9,12 +9,13 @@ import App from "apps";
 import styled from "styled-components";
 import useDraggable from "utils/hooks/useDraggable";
 import ContextMenu from "molecules/contextMenu";
+import AppBar from "./appBar";
 
 interface IProps {}
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 100%;
+  flex-grow: 2;
 `;
 
 const Base = ({}: IProps) => {
@@ -63,37 +64,40 @@ const Base = ({}: IProps) => {
   ];
 
   return (
-    <Wrapper ref={wrapperRef}>
-      <ContextMenu wrapperRef={wrapperRef} items={menuItems} />
-      {Object.values(openedApps).map((app) => {
-        return (
-          <>
-            {app.instances.map((instance, index) => {
-              const dragId = `${app.id}-${instance.id}-${index}`;
-              return (
-                <App
-                  onMouseDown={(event) => handleMouseDown(event, dragId)}
-                  style={{
-                    transform: store.elements[dragId]?.translate.x
-                      ? `translate(${store.elements[dragId]?.translate.x}px, ${store.elements[dragId]?.translate.y}px)`
-                      : undefined,
-                  }}
-                  key={dragId}
-                  name={app.name}
-                  data={instance.data}
-                  appId={app.id}
-                  id={instance.id}
-                  metaData={instance.metaData!}
-                />
-              );
-            })}
-          </>
-        );
-      })}
-      <Desktop>
-        <IconInterface user={user!.name} files={desktopRoutes!.files} />
-      </Desktop>
-    </Wrapper>
+    <>
+      <Wrapper ref={wrapperRef}>
+        <ContextMenu wrapperRef={wrapperRef} items={menuItems} />
+        {Object.values(openedApps).map((app) => {
+          return (
+            <>
+              {app.instances.map((instance, index) => {
+                const dragId = `${app.id}-${instance.id}-${index}`;
+                return (
+                  <App
+                    onMouseDown={(event) => handleMouseDown(event, dragId)}
+                    style={{
+                      transform: store.elements[dragId]?.translate.x
+                        ? `translate(${store.elements[dragId]?.translate.x}px, ${store.elements[dragId]?.translate.y}px)`
+                        : undefined,
+                    }}
+                    key={dragId}
+                    name={app.name}
+                    data={instance.data}
+                    appId={app.id}
+                    id={instance.id}
+                    metaData={instance.metaData!}
+                  />
+                );
+              })}
+            </>
+          );
+        })}
+        <Desktop>
+          <IconInterface user={user!.name} files={desktopRoutes!.files} />
+        </Desktop>
+      </Wrapper>
+      <AppBar apps={openedApps} />
+    </>
   );
 };
 

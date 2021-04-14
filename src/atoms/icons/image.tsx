@@ -3,11 +3,11 @@ import * as React from "react";
 // this will be generated
 const availableIcons = new Set([
   "desktop",
-  "folder",
   "library",
   "music",
   "system",
   "user",
+  "applications",
 ]);
 
 interface IProps {
