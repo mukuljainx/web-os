@@ -46,4 +46,8 @@ export interface IApp {
 
 export interface IAppGroup extends Pick<IApp, "id" | "name"> {
   instances: IApp[];
+  // to sort in appBar
+  // no pinning as of now or dragging
+  initialWeight: number;
+  weight: number;
 }

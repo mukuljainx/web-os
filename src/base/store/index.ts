@@ -5,9 +5,14 @@ import { getDefaultRoutes } from "base/store/routes";
 interface IBaseState {
   apps: Record<string, IAppGroup>;
   routes: IFile[];
+  currentWeight: number;
 }
 
-const initialState: IBaseState = { apps: {}, routes: getDefaultRoutes() };
+const initialState: IBaseState = {
+  apps: {},
+  routes: getDefaultRoutes(),
+  currentWeight: 0,
+};
 
 const baseSlice = createSlice({
   name: "base",
@@ -19,6 +24,7 @@ const baseSlice = createSlice({
       const runningApp = state.apps[newApp.appName];
 
       if (runningApp) {
+        runningApp.weight = state.currentWeight;
         const index = runningApp.instances.findIndex(
           (instance) => instance.id === instanceId
         );
@@ -31,11 +37,16 @@ const baseSlice = createSlice({
         runningApp.instances.push({ ...newApp, id: instanceId });
       } else {
         state.apps[newApp.appName] = {
+          initialWeight: state.currentWeight,
+          weight: state.currentWeight,
           id: newApp.id,
           name: newApp.appName,
           instances: [{ ...newApp, id: instanceId }],
         };
       }
+      // relying on this to never cross the css z-index limit - 10000
+      // TODO: if does, have to reset every app weight that's all
+      state.currentWeight++;
     },
     closeApp: (
       state,

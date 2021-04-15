@@ -74,7 +74,7 @@ const Base = ({}: IProps) => {
                 const dragId = instance.id;
                 return (
                   <App
-                    weight={index}
+                    weight={app.weight + index}
                     onMouseDown={(event) => handleMouseDown(event, dragId)}
                     style={{
                       transform: store.elements[dragId]?.translate.x
