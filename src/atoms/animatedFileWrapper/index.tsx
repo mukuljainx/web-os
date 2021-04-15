@@ -4,9 +4,9 @@ import { useTransition, animated } from "react-spring";
 
 import { getOverflowAdjust, isInside } from "utils/dom";
 import { IMetaData } from "base/interfaces";
+import theme from "theme";
 
 const AnimatedWrapper = styled(animated.div)`
-  z-index: 11;
   position: fixed;
 `;
 
@@ -17,9 +17,18 @@ interface IProps {
   left: number;
   top: number;
   styleX: React.CSSProperties;
+  weight: number;
 }
 
-const TransitFolder = ({ children, x, y, left, top, styleX }: IProps) => {
+const TransitFolder = ({
+  children,
+  x,
+  y,
+  left,
+  top,
+  styleX,
+  weight,
+}: IProps) => {
   const transition = useTransition(true, {
     from: {
       scale: 0.01,
@@ -33,7 +42,15 @@ const TransitFolder = ({ children, x, y, left, top, styleX }: IProps) => {
   const transform = styleX.transform;
 
   return transition((style) => (
-    <AnimatedWrapper style={{ ...style, left, top, transform }}>
+    <AnimatedWrapper
+      style={{
+        ...style,
+        left,
+        top,
+        transform,
+        zIndex: theme.zIndex.app + weight,
+      }}
+    >
       {children}
     </AnimatedWrapper>
   ));
@@ -43,11 +60,13 @@ const AnimatedFileWrapper = ({
   children,
   metaData,
   style,
+  weight,
 }: // onMouseDown,
 {
   children: React.ReactNode;
   metaData: IMetaData;
   style: React.CSSProperties;
+  weight: number;
   // onMouseDown: (event: React.MouseEvent) => void;
 }) => {
   const [state, setState] = React.useState({
@@ -107,6 +126,7 @@ const AnimatedFileWrapper = ({
 
   return (
     <TransitFolder
+      weight={weight}
       styleX={style}
       left={position.x}
       top={position.y}

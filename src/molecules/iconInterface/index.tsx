@@ -48,8 +48,9 @@ const IconLayout = ({ files, user, fileAction }: IProps) => {
                 fileAction(path);
               } else {
                 window.os.openApp({
-                  id: "folder",
-                  name: "folder",
+                  appName: file.appName,
+                  id: file.id,
+                  name: file.name,
                   sleepTimeout: 1000,
                   data: { path },
                   metaData: {

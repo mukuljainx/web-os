@@ -20,7 +20,7 @@ declare global {
   interface Window {
     os: {
       openApp: (param: IApp) => void;
-      closeApp: (param: { appId: string; instanceId: string }) => void;
+      closeApp: (param: { appName: string; instanceId: string }) => void;
       wrapper: HTMLElement;
     };
   }

@@ -15,29 +15,39 @@ const baseSlice = createSlice({
   reducers: {
     openApp(state, action: PayloadAction<IApp>) {
       const newApp = action.payload;
-      const instanceId = `${newApp.id}-${new Date().getTime()}`;
-      const runningApp = state.apps[newApp.id];
+      const instanceId = `${newApp.appName}-${newApp.id}`;
+      const runningApp = state.apps[newApp.appName];
+
       if (runningApp) {
+        const index = runningApp.instances.findIndex(
+          (instance) => instance.id === instanceId
+        );
+        // instance is already mounted, bring it to top
+        if (index !== -1) {
+          const temp = runningApp.instances.splice(index, 1);
+          runningApp.instances.push(temp[0]);
+          return;
+        }
         runningApp.instances.push({ ...newApp, id: instanceId });
       } else {
-        state.apps[newApp.id] = {
+        state.apps[newApp.appName] = {
           id: newApp.id,
-          name: newApp.name,
+          name: newApp.appName,
           instances: [{ ...newApp, id: instanceId }],
         };
       }
     },
     closeApp: (
       state,
-      action: PayloadAction<{ appId: string; instanceId: string }>
+      action: PayloadAction<{ appName: string; instanceId: string }>
     ) => {
-      const app = state.apps[action.payload.appId];
+      const app = state.apps[action.payload.appName];
       if (!app) {
         return;
       }
 
       if (app.instances.length === 1) {
-        delete state.apps[action.payload.appId];
+        delete state.apps[action.payload.appName];
       } else {
         app.instances = app.instances.filter(
           (instance) => instance.id !== action.payload.instanceId

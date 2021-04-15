@@ -18,6 +18,8 @@ export interface IFile {
   // default behavoiur of opening other layout
   isFolder: boolean;
   files?: IFile[];
+  // app type, a folder, setting, video-player etc
+  appName: string;
 }
 
 export interface IFolderRoutes {
@@ -34,6 +36,7 @@ export type IMetaData = Partial<{
 }>;
 
 export interface IApp {
+  appName: string;
   id: string;
   name: string;
   sleepTimeout: number;

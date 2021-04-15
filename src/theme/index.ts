@@ -3,6 +3,7 @@ const theme = {
   borderRadius: 4,
   zIndex: {
     contextMenu: 1000,
+    app: 11,
   },
   icon: {
     textColor: " white",

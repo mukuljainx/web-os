@@ -21,18 +21,20 @@ const Container = styled.div`
   z-index: 11;
   width: 720px;
   height: 480px;
+  overflow: auto;
+  resize: both;
   background: white;
 `;
 
 interface IProps {
   path: string;
-  appId: string;
+  appName: string;
   id: string;
   metaData: IMetaData;
   onMouseDown: (event: React.MouseEvent) => void;
 }
 
-const Folder = ({ path, appId, id, onMouseDown }: IProps) => {
+const Folder = ({ path, appName, id, onMouseDown }: IProps) => {
   const { getCurrent, push, navigate } = useHistory(path);
   const isMetaKey = React.useRef(false);
   const wrapperRef = React.useRef<HTMLDivElement>(null);
@@ -69,7 +71,7 @@ const Folder = ({ path, appId, id, onMouseDown }: IProps) => {
   }, [navigate]);
 
   const handleClose = React.useCallback(() => {
-    window.os.closeApp({ appId, instanceId: id });
+    window.os.closeApp({ appName, instanceId: id });
   }, []);
 
   if (!currentRoute) {

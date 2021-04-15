@@ -12,6 +12,7 @@ export const getDefaultRoutes = (): IFile[] => [
     isFolder: true,
     name: "/",
     path: "/",
+    appName: "folder",
     files: [
       {
         parent: "/",
@@ -20,6 +21,7 @@ export const getDefaultRoutes = (): IFile[] => [
         isFolder: true,
         name: "System",
         path: "/System",
+        appName: "folder",
         files: [],
       },
       {
@@ -29,6 +31,7 @@ export const getDefaultRoutes = (): IFile[] => [
         isFolder: true,
         name: "Applications",
         path: "/Applications",
+        appName: "folder",
         files: [],
       },
       {
@@ -38,6 +41,7 @@ export const getDefaultRoutes = (): IFile[] => [
         isFolder: true,
         name: "Users",
         path: "/Users",
+        appName: "folder",
         files: [
           {
             parent: "/Users",
@@ -46,6 +50,7 @@ export const getDefaultRoutes = (): IFile[] => [
             isFolder: true,
             name: "${user}",
             path: "/Users/${user}",
+            appName: "folder",
             files: [
               {
                 parent: "/Users/${user}",
@@ -54,6 +59,7 @@ export const getDefaultRoutes = (): IFile[] => [
                 isFolder: true,
                 name: "Desktop",
                 path: "/Users/${user}/Desktop",
+                appName: "folder",
                 files: [
                   {
                     parent: "/Users/${user}/Desktop",
@@ -62,6 +68,7 @@ export const getDefaultRoutes = (): IFile[] => [
                     isFolder: true,
                     name: "Desktop 1",
                     path: "/Users/${user}/Desktop/Desktop 1",
+                    appName: "folder",
                     files: [],
                   },
                   {
@@ -71,6 +78,7 @@ export const getDefaultRoutes = (): IFile[] => [
                     isFolder: true,
                     name: "Desktop 2",
                     path: "/Users/${user}/Desktop/Desktop 2",
+                    appName: "folder",
                     files: [],
                   },
                 ],

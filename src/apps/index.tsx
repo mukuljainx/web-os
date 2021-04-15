@@ -5,33 +5,33 @@ import { IMetaData } from "base/interfaces";
 import AnimatedFileWrapper from "atoms/animatedFileWrapper";
 
 interface IProps {
-  name: string;
+  app: string;
   id: string;
-  appId: string;
   data: any;
   metaData: IMetaData;
   style: React.CSSProperties;
   onMouseDown: (event: React.MouseEvent) => void;
+  weight: number;
 }
 
 const App = ({
-  name,
+  app,
   data,
   id,
-  appId,
   metaData,
   style,
+  weight,
   onMouseDown,
 }: IProps) => {
-  switch (name) {
+  switch (app) {
     case "folder": {
       return (
-        <AnimatedFileWrapper style={style} metaData={metaData}>
+        <AnimatedFileWrapper style={style} metaData={metaData} weight={weight}>
           <Folder
             onMouseDown={onMouseDown}
             metaData={metaData}
             key={id}
-            appId={appId}
+            appName={app}
             id={id}
             {...data}
           />

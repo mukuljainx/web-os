@@ -71,9 +71,10 @@ const Base = ({}: IProps) => {
           return (
             <>
               {app.instances.map((instance, index) => {
-                const dragId = `${app.id}-${instance.id}-${index}`;
+                const dragId = instance.id;
                 return (
                   <App
+                    weight={index}
                     onMouseDown={(event) => handleMouseDown(event, dragId)}
                     style={{
                       transform: store.elements[dragId]?.translate.x
@@ -81,9 +82,8 @@ const Base = ({}: IProps) => {
                         : undefined,
                     }}
                     key={dragId}
-                    name={app.name}
+                    app={instance.appName}
                     data={instance.data}
-                    appId={app.id}
                     id={instance.id}
                     metaData={instance.metaData!}
                   />
