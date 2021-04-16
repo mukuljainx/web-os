@@ -9,7 +9,7 @@ import App from "apps";
 import styled from "styled-components";
 import useDraggable from "utils/hooks/useDraggable";
 import ContextMenu from "molecules/contextMenu";
-import AppBar from "./appBar";
+import AppBar from "molecules/appBar";
 
 interface IProps {}
 

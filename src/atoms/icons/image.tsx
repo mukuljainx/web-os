@@ -6,16 +6,19 @@ const availableIcons = new Set([
   "library",
   "music",
   "system",
+  // "folder",
   "user",
   "applications",
+  "windows",
 ]);
 
 interface IProps {
   name: string;
   size: number;
+  type?: "svg";
 }
 
-const Image = ({ name, size }: IProps) => {
+const Image = ({ name, size, type }: IProps) => {
   let iconName = "generic";
   if (availableIcons.has(name)) {
     iconName = name;
@@ -25,7 +28,7 @@ const Image = ({ name, size }: IProps) => {
       height={size}
       width={size}
       className="icon__image"
-      src={require(`./assets/${iconName}.png`).default}
+      src={require(`./assets/${iconName}.${type || "png"}`).default}
     />
   );
 };

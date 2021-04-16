@@ -63,7 +63,7 @@ export const getDefaultRoutes = (): IFile[] => [
                 files: [
                   {
                     parent: "/Users/${user}/Desktop",
-                    icon: "generic",
+                    icon: "folder",
                     id: "desktop-1",
                     isFolder: true,
                     name: "Desktop 1",
@@ -73,7 +73,7 @@ export const getDefaultRoutes = (): IFile[] => [
                   },
                   {
                     parent: "/Users/${user}/Desktop",
-                    icon: "generic",
+                    icon: "folder",
                     id: "desktop-2",
                     isFolder: true,
                     name: "Desktop 2",
