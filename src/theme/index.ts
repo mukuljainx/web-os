@@ -1,4 +1,5 @@
 const theme = {
+  mode: "light",
   colors: { plain: "white", plainHover: "gray" },
   borderRadius: 4,
   zIndex: {

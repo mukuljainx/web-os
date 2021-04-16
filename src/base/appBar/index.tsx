@@ -1,13 +1,17 @@
-import Icon from "atoms/icons";
+import DesktopIcon from "atoms/icons";
 import { IAppGroup } from "base/interfaces";
 import * as React from "react";
 import styled from "styled-components";
+import { Acrylic } from "atoms/styled";
+import { Icon } from "@fluentui/react";
 
-const Wrapper = styled.div`
+const Wrapper = styled(Acrylic)`
   display: flex;
   width: 100%;
-  height: 64px;
-  flex-shrink: 0;
+  height: 52px;
+  position: fixed;
+  bottom: 0;
+  justify-content: space-between;
 `;
 
 interface IProps {
@@ -21,11 +25,16 @@ const AppBar = ({ apps }: IProps) => {
 
   return (
     <Wrapper data-id="app-bar">
-      {sortedApps.map((app) => (
-        <div>
-          <Icon key={app.id} name={app.id} />
-        </div>
-      ))}
+      <div>
+        {sortedApps.map((app) => (
+          <div>
+            <DesktopIcon key={app.id} name={app.id} />
+          </div>
+        ))}
+      </div>
+      <div>
+        <Icon iconName="ChevronUp" />
+      </div>
     </Wrapper>
   );
 };
