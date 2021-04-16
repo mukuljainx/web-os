@@ -9,13 +9,13 @@ import App from "apps";
 import styled from "styled-components";
 import useDraggable from "utils/hooks/useDraggable";
 import ContextMenu from "molecules/contextMenu";
-import AppBar from "./appBar";
+import AppBar from "molecules/appBar";
 
 interface IProps {}
 
 const Wrapper = styled.div`
   width: 100%;
-  flex-grow: 2;
+  height: 100%;
 `;
 
 const Base = ({}: IProps) => {
@@ -64,7 +64,7 @@ const Base = ({}: IProps) => {
   ];
 
   return (
-    <>
+    <Desktop>
       <Wrapper ref={wrapperRef}>
         <ContextMenu wrapperRef={wrapperRef} items={menuItems} />
         {Object.values(openedApps).map((app) => {
@@ -92,12 +92,10 @@ const Base = ({}: IProps) => {
             </>
           );
         })}
-        <Desktop>
-          <IconInterface user={user!.name} files={desktopRoutes!.files} />
-        </Desktop>
+        <IconInterface user={user!.name} files={desktopRoutes!.files} />
+        <AppBar apps={openedApps} />
       </Wrapper>
-      <AppBar apps={openedApps} />
-    </>
+    </Desktop>
   );
 };
 

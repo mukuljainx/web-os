@@ -1,5 +1,5 @@
 import path from "path";
-import ManifestPlugin from "webpack-manifest-plugin";
+import { WebpackManifestPlugin } from "webpack-manifest-plugin";
 import UglifyJsPlugin from "uglifyjs-webpack-plugin";
 import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 import webpack from "webpack";
@@ -42,10 +42,10 @@ const config = {
         ecma: 5,
       },
     }),
-    new ManifestPlugin(),
+    new WebpackManifestPlugin(),
     new BundleAnalyzerPlugin({
       analyzerMode: "static",
-      openAnalyzer: false,
+      openAnalyzer: true,
     }),
   ],
 };
