@@ -2,7 +2,7 @@ import DesktopIcon from "atoms/icons/image";
 import { IAppGroup } from "base/interfaces";
 import * as React from "react";
 import styled from "styled-components";
-import { Acrylic, Stack, Image } from "atoms/styled";
+import { Acrylic, Stack, Image, StackItem } from "atoms/styled";
 import { Icon } from "@fluentui/react";
 import useDate from "utils/hooks/useDate";
 
@@ -37,31 +37,31 @@ const AppBar = ({ apps }: IProps) => {
       <Stack fullWidth justifyContent="center" style={{ position: "relative" }}>
         <Absolute>
           <Stack alignItems="center" gap={16} fullHeight paddingLeft={16}>
-            <DesktopIcon name="windows" size={32} type="svg" />
+            <DesktopIcon name="windows" size={32} />
           </Stack>
         </Absolute>
         <div>
           {sortedApps.map((app, i) => (
-            <div key={i}>
+            <StackItem key={i}>
               <DesktopIcon size={48} name={app.id} />
-            </div>
+            </StackItem>
           ))}
         </div>
         <Absolute right>
           <Stack alignItems="center" gap={16} fullHeight paddingRight={16}>
-            <div>
+            <StackItem>
               <Icon style={{ fontWeight: "bold" }} iconName="ChevronUp" />
-            </div>
-            <div>
+            </StackItem>
+            <StackItem>
               <Image
                 height={12}
                 src={require("assests/images/battery.svg").default}
               />
-            </div>
-            <div>
+            </StackItem>
+            <StackItem>
               <Icon style={{ fontWeight: "bold" }} iconName="CannedChat" />
-            </div>
-            <div>{date}</div>
+            </StackItem>
+            <StackItem>{date}</StackItem>
           </Stack>
         </Absolute>
       </Stack>

@@ -6,7 +6,8 @@ import { isInside } from "utils/dom";
 interface IProps {
   wrapperRef: React.RefObject<HTMLElement>;
   onDragStart?: (event: React.MouseEvent) => void;
-  onDragEnd?: () => void;
+  onDragEnd?: (event: React.MouseEvent) => void;
+  single?: boolean;
 }
 
 /**
@@ -27,7 +28,12 @@ interface IProps {
  *
  */
 
-const useDraggable = ({ wrapperRef }: IProps) => {
+const useDraggable = ({
+  wrapperRef,
+  onDragStart,
+  onDragEnd,
+  single,
+}: IProps) => {
   const [store, actions] = useStore();
 
   const dragging = React.useRef<Set<string>>(new Set());
@@ -43,8 +49,10 @@ const useDraggable = ({ wrapperRef }: IProps) => {
       const coordinates = { x: event.clientX, y: event.clientY };
       event.stopPropagation();
       let multiple = false;
-
-      if (event.ctrlKey || event.metaKey) {
+      if (onDragStart) {
+        onDragStart(event);
+      }
+      if (!single && (event.ctrlKey || event.metaKey)) {
         multiple = true;
       }
 
@@ -54,6 +62,7 @@ const useDraggable = ({ wrapperRef }: IProps) => {
         // if the selection is without a hot key
         if (!elementInState) {
           // and element is new: forget previouse one and start with this one
+          // TODO: is stop needed?
           stop();
           dragging.current.add(id);
         }
@@ -89,28 +98,49 @@ const useDraggable = ({ wrapperRef }: IProps) => {
     dragging.current.clear();
   }, []);
 
-  const handleMouseMove = React.useCallback(({ clientX, clientY }) => {
+  const handleMouseMove = React.useCallback((event) => {
     if (
       wrapperRef.current &&
-      !isInside(wrapperRef.current!, { left: clientX, top: clientY })
+      !isInside(wrapperRef.current!, {
+        left: event.clientX,
+        top: event.clientY,
+      })
     ) {
+      if (onDragEnd) {
+        onDragEnd(event);
+      }
       stop();
       return;
     }
-    actions.move(Array.from(dragging.current), { x: clientX, y: clientY });
+    actions.move(Array.from(dragging.current), {
+      x: event.clientX,
+      y: event.clientY,
+    });
   }, []);
 
-  const handleMouseUp = React.useCallback(() => {
+  const handleMouseUp = React.useCallback((event) => {
+    if (onDragEnd) {
+      onDragEnd(event);
+    }
     actions.stop(Array.from(dragging.current));
+    removeEventListener(true);
+  }, []);
+
+  React.useEffect(() => removeEventListener, []);
+
+  const removeEventListener = (mounted?: boolean) => {
     window.removeEventListener("mousemove", handleMouseMove);
     window.removeEventListener("mouseup", handleMouseUp);
-  }, []);
+    if (!mounted || single) {
+      window.removeEventListener("mousedown", handleWindowClick);
+    }
+  };
+  const clearStore = React.useCallback(() => {
+    actions.clear();
+    dragging.current.clear();
+  }, [actions.clear]);
 
-  React.useEffect(() => {
-    return () => window.removeEventListener("mousedown", handleWindowClick);
-  }, []);
-
-  return { store, handleMouseDown };
+  return { store, handleMouseDown, clearStore };
 };
 
 export default useDraggable;
