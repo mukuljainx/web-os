@@ -10,6 +10,7 @@ import styled from "styled-components";
 import useDraggable from "utils/hooks/useDraggable";
 import ContextMenu from "molecules/contextMenu";
 import AppBar from "molecules/appBar";
+import Menu from "molecules/menu";
 
 interface IProps {}
 
@@ -66,6 +67,7 @@ const Base = ({}: IProps) => {
   return (
     <Desktop>
       <Wrapper ref={wrapperRef}>
+        <Menu />
         <ContextMenu wrapperRef={wrapperRef} items={menuItems} />
         {Object.values(openedApps).map((app) => {
           return (

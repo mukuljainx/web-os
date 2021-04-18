@@ -1,10 +1,14 @@
 const theme = {
-  mode: "light",
-  colors: { plain: "white", plainHover: "gray" },
+  colors: {
+    plain: "white",
+    plainHover: "gray",
+    acrylic: "rgba(255, 255, 255, 0.6)",
+  },
   borderRadius: 4,
   zIndex: {
-    contextMenu: 1000,
+    contextMenu: 2147483001,
     app: 11,
+    menu: 2147483000,
   },
   icon: {
     textColor: " white",

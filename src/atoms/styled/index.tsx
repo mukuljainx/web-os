@@ -2,12 +2,21 @@ import React from "react";
 import styled from "styled-components";
 
 export const Acrylic = styled.div`
-  background: ${({ theme }) =>
-    theme.mode === "light"
-      ? "rgba(255, 255, 255, 0.6);"
-      : "rgba(0, 0, 0, 0.5);"};
+  background: ${({ theme }) => theme.colors.acrylic};
   backdrop-filter: blur(10px);
 `;
+
+export const getNotLastChild = () =>
+  ["div", "p", "span", "i", "a"].map((x) => `${x}:not(:last-child)`).join(",");
+
+export const StackItem = styled.div<
+  Pick<React.CSSProperties, "flexShrink" | "flexGrow">
+>`
+  ${({ flexShrink }) => flexShrink && `flex-shrink: ${flexShrink}`};
+  ${({ flexGrow }) => flexGrow && `flex-grow: ${flexGrow}`};
+`;
+
+const getPixel = (x: string | number) => (typeof x === "string" ? x : `${x}px`);
 
 /**
  * function to get css from variable name
@@ -69,24 +78,24 @@ export const Stack = styled.div<
   ${({ marginY }) =>
     marginY && `margin-top: ${marginY}px; margin-bottom: ${marginY}px`};
 
-  ${({ marginLeft }) => marginLeft && `margin-left: ${marginLeft}`};
-  ${({ marginRight }) => marginRight && `margin-right: ${marginRight}`};
-  ${({ marginTop }) => marginTop && `margin-top: ${marginTop}`};
-  ${({ marginBottom }) => marginBottom && `margin-bottom: ${marginBottom}`};
+  ${({ marginLeft }) => marginLeft && `margin-left: ${marginLeft}px`};
+  ${({ marginRight }) => marginRight && `margin-right: ${marginRight}px`};
+  ${({ marginTop }) => marginTop && `margin-top: ${marginTop}px`};
+  ${({ marginBottom }) => marginBottom && `margin-bottom: ${marginBottom}px`};
 
   ${({ gap, flexDirection }) =>
     gap &&
     (flexDirection === "column"
-      ? `>div:not(:last-child){margin-bottom: ${gap}px}`
-      : `>div:not(:last-child){margin-right: ${gap}px}`)};
+      ? `>${StackItem}{margin-bottom: ${gap}px}`
+      : `>${StackItem}{margin-right: ${gap}px}`)};
 
   ${({ fullHeight }) => fullHeight && `height: 100%`};
   ${({ fullWidth }) => fullWidth && `width: 100%`};
 `;
 
-const getPixel = (x: string | number) => (typeof x === "string" ? x : `${x}px`);
-
 export const Image = styled.img<Pick<React.CSSProperties, "width" | "height">>`
   ${({ width }) => width && `width: ${getPixel(width)}`};
   ${({ height }) => height && `height: ${getPixel(height)}`};
 `;
+
+export { default as Text } from "./text";

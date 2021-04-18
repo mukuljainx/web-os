@@ -14,6 +14,8 @@ interface IState {
       id: string;
     }
   >;
+  // defined in case of single mode onl
+  id?: string;
 }
 
 const getInitialElementState = () => ({
@@ -26,7 +28,9 @@ const getInitialElementState = () => ({
 export const initialState: Omit<IState, "id"> = { elements: {} };
 
 const reducer = {
-  start: (id: string, coordinate: Coordinates) => (state: IState): IState => {
+  start: (id: string, coordinate: Coordinates, single?: boolean) => (
+    state: IState
+  ): IState => {
     const element = state.elements[id];
     if (!element) {
       return {
@@ -39,6 +43,7 @@ const reducer = {
             selected: true,
           },
         },
+        ...(single ? { id } : {}),
       };
     } else {
       return {
@@ -72,25 +77,15 @@ const reducer = {
     });
 
     return { elements };
-    // const element = state.elements[id];
-    // const { last, initial } = element;
-    // return {
-    //   elements: {
-    //     ...state.elements,
-    //     [id]: {
-    //       ...element,
-    //       translate: {
-    //         x: last.x + coordinate.x - initial.x,
-    //         y: last.y + coordinate.y - initial.y,
-    //       },
-    //     },
-    //   },
-    // };
   },
   stop: (id: string | string[]) => (state: IState): IState => {
+    console.log(id, state);
     const ids = typeof id === "string" ? [id] : id;
 
     const elements = { ...state.elements };
+    if (!elements[id[0]]) {
+      debugger;
+    }
     ids.forEach((itemId) => {
       elements[itemId] = {
         ...elements[itemId],
@@ -99,17 +94,6 @@ const reducer = {
     });
 
     return { elements };
-
-    // const element = state.elements[id];
-    // return {
-    //   elements: {
-    //     ...state.elements,
-    //     [id]: {
-    //       ...element,
-    //       last: element.translate,
-    //     },
-    //   },
-    // };
   },
 
   unselect: (id: string | string[]) => (state: IState): IState => {
@@ -124,6 +108,20 @@ const reducer = {
 
     return { elements };
   },
+  clear: () => (): IState => ({ elements: {} }),
+
+  // clear: () => (state: IState): IState => {
+  //   const elements = { ...state.elements };
+  //   const ids = Object.keys(elements);
+  //   ids.forEach((itemId) => {
+  //     elements[itemId] = {
+  //       ...elements[itemId],
+  //       selected: false,
+  //     };
+  //   });
+
+  //   return { elements };
+  // },
 };
 
 const useStore = () => {

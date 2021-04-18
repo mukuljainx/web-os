@@ -10,7 +10,8 @@ type ReducerState<R extends ActionCreator<any, any>> = R extends ActionCreator<
 
 const useTypedReducer = <R extends ActionCreator<any, any>>(
   actions: R,
-  initialState: ReducerState<R>
+  initialState: ReducerState<R>,
+  log?: boolean
 ): [ReducerState<R>, R] => {
   const reducer = (
     s: ReducerState<R>,
@@ -26,8 +27,12 @@ const useTypedReducer = <R extends ActionCreator<any, any>>(
 
   const newActions: any = {};
   Object.keys(actions).forEach((actionName) => {
-    newActions[actionName] = (...payload: any) =>
+    newActions[actionName] = (...payload: any) => {
+      if (log) {
+        console.log(`USE_TYPED_REDUCER: ${actionName}`, payload);
+      }
       dispatch({ type: actionName, payload });
+    };
   });
 
   return [state, newActions];

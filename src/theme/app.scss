@@ -25,6 +25,10 @@
   font-feature-settings: "liga";
 }
 
+* {
+  box-sizing: border-box;
+}
+
 #web-os-root,
 body,
 html {
@@ -100,4 +104,10 @@ html {
   height: 100%;
   width: 100%;
   background-size: cover;
+}
+
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
