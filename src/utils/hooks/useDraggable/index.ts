@@ -81,7 +81,7 @@ const useDraggable = ({
 
       if (dragging.current.size) {
         dragging.current.forEach((id) => {
-          actions.start(id, coordinates);
+          actions.start(id, coordinates, true);
         });
         window.addEventListener("mousedown", handleWindowClick);
         window.addEventListener("mousemove", handleMouseMove);

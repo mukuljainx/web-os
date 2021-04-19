@@ -16,6 +16,7 @@ interface IState {
   >;
   // defined in case of single mode onl
   id?: string;
+  active: boolean;
 }
 
 const getInitialElementState = () => ({
@@ -25,7 +26,7 @@ const getInitialElementState = () => ({
   selected: true,
 });
 
-export const initialState: Omit<IState, "id"> = { elements: {} };
+export const initialState: Omit<IState, "id"> = { elements: {}, active: false };
 
 const reducer = {
   start: (id: string, coordinate: Coordinates, single?: boolean) => (
@@ -34,6 +35,7 @@ const reducer = {
     const element = state.elements[id];
     if (!element) {
       return {
+        active: true,
         elements: {
           ...state.elements,
           [id]: {
@@ -47,6 +49,8 @@ const reducer = {
       };
     } else {
       return {
+        active: true,
+        id: state.id,
         elements: {
           ...state.elements,
           [id]: {
@@ -76,16 +80,12 @@ const reducer = {
       };
     });
 
-    return { elements };
+    return { ...state, elements };
   },
   stop: (id: string | string[]) => (state: IState): IState => {
-    console.log(id, state);
     const ids = typeof id === "string" ? [id] : id;
 
     const elements = { ...state.elements };
-    if (!elements[id[0]]) {
-      debugger;
-    }
     ids.forEach((itemId) => {
       elements[itemId] = {
         ...elements[itemId],
@@ -93,7 +93,7 @@ const reducer = {
       };
     });
 
-    return { elements };
+    return { ...state, elements, active: false };
   },
 
   unselect: (id: string | string[]) => (state: IState): IState => {
@@ -106,22 +106,9 @@ const reducer = {
       };
     });
 
-    return { elements };
+    return { ...state, elements };
   },
-  clear: () => (): IState => ({ elements: {} }),
-
-  // clear: () => (state: IState): IState => {
-  //   const elements = { ...state.elements };
-  //   const ids = Object.keys(elements);
-  //   ids.forEach((itemId) => {
-  //     elements[itemId] = {
-  //       ...elements[itemId],
-  //       selected: false,
-  //     };
-  //   });
-
-  //   return { elements };
-  // },
+  clear: () => (): IState => initialState,
 };
 
 const useStore = () => {
