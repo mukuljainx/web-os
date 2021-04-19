@@ -8,11 +8,6 @@ const Block = styled(Stack)`
   background: ${({ theme }) => theme.colors.acrylic};
   position: relative;
   border-radius: 4px;
-  margin-bottom: 8px;
-  margin-right: 8px;
-  &:nth-child(3n) {
-    margin-right: 0px;
-  }
 `;
 
 const StyledText = styled(Text)`
