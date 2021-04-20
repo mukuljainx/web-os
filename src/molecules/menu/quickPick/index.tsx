@@ -10,7 +10,14 @@ import AppBlock from "./appBlock";
 // TODO: app list from store
 import { fakeList } from "../appList";
 import useDraggable from "utils/hooks/useDraggable";
-import { animate } from "./utils";
+import { animate, getIndex, getPositionToIndexMapping } from "./utils";
+
+export interface IAppList {
+  name: string;
+  icon: string;
+  width: number;
+  position: number;
+}
 
 const UserInfo = styled.div`
   margin-bottom: 32px;
@@ -27,26 +34,40 @@ const AppWrapper = styled(Stack)`
 
 const AnimatedWrapper = styled(animated.div)`
   position: absolute;
-  margin-bottom: 8px;
-  margin-right: 8px;
   border-radius: 4px;
-
-  &:nth-child(3n) {
-    margin-right: 0px;
-  }
 `;
 
 interface IProps {}
 
-let appsZ: Array<{ name: string; icon: string }> = [];
-const fakeApps = fakeList();
-fakeApps.forEach((a) => {
-  appsZ = [...appsZ, ...a.apps];
-});
+// TODO: drive row redux menu config
+const ROW_SIZE = 3;
 
 const QucikPick = ({}: IProps) => {
-  const apps = appsZ;
-  const order = React.useRef(apps.map((_, index) => index));
+  const getApps = React.useCallback(() => {
+    let appsZ: IAppList[] = [];
+    const fakeApps = fakeList();
+    fakeApps.forEach((a) => {
+      appsZ = [
+        ...appsZ,
+        ...a.apps.map((a) => ({
+          ...a,
+          width: 1,
+          position: -1,
+        })),
+      ];
+    });
+
+    appsZ = appsZ.map((a) => ({ ...a, width: Math.random() > 0.5 ? 2 : 1 }));
+
+    return getIndex(appsZ, ROW_SIZE);
+  }, []);
+  const apps = React.useMemo(getApps, []);
+  const order = React.useRef(
+    apps.map((a, index) => ({ index, width: a.width, position: a.position }))
+  );
+  const positionToIndexMap = React.useRef(
+    getPositionToIndexMapping(order.current, ROW_SIZE)
+  );
   const wrapperRef = React.useRef<HTMLDivElement>(null);
   const user = useSelector((state) => state.auth.user?.name);
   const startPosition = React.useRef({ x: 0, y: 0 });
@@ -73,26 +94,100 @@ const QucikPick = ({}: IProps) => {
       x: store.elements[store.id!].translate.x,
       y: store.elements[store.id!].translate.y,
     };
+
+    // draggingIndex.current will contain the current index, where index is intial
+    // render index, which might differ in order array
+    // so we need position of that element in order array
+    const prevIndex = order.current.findIndex(
+      (a) => draggingIndex.current === a.index
+    );
+    const currentElement = order.current[prevIndex];
+    const oldPosition = currentElement.position;
+
     // down-up : 3
     let y = Math.round(gap.y / 120);
     if (Math.abs(y) > 0.5) {
-      y = y * 3;
+      y = y * ROW_SIZE;
     }
+
     const x = Math.round(gap.x / 120);
-    const z = y + x + order.current.indexOf(draggingIndex.current);
 
-    let newIndex = Math.round(z);
+    const z = y + x + oldPosition;
+    // how much block has moved
+    let newPosition = Math.round(z);
+    const movement = newPosition - oldPosition > 0 ? "FORWARD" : "BACKWARD";
 
-    const newOrder = [...order.current];
-    if (newIndex < 0) {
-      newIndex = order.current.indexOf(draggingIndex.current);
-    } else {
-      newOrder.splice(newOrder.indexOf(draggingIndex.current), 1);
-      newOrder.splice(newIndex, 0, draggingIndex.current);
+    let newOrder = [...order.current];
+
+    const changeOrder = (
+      prev: number,
+      dirtyNewIndex: number,
+      newPosition: number,
+      width?: number
+    ) => {
+      let newI = dirtyNewIndex;
+      newPosition;
+      // only elements with width 1
+      // are allowed to attached in empty spaces
+      // reason being, allowing everything will
+      // complicate process a lot, but ROI will be very low
+      if (dirtyNewIndex === -1 && width === 1) {
+        // search in the order where it fits as per the new position
+        let i =
+          newOrder.findIndex((a) => a.position > newPosition) +
+          (movement === "BACKWARD" ? 0 : -1);
+
+        if (i < 0) {
+          i = order.current.length - 1;
+        }
+
+        const newElementProps = {
+          ...newOrder[prev],
+          position: newPosition,
+        };
+        newI = i;
+        // remove it from previous index and insert to new index
+        newOrder.splice(prev, 1);
+        newOrder.splice(newI, 0, newElementProps);
+        newOrder = getIndex(newOrder, ROW_SIZE);
+      } else {
+        // remove it from previous index and insert to new index
+        newOrder.splice(prev, 1);
+        newOrder.splice(newI, 0, { ...order.current[prev] });
+        // get latest positions as per the width
+        newOrder = getIndex(newOrder, ROW_SIZE);
+      }
+    };
+
+    // if the element has some width, this will same as prevIndex
+    let newIndex = positionToIndexMap.current[newPosition];
+
+    if (newPosition < 0) {
+      // do nothing
+      newIndex = prevIndex;
+    } else if (prevIndex !== newIndex) {
+      // these are special checks in case of different width
+      // check new element width
+      // newIndex can't be used directly here
+      const newPositionElement =
+        order.current[positionToIndexMap.current[newPosition]];
+      // if element exist and it has width more than 2
+      // if it doesn't "empty space"
+      // them move block freely in else case
+      if (newPositionElement && newPositionElement.width > 1) {
+        if (Math.abs(newPosition - oldPosition) < newPositionElement.width) {
+          // do nothing
+        } else {
+          changeOrder(prevIndex, newIndex, newPosition, currentElement.width);
+        }
+      } else {
+        changeOrder(prevIndex, newIndex, newPosition, currentElement.width);
+      }
     }
 
     setSprings(
       animate(
+        ROW_SIZE,
         newOrder,
         order.current,
         gap.x,
@@ -104,10 +199,17 @@ const QucikPick = ({}: IProps) => {
     if (!store.active) {
       clearStore();
       order.current = newOrder;
+      positionToIndexMap.current = getPositionToIndexMapping(
+        order.current,
+        ROW_SIZE
+      );
     }
   }, [store]);
 
-  const [springs, setSprings] = useSprings(apps.length, animate(order.current));
+  const [springs, setSprings] = useSprings(
+    apps.length,
+    animate(ROW_SIZE, order.current)
+  );
 
   return (
     <Stack fullHeight flexDirection="column" paddingX={16}>
@@ -127,13 +229,10 @@ const QucikPick = ({}: IProps) => {
                   handleMouseDown(event, dragId);
                 }}
                 style={{
-                  width: 120,
+                  width: 128 * apps[i].width - 8,
                   height: 120,
-                  // transform: store.elements[dragId]
-                  //   ? `translate(${store.elements[dragId]?.translate.x}px, ${store.elements[dragId]?.translate.y}px)`
-                  //   : ``,
                 }}
-                name={apps[i].name}
+                name={apps[i].name + " " + i}
                 icon={apps[i].name}
               />
             </AnimatedWrapper>
