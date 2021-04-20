@@ -21,14 +21,20 @@ type IProps = ReactHTMLElement<
   {
     icon: string;
     name: string;
+    ref?: React.RefObject<HTMLDivElement>;
+    isCurrent?: boolean;
   }
 >;
 
-const QucikPick = ({ icon, name, ref, ...rest }: IProps) => {
+const QucikPick = ({ icon, name, isCurrent, ref, ...rest }: IProps) => {
   return (
-    <Block {...rest} alignItems="center" justifyContent="center">
-      <Image name={icon} size={48} />
-      <StyledText className="ellipsis">{name}</StyledText>
+    <Block {...rest} alignItems="center" justifyContent="center" ref={ref!}>
+      {!isCurrent && (
+        <>
+          <Image name={icon} size={48} />
+          <StyledText className="ellipsis">{name}</StyledText>
+        </>
+      )}
     </Block>
   );
 };
