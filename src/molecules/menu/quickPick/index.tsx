@@ -72,6 +72,10 @@ const QucikPick = ({}: IProps) => {
   const user = useSelector((state) => state.auth.user?.name);
   const startPosition = React.useRef({ x: 0, y: 0 });
   const draggingIndex = React.useRef(-1);
+  const [springs, setSprings] = useSprings(
+    apps.length,
+    animate(ROW_SIZE, order.current)
+  );
 
   const onDragStart = React.useCallback((event: React.MouseEvent) => {
     startPosition.current = {
@@ -205,11 +209,6 @@ const QucikPick = ({}: IProps) => {
       );
     }
   }, [store]);
-
-  const [springs, setSprings] = useSprings(
-    apps.length,
-    animate(ROW_SIZE, order.current)
-  );
 
   return (
     <Stack fullHeight flexDirection="column" paddingX={16}>

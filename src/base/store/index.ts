@@ -6,12 +6,18 @@ interface IBaseState {
   apps: Record<string, IAppGroup>;
   routes: IFile[];
   currentWeight: number;
+  menu: {
+    show: boolean;
+  };
 }
 
 const initialState: IBaseState = {
   apps: {},
   routes: getDefaultRoutes(),
   currentWeight: 0,
+  menu: {
+    show: false,
+  },
 };
 
 const baseSlice = createSlice({
@@ -65,8 +71,11 @@ const baseSlice = createSlice({
         );
       }
     },
+    toggleStartMenu: (state) => {
+      state.menu.show = !state.menu.show;
+    },
   },
 });
 
-export const { openApp, closeApp } = baseSlice.actions;
+export const { openApp, closeApp, toggleStartMenu } = baseSlice.actions;
 export default baseSlice.reducer;

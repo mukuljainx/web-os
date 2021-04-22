@@ -19,18 +19,20 @@ export const availableIcons: Record<string, string> = {
   partlyCloudy: "partly-cloudy.png",
 };
 
-interface IProps {
-  name: string;
-  size: number;
-  style?: React.CSSProperties;
-}
+type IProps = ReactHTMLElement<
+  "img",
+  {
+    name: string;
+    size: number;
+  }
+>;
 
-const Image = ({ name, size, style }: IProps) => {
+const Image = ({ name, size, ref, ...rest }: IProps) => {
   const iconName = availableIcons[name] || "generic.png";
 
   return (
     <img
-      style={style}
+      {...rest}
       height={size}
       width={size}
       className="icon__image"

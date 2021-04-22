@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Redirect } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import IconInterface from "molecules/iconInterface";
 import { getRoutes } from "base/helper";
@@ -11,6 +11,7 @@ import useDraggable from "utils/hooks/useDraggable";
 import ContextMenu from "molecules/contextMenu";
 import AppBar from "molecules/appBar";
 import Menu from "molecules/menu";
+import { toggleStartMenu as toggleStartMenuAction } from "base/store";
 
 interface IProps {}
 
@@ -25,6 +26,10 @@ const Base = ({}: IProps) => {
   const routesMap = useSelector((state) => state.base.routes);
   const openedApps = useSelector((state) => state.base.apps);
   const { store, handleMouseDown } = useDraggable({ wrapperRef });
+  const dispatch = useDispatch();
+  const toggleStartMenu = React.useCallback(() => {
+    dispatch(toggleStartMenuAction());
+  }, [toggleStartMenuAction, dispatch]);
 
   if (!user) {
     return <Redirect to="/auth" />;
@@ -95,7 +100,7 @@ const Base = ({}: IProps) => {
           );
         })}
         <IconInterface user={user!.name} files={desktopRoutes!.files} />
-        <AppBar apps={openedApps} />
+        <AppBar toggleMenu={toggleStartMenu} apps={openedApps} />
       </Wrapper>
     </Desktop>
   );

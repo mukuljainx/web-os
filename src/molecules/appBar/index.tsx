@@ -13,6 +13,7 @@ const Wrapper = styled(Acrylic)`
   position: fixed;
   bottom: 0;
   justify-content: space-between;
+  z-index: ${({ theme }) => theme.zIndex.appBar};
 `;
 
 const Absolute = styled.div<{ right?: boolean }>`
@@ -24,9 +25,10 @@ const Absolute = styled.div<{ right?: boolean }>`
 
 interface IProps {
   apps: Record<string, IAppGroup>;
+  toggleMenu: () => void;
 }
 
-const AppBar = ({ apps }: IProps) => {
+const AppBar = ({ apps, toggleMenu }: IProps) => {
   const sortedApps = Object.values(apps).sort((a, b) =>
     a.initialWeight > b.initialWeight ? 1 : -1
   );
@@ -37,7 +39,7 @@ const AppBar = ({ apps }: IProps) => {
       <Stack fullWidth justifyContent="center" style={{ position: "relative" }}>
         <Absolute>
           <Stack alignItems="center" gap={16} fullHeight paddingLeft={16}>
-            <DesktopIcon name="windows" size={32} />
+            <DesktopIcon onClick={toggleMenu} name="windows" size={32} />
           </Stack>
         </Absolute>
         <div>

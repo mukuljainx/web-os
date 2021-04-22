@@ -9,6 +9,7 @@ const theme = {
     contextMenu: 2147483001,
     app: 11,
     menu: 2147483000,
+    appBar: 2147483001,
   },
   icon: {
     textColor: " white",
