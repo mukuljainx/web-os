@@ -30,7 +30,7 @@ const Wrapper = styled(Acrylic)`
   }
 
   ${Partial}:last-child {
-    width: ${120 * 3 + 32 + 16}px;
+    width: ${120 * 4 + 32 + 16}px;
   }
 
   ${Partial}:not(:last-child) {

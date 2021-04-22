@@ -8,7 +8,7 @@ export const getPositionIndex = (pos: number, ROW_SIZE: number) => {
 export const getPosition = ({ row, col }: { row: number; col: number }) => {
   return {
     x: col * 128,
-    y: row * 128,
+    y: row * 128 + (row > 1 ? 24 : 0),
   };
 };
 

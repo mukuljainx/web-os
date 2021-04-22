@@ -40,7 +40,7 @@ const AnimatedWrapper = styled(animated.div)`
 interface IProps {}
 
 // TODO: drive row redux menu config
-const ROW_SIZE = 3;
+const ROW_SIZE = 4;
 
 const QucikPick = ({}: IProps) => {
   const getApps = React.useCallback(() => {
