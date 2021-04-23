@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Icon } from "@fluentui/react";
 
 import { Acrylic, Stack, Text } from "atoms/styled";
-import { IMenuItem } from "./interface";
+import { MenuItemsType } from "./interface";
 
 const AnimatedWrapper = styled(animated.div)`
   z-index: ${({ theme }) => theme.zIndex.contextMenu};
@@ -12,9 +12,16 @@ const AnimatedWrapper = styled(animated.div)`
   overflow: auto;
 `;
 
-const ItemWrapper = styled(Stack)`
+const ItemWrapper = styled(Stack)<{ disabled?: boolean }>`
   &:hover {
     background: ${({ theme }) => theme.colors.plainHover};
+  }
+  ${({ disabled }) => disabled && `opacity: 0.3; pointer-events: none; `}
+`;
+
+const ItemGroupWrapper = styled.div`
+  &:not(:last-child) {
+    border-bottom: 1px solid ${({ theme }) => theme.colors.plainHover};
   }
 `;
 
@@ -43,7 +50,7 @@ const Wrapper = styled(Acrylic)`
 type IProps = ReactHTMLElement<
   "div",
   {
-    items: Array<IMenuItem & { children?: IMenuItem[] }>;
+    items: MenuItemsType[];
     itemAction?: {
       onClick?: (event: React.MouseEvent) => void;
       onMouseEnter?: (event: React.MouseEvent) => void;
@@ -55,16 +62,23 @@ type IProps = ReactHTMLElement<
 >;
 
 const ContextMenu = ({
-  items,
+  items: itemGroup,
   show,
   itemAction,
   style,
   ref,
   ...rest
 }: IProps) => {
+  const menuLenght = React.useMemo(() => {
+    let len = 0;
+    itemGroup.forEach((x) => (len += x.length));
+
+    return len;
+  }, [itemGroup]);
+
   const transition = useTransition(show, {
     from: { height: 0 },
-    enter: { height: items.length * 42 },
+    enter: { height: menuLenght * 42 + itemGroup.length },
     leave: { height: 0 },
     config: {
       ...config.default,
@@ -84,24 +98,30 @@ const ContextMenu = ({
           {...rest}
         >
           <Wrapper>
-            {items.map((item, j) => (
-              <ItemWrapper
-                data-id="context-menu-item"
-                paddingX={8}
-                paddingY={12}
-                alignItems="center"
-                key={j}
-                data-index={j}
-                {...itemAction}
-              >
-                {item.icon ? <Icon iconName={item.icon} /> : <span></span>}
-                <Text weight="light">{item.label}</Text>
-                {item.icon ? (
-                  <Icon iconName="ChevronRightMed" />
-                ) : (
-                  <span></span>
-                )}
-              </ItemWrapper>
+            {itemGroup.map((group, i) => (
+              <ItemGroupWrapper key={i}>
+                {group.map((item, j) => (
+                  <ItemWrapper
+                    disabled={item.disabled}
+                    data-id="context-menu-item"
+                    paddingX={8}
+                    paddingY={12}
+                    alignItems="center"
+                    key={`${j}-${j}`}
+                    data-row={i}
+                    data-col={j}
+                    {...itemAction}
+                  >
+                    {item.icon ? <Icon iconName={item.icon} /> : <span></span>}
+                    <Text weight="light">{item.label}</Text>
+                    {item.icon ? (
+                      <Icon iconName="ChevronRightMed" />
+                    ) : (
+                      <span></span>
+                    )}
+                  </ItemWrapper>
+                ))}
+              </ItemGroupWrapper>
             ))}
           </Wrapper>
         </AnimatedWrapper>

@@ -1,12 +1,12 @@
 import * as React from "react";
 
-import { ShowMenuType, HideMenuType, IMenuItem } from "./interface";
+import { ShowMenuType, HideMenuType, MenuItemsType } from "./interface";
 
 const useGlobal = () => {
   const [state, setState] = React.useState<{
     style: React.CSSProperties;
     show: boolean;
-    items: IMenuItem[];
+    items: MenuItemsType[];
   }>({ show: false, style: {}, items: [] });
 
   const hideMenu: HideMenuType = React.useCallback(() => {

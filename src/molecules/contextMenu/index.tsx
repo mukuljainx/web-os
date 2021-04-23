@@ -1,8 +1,9 @@
 import * as React from "react";
-import Menu from "./menu";
 
+import Menu from "./menu";
 import useGlobal from "./useGlobal";
 import useLocal from "./useLocal";
+import { MenuItemsType } from "./interface";
 
 export interface IMenuItem {
   icon?: string;
@@ -13,14 +14,44 @@ export interface IMenuItem {
 
 interface IProps {
   wrapperRef: React.RefObject<HTMLDivElement | null>;
-  items: Array<IMenuItem & { children?: IMenuItem[] }>;
+  items: MenuItemsType[] | MenuItemsType;
   childMenu?: {
     show: boolean;
     style: React.CSSProperties;
   };
 }
 
-const ContextMenu = ({ wrapperRef, items, childMenu }: IProps) => {
+const getMenuItems = (dirtyItems: MenuItemsType[] | MenuItemsType) => {
+  let itemsGroup: MenuItemsType[] = [];
+  if (!Array.isArray(dirtyItems[0])) {
+    itemsGroup = [dirtyItems as MenuItemsType];
+  } else {
+    itemsGroup = dirtyItems as MenuItemsType[];
+  }
+
+  return itemsGroup.map((items) => {
+    return items.map((i) => {
+      let x: MenuItemsType[] = [];
+      if (i.children && i.children.length > 0) {
+        if (!Array.isArray(i.children[0])) {
+          x = [i.children as MenuItemsType];
+        } else {
+          x = i.children as MenuItemsType[];
+        }
+      }
+      return {
+        ...i,
+        children: i.children ? (x as MenuItemsType[]) : undefined,
+      };
+    });
+  });
+};
+
+const ContextMenu = ({ wrapperRef, items: dirtyItems, childMenu }: IProps) => {
+  let items = React.useMemo(() => {
+    return getMenuItems(dirtyItems);
+  }, [dirtyItems]);
+
   const menuRef = React.useRef<HTMLDivElement>(null);
   const state = useGlobal(wrapperRef, menuRef);
   const childState = useLocal();
@@ -29,18 +60,20 @@ const ContextMenu = ({ wrapperRef, items, childMenu }: IProps) => {
     if (!childMenu) {
       childState.hideMenu();
     }
-    const i = parseInt(event.currentTarget.getAttribute("data-index")!, 10);
-    if (!items[i].action) {
+    const i = parseInt(event.currentTarget.getAttribute("data-row")!, 10);
+    const j = parseInt(event.currentTarget.getAttribute("data-col")!, 10);
+    if (!items[i][j].action) {
       return;
     }
-    items[i].action!(items[i].label, items[i].id);
+    items[i][j].action!(items[i][j].label, items[i][j].id);
     state.hideMenu();
   }, []);
 
   const handleItemMouseEnter = React.useCallback((event: React.MouseEvent) => {
     const element = event.currentTarget;
-    const i = parseInt(element.getAttribute("data-index")!, 10);
-    const childItems = items[i].children || [];
+    const i = parseInt(element.getAttribute("data-row")!, 10);
+    const j = parseInt(element.getAttribute("data-col")!, 10);
+    const childItems = items[i][j].children || [];
 
     if (childItems.length === 0) {
       childState.hideMenu();

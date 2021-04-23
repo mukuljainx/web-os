@@ -75,6 +75,7 @@ const Base = ({}: IProps) => {
       label: "Change Desktop Background",
       action: MenuItemAction,
       id: "change-desktop-background",
+      disabled: true,
     },
   ];
 
@@ -82,7 +83,7 @@ const Base = ({}: IProps) => {
     <Desktop>
       <Wrapper ref={wrapperRef}>
         <Menu />
-        <ContextMenu wrapperRef={wrapperRef} items={menuItems} />
+        <ContextMenu wrapperRef={wrapperRef} items={[menuItems, menuItems]} />
         {Object.values(openedApps).map((app) => {
           return (
             <>
