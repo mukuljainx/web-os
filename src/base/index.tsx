@@ -60,7 +60,16 @@ const Base = ({}: IProps) => {
   }, []);
 
   const menuItems = [
-    { label: "New Folder", action: MenuItemAction, id: "new-folder" },
+    {
+      label: "New Folder",
+      action: MenuItemAction,
+      id: "new-folder",
+      icon: "ViewAll",
+      children: [
+        { label: "Option A", action: MenuItemAction, id: "get-info" },
+        { label: "Option B", action: MenuItemAction, id: "get-info" },
+      ],
+    },
     { label: "Get Info", action: MenuItemAction, id: "get-info" },
     {
       label: "Change Desktop Background",

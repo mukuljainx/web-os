@@ -6,9 +6,24 @@ interface IProps extends ITextProps {
   textTransform?: React.CSSProperties["textTransform"];
 }
 
-const StyledText = ({ weight, textTransform, ...rest }: IProps) => {
+const StyledText = ({
+  weight,
+  textTransform,
+  className,
+  style,
+  ...rest
+}: IProps) => {
   return (
-    <Text {...rest} style={{ fontWeight: weight as any, textTransform }} />
+    <Text
+      {...rest}
+      style={{
+        fontWeight: weight as any,
+        textTransform,
+        width: "100%",
+        ...style,
+      }}
+      className={`ellipsis ${className || ""}`}
+    />
   );
 };
 

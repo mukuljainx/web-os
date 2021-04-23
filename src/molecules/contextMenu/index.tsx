@@ -1,108 +1,84 @@
-import { useTransition } from "@react-spring/core";
-import { animated } from "@react-spring/web";
 import * as React from "react";
-import styled from "styled-components";
+import Menu from "./menu";
 
-const AnimatedWrapper = styled(animated.div)`
-  z-index: ${({ theme }) => theme.zIndex.contextMenu};
-  position: absolute;
-  overflow: auto;
-`;
+import useGlobal from "./useGlobal";
+import useLocal from "./useLocal";
 
-const ItemWrapper = styled.div`
-  padding: 12px 8px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  &:hover {
-    background: ${({ theme }) => theme.colors.plainHover};
-  }
-`;
-
-const Wrapper = styled.div`
-  background: ${({ theme }) => theme.colors.plain};
-  width: 200px;
-  border-radius: ${({ theme }) => theme.borderRadius}px;
-
-  ${ItemWrapper} {
-    ${({ theme }) => `
-    &:first-child {
-      border-top-left-radius: ${theme.borderRadius}px;
-      border-top-right-radius: ${theme.borderRadius}px;
-    }
-    &:last-child {
-      border-bottom-left-radius: ${theme.borderRadius}px;
-      border-bottom-right-radius: ${theme.borderRadius}px;
-    }`}
-  }
-`;
+export interface IMenuItem {
+  icon?: string;
+  label: string;
+  action?: (label: string, id: string) => void;
+  id: string;
+}
 
 interface IProps {
   wrapperRef: React.RefObject<HTMLDivElement | null>;
-  items: Array<{
-    label: string;
-    action: (label: string, id: string) => void;
-    id: string;
-  }>;
+  items: Array<IMenuItem & { children?: IMenuItem[] }>;
+  childMenu?: {
+    show: boolean;
+    style: React.CSSProperties;
+  };
 }
 
-const ContextMenu = ({ wrapperRef, items }: IProps) => {
-  const [state, setState] = React.useState<{
-    style: React.CSSProperties;
-    show: boolean;
-  }>({ show: false, style: {} });
+const ContextMenu = ({ wrapperRef, items, childMenu }: IProps) => {
+  const menuRef = React.useRef<HTMLDivElement>(null);
+  const state = useGlobal(wrapperRef, menuRef);
+  const childState = useLocal();
 
-  const handleContextMenuClick = React.useCallback((event: MouseEvent) => {
-    event.preventDefault();
-    setState({
-      style: { left: event.clientX, top: event.clientY },
-      show: true,
+  const handleItemClick = React.useCallback((event: React.MouseEvent) => {
+    if (!childMenu) {
+      childState.hideMenu();
+    }
+    const i = parseInt(event.currentTarget.getAttribute("data-index")!, 10);
+    if (!items[i].action) {
+      return;
+    }
+    items[i].action!(items[i].label, items[i].id);
+    state.hideMenu();
+  }, []);
+
+  const handleItemMouseEnter = React.useCallback((event: React.MouseEvent) => {
+    const element = event.currentTarget;
+    const i = parseInt(element.getAttribute("data-index")!, 10);
+    const childItems = items[i].children || [];
+
+    if (childItems.length === 0) {
+      childState.hideMenu();
+      return;
+    }
+    childState.showMenu({
+      items: childItems,
+      left: element.getBoundingClientRect().right,
+      top: element.getBoundingClientRect().top,
     });
   }, []);
 
-  const hideMenu = React.useCallback(() => {
-    setState((prev) => ({
-      ...prev,
-      show: false,
-    }));
-  }, []);
-
-  const handleItemClick = React.useCallback((event: React.MouseEvent) => {
-    const i = parseInt(event.currentTarget.getAttribute("data-index")!, 10);
-    items[i].action(items[i].label, items[i].id);
-  }, []);
-
   React.useEffect(() => {
-    wrapperRef.current?.addEventListener("contextmenu", handleContextMenuClick);
-    wrapperRef.current?.addEventListener("mousedown", hideMenu);
-    return () => {
-      wrapperRef.current?.removeEventListener(
-        "mousedown",
-        handleContextMenuClick
-      );
-      wrapperRef.current?.removeEventListener("contextmenu", hideMenu);
-    };
-  }, [wrapperRef]);
+    childState.hideMenu();
+  }, [state.show]);
 
-  const transition = useTransition(state.show, {
-    from: { height: 0 },
-    enter: { height: items.length * 42 },
-    leave: { height: 0 },
-  });
-
-  return transition(
-    (style, item, __, index) =>
-      item && (
-        <AnimatedWrapper key={index} style={{ ...style, ...state.style }}>
-          <Wrapper>
-            {items.map((item, j) => (
-              <ItemWrapper key={j} data-index={j} onClick={handleItemClick}>
-                {item.label}
-              </ItemWrapper>
-            ))}
-          </Wrapper>
-        </AnimatedWrapper>
-      )
+  return (
+    <span ref={menuRef} onMouseLeave={childState.hideMenu}>
+      <Menu
+        test-id="context-menu"
+        itemAction={{
+          onClick: handleItemClick,
+          onMouseEnter: handleItemMouseEnter,
+        }}
+        show={state.show}
+        style={state.style}
+        items={items}
+      />
+      <Menu
+        test-id="child-context-menu"
+        itemAction={{
+          onClick: handleItemClick,
+        }}
+        show={childState.show}
+        style={childState.style}
+        items={childState.items}
+      />
+    </span>
   );
 };
 
