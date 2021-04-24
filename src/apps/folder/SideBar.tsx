@@ -8,7 +8,6 @@ import Image from "atoms/icons/image";
 
 const Wrapper = styled(Stack)`
   width: 240px;
-  border-right: 1px solid;
 `;
 
 const items = [
@@ -32,7 +31,7 @@ const SideBar = ({ app }: IProps) => {
       <Stack alignItems="center">
         <Image height={24} name={app.icon} style={{ paddingRight: 8 }} />
         <Text weight={700} variant="mediumPlus">
-          {app.name}
+          {app.appName}
         </Text>
       </Stack>
       <SideNav items={items} />

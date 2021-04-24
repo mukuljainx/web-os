@@ -12,6 +12,7 @@ const config = {
     modules: ["node_modules", "."],
     alias: {
       src: path.resolve(__dirname, "./src"),
+      react: path.resolve(__dirname, "./node_modules/react"),
       // webpack was unable to understand the instance import
       // and export, so we have explicitly tell it which comes
       // from the node_modules

@@ -10,7 +10,7 @@ import styled from "styled-components";
 import useDraggable from "utils/hooks/useDraggable";
 import ContextMenu from "molecules/contextMenu";
 import AppBar from "molecules/appBar";
-import Menu from "molecules/menu";
+import Menu from "molecules/startMenu";
 import { toggleStartMenu as toggleStartMenuAction } from "base/store";
 
 interface IProps {}

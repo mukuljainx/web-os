@@ -5,8 +5,8 @@ interface IProps extends IIconProps {
   size?: number;
 }
 
-const StyledIcon = ({ size, ...rest }: IProps) => {
-  return <Icon {...rest} style={{ fontSize: size }} />;
+const StyledIcon = ({ size, style, ...rest }: IProps) => {
+  return <Icon {...rest} style={{ ...style, fontSize: size }} />;
 };
 
 export default StyledIcon;
