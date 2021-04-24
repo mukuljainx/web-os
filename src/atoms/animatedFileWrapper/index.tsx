@@ -5,19 +5,22 @@ import { useTransition, animated } from "react-spring";
 import { getOverflowAdjust, isInside } from "utils/dom";
 import { IMetaData } from "base/interfaces";
 import theme from "theme";
+import { dispatchEvent } from "utils/events";
 
 const AnimatedWrapper = styled(animated.div)`
   position: fixed;
 `;
 
-interface IProps {
-  children: React.ReactNode;
+interface ITransitFolderProps {
   x: number;
   y: number;
   left: number;
   top: number;
   styleX: React.CSSProperties;
+  children: React.ReactNode;
   weight: number;
+  appName: string;
+  id: string;
 }
 
 const TransitFolder = ({
@@ -28,7 +31,9 @@ const TransitFolder = ({
   top,
   styleX,
   weight,
-}: IProps) => {
+  appName,
+  id,
+}: ITransitFolderProps) => {
   const transition = useTransition(true, {
     from: {
       scale: 0.01,
@@ -37,6 +42,9 @@ const TransitFolder = ({
     },
     enter: { scale: 1, x: 100 + x, y: 100 + y },
     leave: { opacity: 0.33 },
+    onRest: () => {
+      dispatchEvent("ANIMATED_FOLDER_ANIMATION_COMPLETED", { appName, id });
+    },
   });
 
   const transform = styleX.transform;
@@ -56,19 +64,19 @@ const TransitFolder = ({
   ));
 };
 
-const AnimatedFileWrapper = ({
-  children,
-  metaData,
-  style,
-  weight,
-}: // onMouseDown,
-{
-  children: React.ReactNode;
+type IProps = {
   metaData: IMetaData;
   style: React.CSSProperties;
-  weight: number;
-  // onMouseDown: (event: React.MouseEvent) => void;
-}) => {
+} & Pick<ITransitFolderProps, "appName" | "id" | "weight" | "children">;
+
+const AnimatedFileWrapper = ({
+  children,
+  style,
+  metaData,
+  weight,
+  appName,
+  id,
+}: IProps) => {
   const [state, setState] = React.useState({
     show: false,
     adjust: {
@@ -132,6 +140,8 @@ const AnimatedFileWrapper = ({
       top={position.y}
       x={state.adjust.left}
       y={state.adjust.top}
+      appName={appName}
+      id={id}
     >
       <div style={{ position: "fixed" }} ref={ref}>
         {children}

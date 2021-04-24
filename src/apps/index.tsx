@@ -26,7 +26,13 @@ const App = ({
   switch (app.appName) {
     case "folder": {
       return (
-        <AnimatedFileWrapper style={style} metaData={metaData} weight={weight}>
+        <AnimatedFileWrapper
+          appName={app.appName}
+          id={id}
+          style={style}
+          metaData={metaData}
+          weight={weight}
+        >
           <Folder
             onMouseDown={onMouseDown}
             metaData={metaData}

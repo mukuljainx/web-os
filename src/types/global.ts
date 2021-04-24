@@ -22,6 +22,8 @@ declare global {
       openApp: (param: IApp) => void;
       closeApp: (param: { appName: string; instanceId: string }) => void;
       wrapper: HTMLElement;
+      // to keep track of events
+      events: Record<string, number>;
     };
   }
 }

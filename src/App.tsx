@@ -14,10 +14,12 @@ import { openApp, closeApp } from "base/store";
 const App = () => {
   // move to more apporpiate place
   React.useEffect(() => {
+    // init global object
     window.os = {
       ...window.os,
       openApp: (param) => store.dispatch(openApp(param)),
       closeApp: (param) => store.dispatch(closeApp(param)),
+      events: {},
     };
 
     // housekeeping

@@ -3,16 +3,19 @@ import styled from "styled-components";
 import { useSelector } from "react-redux";
 
 import SideBar from "./SideBar";
-import TopBar from "./TopBar";
+import TopBar from "./topbar";
 import Content from "./Content";
 import { getRoutes } from "base/helper";
 import useHistory from "utils/hooks/useHistory";
 import { interpolate } from "utils/string";
 import { IApp, IMetaData } from "base/interfaces";
 import { Acrylic } from "atoms/styled";
+import NavigationBar from "./navigationBar";
 
 const Wrapper = styled.div`
   height: 100%;
+  width: 100%;
+  overflow: hidden;
 `;
 
 const Container = styled(Acrylic)`
@@ -35,8 +38,12 @@ interface IProps {
   onMouseDown: (event: React.MouseEvent) => void;
 }
 
+const getPathName = (path: string) => {
+  return path.split("/").pop() || "/";
+};
+
 const Folder = ({ path, app, id, onMouseDown }: IProps) => {
-  const { getCurrent, push, navigate } = useHistory(path);
+  const { getCurrent, push, navigate, state: history } = useHistory(path);
   const isMetaKey = React.useRef(false);
   const wrapperRef = React.useRef<HTMLDivElement>(null);
   const routesMap = useSelector((state) => state.base.routes);
@@ -75,6 +82,14 @@ const Folder = ({ path, app, id, onMouseDown }: IProps) => {
     window.os.closeApp({ appName: app.appName, instanceId: id });
   }, []);
 
+  const goToParentRoute = React.useCallback(() => {
+    const currentRoute = getCurrent();
+    if (currentRoute === "/") return;
+    const newRoute = getCurrent().split("/");
+    newRoute.pop();
+    push(newRoute.join("/") || "/");
+  }, [currentRoute, push]);
+
   if (!currentRoute) {
     throw Error("No matching route for: " + getCurrent());
   }
@@ -91,11 +106,7 @@ const Folder = ({ path, app, id, onMouseDown }: IProps) => {
             return;
           }
           case "ArrowUp": {
-            const currentRoute = getCurrent();
-            if (currentRoute === "/") return;
-            const newRoute = getCurrent().split("/");
-            newRoute.pop();
-            push(newRoute.join("/") || "/");
+            goToParentRoute();
             return;
           }
         }
@@ -126,12 +137,20 @@ const Folder = ({ path, app, id, onMouseDown }: IProps) => {
         <SideBar app={app} />
         <Wrapper className="flex flex-column flex-grow">
           <TopBar
+            name={getPathName(getCurrent())}
             onMouseDown={onMouseDown}
-            onNextClick={nextRoute}
-            onPreviousClick={previousRoute}
             onCloseClick={handleClose}
           ></TopBar>
+          <NavigationBar
+            history={history}
+            app={app}
+            onNextClick={nextRoute}
+            onPreviousClick={previousRoute}
+            onUpwardClick={goToParentRoute}
+            push={push}
+          />
           <Content
+            app={app}
             fileAction={fileAction}
             user={userName}
             files={currentRoute.files}
