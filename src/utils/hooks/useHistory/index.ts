@@ -1,36 +1,55 @@
 import * as React from "react";
 
+export interface IHistoryStatus {
+  position: number;
+  side: "START" | "MID" | "END";
+  history: string[];
+}
+
 const useHistory = (initialPath: string) => {
-  const [history, setHistory] = React.useState([initialPath]);
-  const [current, setCurrent] = React.useState(0);
+  const [state, setState] = React.useState<IHistoryStatus>({
+    position: 0,
+    side: "START",
+    history: [initialPath],
+  });
 
-  React.useEffect(() => {
-    setCurrent(history.length - 1);
-  }, [history]);
+  // React.useEffect(() => {
+  //   setState({ position: history.length - 1, side: "END" });
+  // }, [history]);
 
-  const getCurrent = () => history[current];
+  const getCurrent = () => state.history[state.position];
 
   const push = React.useCallback(
     (path: string) => {
-      setHistory((prevHistory) => {
-        return [...prevHistory.slice(0, current + 1), path];
+      setState((prevState) => {
+        const history = [
+          ...prevState.history.slice(0, prevState.position + 1),
+          path,
+        ];
+        return { history, side: "END", position: history.length - 1 };
       });
     },
-    [current]
+    [state]
   );
 
   const navigate = React.useCallback(
     (step: number) => {
-      setCurrent((c) => {
-        let next = c + step;
-        // if c was positive, forward movement
+      setState((prevState) => {
+        let position = prevState.position + step;
+        // if prevState was positive, forward movement
         if (step > -1) {
-          next = Math.min(history.length - 1, next);
+          position = Math.min(prevState.history.length - 1, position);
         } else {
-          next = Math.max(0, next);
+          position = Math.max(0, position);
+        }
+        let side: IHistoryStatus["side"] = "MID";
+        if (position === prevState.history.length - 1) {
+          side = "END";
+        } else if (position === 0) {
+          side = "START";
         }
 
-        return next;
+        return { ...prevState, position, side };
       });
     },
     [history]
@@ -40,9 +59,10 @@ const useHistory = (initialPath: string) => {
     getCurrent,
     push,
     navigate,
+    side: state.side,
     __: {
-      history,
-      current,
+      history: state.history,
+      current: state.position,
     },
   };
 };
