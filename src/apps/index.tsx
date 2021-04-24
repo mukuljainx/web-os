@@ -1,11 +1,11 @@
 import * as React from "react";
 
 import Folder from "apps/folder";
-import { IMetaData } from "base/interfaces";
+import { IApp, IMetaData } from "base/interfaces";
 import AnimatedFileWrapper from "atoms/animatedFileWrapper";
 
 interface IProps {
-  app: string;
+  app: IApp;
   id: string;
   data: any;
   metaData: IMetaData;
@@ -23,7 +23,7 @@ const App = ({
   weight,
   onMouseDown,
 }: IProps) => {
-  switch (app) {
+  switch (app.appName) {
     case "folder": {
       return (
         <AnimatedFileWrapper style={style} metaData={metaData} weight={weight}>
@@ -31,7 +31,7 @@ const App = ({
             onMouseDown={onMouseDown}
             metaData={metaData}
             key={id}
-            appName={app}
+            app={app}
             id={id}
             {...data}
           />

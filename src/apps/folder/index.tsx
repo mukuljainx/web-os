@@ -8,13 +8,14 @@ import Content from "./Content";
 import { getRoutes } from "base/helper";
 import useHistory from "utils/hooks/useHistory";
 import { interpolate } from "utils/string";
-import { IMetaData } from "base/interfaces";
+import { IApp, IMetaData } from "base/interfaces";
+import { Acrylic } from "atoms/styled";
 
 const Wrapper = styled.div`
   height: 100%;
 `;
 
-const Container = styled.div`
+const Container = styled(Acrylic)`
   &:focus {
     outline: none;
   }
@@ -23,18 +24,18 @@ const Container = styled.div`
   height: 480px;
   overflow: auto;
   resize: both;
-  background: white;
+  border-radius: ${({ theme }) => theme.borderRadius}px;
 `;
 
 interface IProps {
   path: string;
-  appName: string;
+  app: IApp;
   id: string;
   metaData: IMetaData;
   onMouseDown: (event: React.MouseEvent) => void;
 }
 
-const Folder = ({ path, appName, id, onMouseDown }: IProps) => {
+const Folder = ({ path, app, id, onMouseDown }: IProps) => {
   const { getCurrent, push, navigate } = useHistory(path);
   const isMetaKey = React.useRef(false);
   const wrapperRef = React.useRef<HTMLDivElement>(null);
@@ -71,7 +72,7 @@ const Folder = ({ path, appName, id, onMouseDown }: IProps) => {
   }, [navigate]);
 
   const handleClose = React.useCallback(() => {
-    window.os.closeApp({ appName, instanceId: id });
+    window.os.closeApp({ appName: app.appName, instanceId: id });
   }, []);
 
   if (!currentRoute) {
@@ -122,7 +123,7 @@ const Folder = ({ path, appName, id, onMouseDown }: IProps) => {
       onKeyDown={handleKeyDown}
     >
       <Wrapper className="flex">
-        <SideBar></SideBar>
+        <SideBar app={app} />
         <Wrapper className="flex flex-column flex-grow">
           <TopBar
             onMouseDown={onMouseDown}

@@ -2,7 +2,7 @@ import * as React from "react";
 import { Text, ITextProps, FontWeights } from "@fluentui/react";
 
 interface IProps extends ITextProps {
-  weight?: keyof typeof FontWeights;
+  weight?: keyof typeof FontWeights | number;
   textTransform?: React.CSSProperties["textTransform"];
 }
 

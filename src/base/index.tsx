@@ -99,7 +99,7 @@ const Base = ({}: IProps) => {
                         : undefined,
                     }}
                     key={dragId}
-                    app={instance.appName}
+                    app={instance}
                     data={instance.data}
                     id={instance.id}
                     metaData={instance.metaData!}

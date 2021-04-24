@@ -36,6 +36,7 @@ export type IMetaData = Partial<{
 }>;
 
 export interface IApp {
+  icon: string;
   appName: string;
   id: string;
   name: string;

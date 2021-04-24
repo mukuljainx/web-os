@@ -50,7 +50,8 @@ const IconLayout = ({ files, user, fileAction }: IProps) => {
                 window.os.openApp({
                   appName: file.appName,
                   id: file.id,
-                  name: file.name,
+                  icon: file.icon,
+                  name: fileName,
                   sleepTimeout: 1000,
                   data: { path },
                   metaData: {

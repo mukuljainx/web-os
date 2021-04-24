@@ -17,24 +17,25 @@ export const availableIcons: Record<string, string> = {
   photos: "photos.png",
   settings: "settings.png",
   partlyCloudy: "partly-cloudy.png",
+  myPc: "my-pc.png",
 };
 
 type IProps = ReactHTMLElement<
   "img",
   {
     name: string;
-    size: number;
+    size?: number;
   }
 >;
 
-const Image = ({ name, size, ref, ...rest }: IProps) => {
+const Image = ({ name, size, ref, height, width, ...rest }: IProps) => {
   const iconName = availableIcons[name] || "generic.png";
 
   return (
     <img
       {...rest}
-      height={size}
-      width={size}
+      height={height || size}
+      width={width || size}
       className="icon__image"
       src={require(`./assets/${iconName}`).default}
     />
