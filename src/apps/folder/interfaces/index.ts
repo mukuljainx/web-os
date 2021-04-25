@@ -17,7 +17,7 @@ export interface IFile {
   // useful for drag files/folder into folder
   // default behavoiur of opening other layout
   isFolder: boolean;
-  files?: IFile[];
+  files?: Record<string, IFile>;
   // app type, a folder, setting, video-player etc
   appName: string;
 }

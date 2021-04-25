@@ -9,9 +9,13 @@ export const getPath = (file: IFile, user: string) => {
 export const getRoutes = (root: IFile, user: string): IFolderRoutes[] => {
   const inner = (root: IFile, user: string) => {
     let routes: IFolderRoutes[] = [];
-    root.files!.forEach((file: IFile) => {
+    Object.values(root.files || {}).forEach((file: IFile) => {
       if (file.isFolder) {
-        routes.push({ path: getPath(file, user), files: file.files!, file });
+        routes.push({
+          path: getPath(file, user),
+          files: Object.values(file.files || {}),
+          file,
+        });
         routes.push(...inner(file, user));
       }
     });
@@ -19,5 +23,8 @@ export const getRoutes = (root: IFile, user: string): IFolderRoutes[] => {
     return routes;
   };
 
-  return [...inner(root, user), { path: "/", file: root, files: root.files! }];
+  return [
+    ...inner(root, user),
+    { path: "/", file: root, files: Object.values(root.files || {}) },
+  ];
 };

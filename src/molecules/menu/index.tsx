@@ -11,49 +11,30 @@ const MenuWrapper = styled(StackItem)`
 `;
 
 interface IProps {
-  items: Array<{ label: string }>;
+  items: Array<{
+    label: string;
+    options: IContextualMenuProps["items"];
+  }>;
 }
 
 const Menu = ({ items }: IProps) => {
-  const menuProps = useConst<IContextualMenuProps>(() => ({
-    shouldFocusOnMount: true,
-    shouldFocusOnContainer: true,
-    items: [
-      {
-        key: "rename",
-        text: "Rename",
-        onClick: () => console.log("Rename clicked"),
-      },
-      {
-        key: "edit",
-        text: "Edit",
-        onClick: () => console.log("Edit clicked"),
-      },
-      {
-        key: "properties",
-        text: "Properties",
-        onClick: () => console.log("Properties clicked"),
-      },
-      {
-        key: "linkNoTarget",
-        text: "Link same window",
-        href: "http://bing.com",
-      },
-      {
-        key: "linkWithTarget",
-        text: "Link new window",
-        href: "http://bing.com",
-        target: "_blank",
-      },
-      { key: "disabled", text: "Disabled item", disabled: true },
-    ],
-  }));
+  const menuProps = useConst<IContextualMenuProps[]>(() => {
+    return items.map((item) => ({
+      shouldFocusOnMount: true,
+      shouldFocusOnContainer: false,
+      items: item.options,
+    }));
+  });
 
   return (
     <Stack fullWidth gap={24} paddingX={16} paddingTop={8}>
       {items.map((item, i) => (
         <MenuWrapper key={i}>
-          <CommandButton text={item.label} persistMenu menuProps={menuProps} />
+          <CommandButton
+            text={item.label}
+            persistMenu
+            menuProps={menuProps[i]}
+          />
         </MenuWrapper>
       ))}
     </Stack>

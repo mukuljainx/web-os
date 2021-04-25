@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import SideBar from "./SideBar";
 import TopBar from "./topbar";
 import Content from "./Content";
-import { getRoutes } from "apps/folder/helper";
 import useHistory from "utils/hooks/useHistory";
 import { interpolate } from "utils/string";
 import { IApp, IMetaData } from "base/interfaces";
@@ -24,6 +23,8 @@ const Container = styled(Acrylic)`
   }
   z-index: 11;
   width: 720px;
+  min-width: 240px;
+  min-height: 240px;
   height: 480px;
   overflow: auto;
   resize: both;
@@ -46,16 +47,8 @@ const Folder = ({ path, app, id, onMouseDown }: IProps) => {
   const { getCurrent, push, navigate, state: history } = useHistory(path);
   const isMetaKey = React.useRef(false);
   const wrapperRef = React.useRef<HTMLDivElement>(null);
-  const routesMap = useSelector((state) => state.folder.routes);
+  const routes = useSelector((state) => state.folder.routes);
   const userName = useSelector((state) => state.auth.user!.name);
-
-  const routes = React.useMemo(
-    () =>
-      getRoutes(routesMap[0], userName).sort((a, b) =>
-        a.path.length < b.path.length ? 1 : -1
-      ),
-    [routesMap]
-  );
 
   const currentRoute = routes.find((r) => r.path === getCurrent());
 

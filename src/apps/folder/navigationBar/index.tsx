@@ -12,10 +12,24 @@ const Wrapper = styled.div`
 `;
 
 const menuItems = [
-  { label: "File" },
-  { label: "Home" },
-  { label: "Share" },
-  { label: "View" },
+  {
+    label: "File",
+    options: [
+      {
+        key: "new-file",
+        text: "New File",
+        onClick: console.log,
+      },
+      {
+        key: "new-folder",
+        text: "New Folder",
+        onClick: console.log,
+      },
+    ],
+  },
+  // { label: "Home", options: [] },
+  // { label: "Share", options: [] },
+  // { label: "View", options: [] },
 ];
 
 interface IProps {

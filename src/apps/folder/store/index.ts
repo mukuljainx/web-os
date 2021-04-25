@@ -1,21 +1,35 @@
-// import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { createSlice } from "@reduxjs/toolkit";
-import { IFile } from "../interfaces";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { getRoutes } from "../helper";
+import { IFile, IFolderRoutes } from "../interfaces";
 import { getDefaultRoutes } from "./routes";
 
 interface IBaseState {
-  routes: IFile[];
+  root: IFile;
+  routes: IFolderRoutes[];
 }
 
 const initialState: IBaseState = {
-  routes: getDefaultRoutes(),
+  root: getDefaultRoutes(),
+  routes: [],
 };
 
 const folderSlice = createSlice({
   name: "folder",
   initialState,
-  reducers: {},
+  reducers: {
+    initRoutes: (state, action: PayloadAction<string>) => {
+      state.routes = getRoutes(state.root, action.payload);
+    },
+    // createFolder: (
+    //   state,
+    //   { payload }: PayloadAction<{ name: string; route: string }>
+    // ) => {},
+    // changeFolderName: (
+    //   state,
+    //   { payload }: PayloadAction<{ name: string; id: string; route: string }>
+    // ) => {},
+  },
 });
 
-export const {} = folderSlice.actions;
+export const { initRoutes } = folderSlice.actions;
 export default folderSlice.reducer;

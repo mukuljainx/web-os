@@ -1,9 +1,8 @@
 import * as React from "react";
 import { Redirect } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 
 import IconInterface from "molecules/iconInterface";
-import { getRoutes } from "apps/folder/helper";
 import Desktop from "base/desktop";
 import App from "apps";
 import styled from "styled-components";
@@ -12,6 +11,7 @@ import ContextMenu from "molecules/contextMenu";
 import AppBar from "molecules/appBar";
 import Menu from "molecules/startMenu";
 import { toggleStartMenu as toggleStartMenuAction } from "base/store";
+import { initRoutes } from "apps/folder/store";
 
 interface IProps {}
 
@@ -23,7 +23,7 @@ const Wrapper = styled.div`
 const Base = ({}: IProps) => {
   const wrapperRef = React.useRef<HTMLDivElement>(null);
   let user = useSelector((state) => state.auth.user);
-  const routesMap = useSelector((state) => state.folder.routes);
+
   const openedApps = useSelector((state) => state.base.apps);
   const { store, handleMouseDown } = useDraggable({ wrapperRef });
   const dispatch = useDispatch();
@@ -35,17 +35,11 @@ const Base = ({}: IProps) => {
     return <Redirect to="/auth" />;
   }
 
-  const routes = React.useMemo(
-    () =>
-      getRoutes(routesMap[0], user!.name).sort((a, b) =>
-        a.path.length < b.path.length ? 1 : -1
-      ),
-    [routesMap]
-  );
+  const routes = useSelector((state) => state.folder.routes, shallowEqual);
 
   const desktopRoutes = React.useMemo(
     () => routes.find((route) => route.file.id === "desktop"),
-    [routesMap]
+    [routes]
   );
 
   React.useEffect(() => {
@@ -53,6 +47,7 @@ const Base = ({}: IProps) => {
       ...window.os,
       wrapper: wrapperRef.current!,
     };
+    dispatch(initRoutes(user?.name || "Guest user"));
   }, []);
 
   const MenuItemAction = React.useCallback((label: string, id: string) => {
@@ -109,7 +104,7 @@ const Base = ({}: IProps) => {
             </>
           );
         })}
-        <IconInterface user={user!.name} files={desktopRoutes!.files} />
+        <IconInterface user={user!.name} files={desktopRoutes?.files || []} />
         <AppBar toggleMenu={toggleStartMenu} apps={openedApps} />
       </Wrapper>
     </Desktop>

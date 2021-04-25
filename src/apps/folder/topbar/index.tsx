@@ -4,9 +4,10 @@ import styled from "styled-components";
 import { Stack, Text, Icon } from "atoms/styled";
 import { StackItem } from "@fluentui/react";
 
-const Wrapper = styled(Stack)`
+const WrapperStack = styled(Stack)`
   height: 40px;
   flex-grow: 0;
+  position: relative;
 `;
 
 const TabHeader = styled(StackItem)`
@@ -20,6 +21,12 @@ const TabHeader = styled(StackItem)`
   border-top-right-radius: ${({ theme }) => theme.borderRadius}px;
 `;
 
+const ActionWrapper = styled(Stack)`
+  position: absolute;
+  height: 100%;
+  right: 16px;
+`;
+
 type IProps = ReactHTMLElement<
   "div",
   {
@@ -30,7 +37,7 @@ type IProps = ReactHTMLElement<
 
 const TopBar = ({ name, onCloseClick, ref: __, ...rest }: IProps) => {
   return (
-    <Wrapper
+    <WrapperStack
       paddingRight={12}
       {...rest}
       alignItems="center"
@@ -42,15 +49,15 @@ const TopBar = ({ name, onCloseClick, ref: __, ...rest }: IProps) => {
           {name}
         </Text>
       </TabHeader>
-      <StackItem>
+      <ActionWrapper alignItems="center">
         <Icon
           onClick={onCloseClick}
           size={12}
           iconName="ChromeClose"
           cursor="pointer"
         />
-      </StackItem>
-    </Wrapper>
+      </ActionWrapper>
+    </WrapperStack>
   );
 };
 
