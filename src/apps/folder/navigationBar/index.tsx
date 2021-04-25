@@ -72,7 +72,11 @@ const Navigation = ({
             iconName="ArrowUpRightMirrored8"
           />
         </StackItem>
-        <Breadcrumb push={push} history={history.history} appId={app.id} />
+        <Breadcrumb
+          push={push}
+          route={history.history[history.position]}
+          appId={app.id}
+        />
       </Stack>
     </Wrapper>
   );

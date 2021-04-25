@@ -1,8 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 
-import { Stack, Text } from "atoms/styled";
-import MaterialIcon from "atoms/materialIcon";
+import { Stack, Text, Icon } from "atoms/styled";
 import { StackItem } from "@fluentui/react";
 
 const Wrapper = styled(Stack)`
@@ -44,7 +43,12 @@ const TopBar = ({ name, onCloseClick, ref: __, ...rest }: IProps) => {
         </Text>
       </TabHeader>
       <StackItem>
-        <MaterialIcon onClick={onCloseClick} size={24} name="close" />
+        <Icon
+          onClick={onCloseClick}
+          size={12}
+          iconName="ChromeClose"
+          cursor="pointer"
+        />
       </StackItem>
     </Wrapper>
   );

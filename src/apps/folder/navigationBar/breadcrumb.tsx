@@ -21,7 +21,7 @@ const BreadCrumbWrapper = styled(StackItem)`
 
 interface IProps {
   appId: string;
-  history: string[];
+  route: string;
   push: (route: string) => void;
 }
 
@@ -30,8 +30,7 @@ interface IProps {
  * re-render triggers it
  * seprating breadcrumb with React.memo is the best to avoid it
  */
-const BreadCrumb = ({ appId, history, push }: IProps) => {
-  const currentRoute = history[history.length - 1];
+const BreadCrumb = ({ appId, route, push }: IProps) => {
   const [, forceUpdate] = React.useState(0);
   const onAnimationEnds = React.useCallback((e) => {
     if (e.detail.id === appId) {
@@ -43,14 +42,14 @@ const BreadCrumb = ({ appId, history, push }: IProps) => {
   const handleItemClick = React.useCallback(
     (_, b) => {
       const i = parseInt(b.key, 10);
-      const splits = currentRoute.split("/").slice(0, i + 1);
+      const splits = route.split("/").slice(0, i + 1);
       push(splits.join("/") || "/");
     },
-    [history]
+    [route]
   );
 
   const items =
-    currentRoute === "/"
+    route === "/"
       ? [
           {
             text: "/",
@@ -58,7 +57,7 @@ const BreadCrumb = ({ appId, history, push }: IProps) => {
             onClick: handleItemClick,
           },
         ]
-      : currentRoute.split("/").map((item, i) => ({
+      : route.split("/").map((item, i) => ({
           text: item || "/",
           key: i + "",
           onClick: handleItemClick,
