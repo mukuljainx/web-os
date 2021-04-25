@@ -1,4 +1,4 @@
-import { IFolderRoutes, IFile } from "base/interfaces";
+import { IFolderRoutes, IFile } from "../interfaces";
 import { interpolate } from "utils/string";
 
 export const getPath = (file: IFile, user: string) => {

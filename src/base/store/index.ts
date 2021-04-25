@@ -1,10 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IApp, IAppGroup, IFile } from "base/interfaces";
-import { getDefaultRoutes } from "base/store/routes";
+import { IApp, IAppGroup } from "base/interfaces";
 
 interface IBaseState {
   apps: Record<string, IAppGroup>;
-  routes: IFile[];
+
   currentWeight: number;
   menu: {
     show: boolean;
@@ -13,7 +12,6 @@ interface IBaseState {
 
 const initialState: IBaseState = {
   apps: {},
-  routes: getDefaultRoutes(),
   currentWeight: 0,
   menu: {
     show: false,

@@ -3,7 +3,7 @@ import { Redirect } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import IconInterface from "molecules/iconInterface";
-import { getRoutes } from "base/helper";
+import { getRoutes } from "apps/folder/helper";
 import Desktop from "base/desktop";
 import App from "apps";
 import styled from "styled-components";
@@ -23,7 +23,7 @@ const Wrapper = styled.div`
 const Base = ({}: IProps) => {
   const wrapperRef = React.useRef<HTMLDivElement>(null);
   let user = useSelector((state) => state.auth.user);
-  const routesMap = useSelector((state) => state.base.routes);
+  const routesMap = useSelector((state) => state.folder.routes);
   const openedApps = useSelector((state) => state.base.apps);
   const { store, handleMouseDown } = useDraggable({ wrapperRef });
   const dispatch = useDispatch();

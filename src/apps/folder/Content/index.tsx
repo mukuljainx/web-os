@@ -1,7 +1,8 @@
 import * as React from "react";
 import styled from "styled-components";
 
-import { IApp, IFile } from "base/interfaces";
+import { IApp } from "base/interfaces";
+import { IFile } from "apps/folder/interfaces";
 import IconLayout from "molecules/iconInterface";
 
 const Wrapper = styled.div`

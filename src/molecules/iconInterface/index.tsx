@@ -2,9 +2,9 @@ import styled from "styled-components";
 import * as React from "react";
 
 // import { MoveHandler, ElementHandler } from "./interfaces";
-import { IFile } from "base/interfaces";
+import { IFile } from "apps/folder/interfaces";
 import { interpolate } from "utils/string";
-import { getPath } from "base/helper";
+import { getPath } from "apps/folder/helper";
 // import { isInside } from "utils/dom";
 import useDraggable from "utils/hooks/useDraggable";
 import Icon from "atoms/icons";
