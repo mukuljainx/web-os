@@ -6,31 +6,12 @@ import { IApp } from "base/interfaces";
 import Menu from "molecules/menu";
 import { IHistoryStatus } from "utils/hooks/useHistory";
 import Breadcrumb from "./breadcrumb";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { createFolder } from "../store";
 
 const Wrapper = styled.div`
   background: ${({ theme }) => theme.colors.plain};
 `;
-
-const menuItems = [
-  {
-    label: "File",
-    options: [
-      {
-        key: "new-file",
-        text: "New File",
-        onClick: console.log,
-      },
-      {
-        key: "new-folder",
-        text: "New Folder",
-        onClick: console.log,
-      },
-    ],
-  },
-  // { label: "Home", options: [] },
-  // { label: "Share", options: [] },
-  // { label: "View", options: [] },
-];
 
 interface IProps {
   app: IApp;
@@ -49,6 +30,35 @@ const Navigation = ({
   history,
   push,
 }: IProps) => {
+  const dispatch = useDispatch();
+  const user = useSelector(
+    (state) => state.auth.user?.name || "",
+    shallowEqual
+  );
+  const menuItems = [
+    {
+      label: "File",
+      options: [
+        {
+          key: "new-file",
+          text: "New File",
+          onClick: console.log,
+        },
+        {
+          key: "new-folder",
+          text: "New Folder",
+          onClick: () =>
+            dispatch(
+              createFolder({ route: history.history[history.position], user })
+            ),
+        },
+      ],
+    },
+    // { label: "Home", options: [] },
+    // { label: "Share", options: [] },
+    // { label: "View", options: [] },
+  ];
+
   return (
     <Wrapper>
       <Menu items={menuItems} />

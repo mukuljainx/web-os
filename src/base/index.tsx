@@ -38,7 +38,7 @@ const Base = ({}: IProps) => {
   const routes = useSelector((state) => state.folder.routes, shallowEqual);
 
   const desktopRoutes = React.useMemo(
-    () => routes.find((route) => route.file.id === "desktop"),
+    () => routes.find((route) => route.file.id === "Desktop"),
     [routes]
   );
 
