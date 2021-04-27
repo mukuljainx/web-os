@@ -8,7 +8,11 @@ import Image from "./image";
 import Label from "./label";
 import { renameFolder } from "apps/folder/store";
 
-const Wrapper = styled.div<{ highlight?: boolean }>`
+const Wrapper = styled.div<{ highlight?: boolean; desktop?: boolean }>`
+  .icon__image {
+    padding: 2px;
+    margin-bottom: 4px;
+  }
   &:focus {
     outline: none;
   }
@@ -18,17 +22,15 @@ const Wrapper = styled.div<{ highlight?: boolean }>`
       outline: none;
     }
   }
-  ${({ highlight }) =>
+  ${({ highlight, desktop, theme: { colors } }) =>
     highlight
       ? `
     .icon__image {
-      // margin-bottom: 2px;
-      padding: 0px;
       border-radius: 4px;
-      border: 2px solid var(--icon-border-color);
+      background: rgba(${desktop ? colors.plainRGB : colors.blackRGB}, 0.15);
     }
     .icon__label {
-      background: var(--icon-text-background);
+      background: rgba(${desktop ? colors.blueRGB : colors.blueRGB},0.85);
     }
   `
       : ""}
@@ -73,6 +75,7 @@ const Icon = ({ desktop, name, path, label, innnerRef, ...rest }: IProps) => {
       />
       <Wrapper
         {...rest}
+        desktop={desktop}
         ref={iconRef}
         className={`inline-flex flex-column justify-content-center align-items-center icon ${
           rest.className || ""

@@ -5,6 +5,9 @@ const theme = {
     acrylic: "rgba(255, 255, 255, 0.6)",
     offWhite: "rgb(248,248,248)",
     black: "black",
+    blackRGB: "0,0,0",
+    plainRGB: "255,255,255",
+    blueRGB: "0,0,255",
   },
   borderRadius: 4,
   zIndex: {
