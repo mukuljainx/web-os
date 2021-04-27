@@ -11,7 +11,8 @@ import ContextMenu from "molecules/contextMenu";
 import AppBar from "molecules/appBar";
 import Menu from "molecules/startMenu";
 import { toggleStartMenu as toggleStartMenuAction } from "base/store";
-import { initRoutes } from "apps/folder/store";
+import { createFolder, initRoutes } from "apps/folder/store";
+createFolder;
 
 interface IProps {}
 
@@ -37,10 +38,33 @@ const Base = ({}: IProps) => {
 
   const routes = useSelector((state) => state.folder.routes, shallowEqual);
 
-  const desktopRoutes = React.useMemo(
+  let desktopRoute = React.useMemo(
     () => routes.find((route) => route.file.id === "Desktop"),
     [routes]
   );
+
+  const MenuItemAction = React.useCallback(
+    (__: string, id: string) => {
+      switch (id) {
+        case "new-folder": {
+          dispatch(
+            createFolder({ route: desktopRoute?.path!, user: user!.name })
+          );
+          return;
+        }
+      }
+    },
+    [routes]
+  );
+
+  const menuItems = [
+    {
+      label: "New Folder",
+      action: MenuItemAction,
+      id: "new-folder",
+      icon: "ViewAll",
+    },
+  ];
 
   React.useEffect(() => {
     window.os = {
@@ -50,35 +74,11 @@ const Base = ({}: IProps) => {
     dispatch(initRoutes(user?.name || "Guest user"));
   }, []);
 
-  const MenuItemAction = React.useCallback((label: string, id: string) => {
-    console.log(label, id);
-  }, []);
-
-  const menuItems = [
-    {
-      label: "New Folder",
-      action: MenuItemAction,
-      id: "new-folder",
-      icon: "ViewAll",
-      children: [
-        { label: "Option A", action: MenuItemAction, id: "get-info" },
-        { label: "Option B", action: MenuItemAction, id: "get-info" },
-      ],
-    },
-    { label: "Get Info", action: MenuItemAction, id: "get-info" },
-    {
-      label: "Change Desktop Background",
-      action: MenuItemAction,
-      id: "change-desktop-background",
-      disabled: true,
-    },
-  ];
-
   return (
     <Desktop>
       <Wrapper ref={wrapperRef}>
         <Menu />
-        <ContextMenu wrapperRef={wrapperRef} items={[menuItems, menuItems]} />
+        <ContextMenu wrapperRef={wrapperRef} items={menuItems} />
         {Object.values(openedApps).map((app) => {
           return (
             <>
@@ -107,7 +107,7 @@ const Base = ({}: IProps) => {
         <IconInterface
           desktop
           user={user!.name}
-          files={desktopRoutes?.files || []}
+          files={desktopRoute?.files || []}
         />
         <AppBar toggleMenu={toggleStartMenu} apps={openedApps} />
       </Wrapper>

@@ -37,7 +37,6 @@ const Navigation = ({
     shallowEqual
   );
   const action = () => {
-    console.log(history);
     dispatch(createFolder({ route: history.history[history.position], user }));
   };
 

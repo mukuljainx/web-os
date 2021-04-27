@@ -57,35 +57,41 @@ const ContextMenu = ({ wrapperRef, items: dirtyItems, childMenu }: IProps) => {
   const state = useGlobal(wrapperRef, menuRef);
   const childState = useLocal();
 
-  const handleItemClick = React.useCallback((event: React.MouseEvent) => {
-    if (!childMenu) {
-      childState.hideMenu();
-    }
-    const i = parseInt(event.currentTarget.getAttribute("data-row")!, 10);
-    const j = parseInt(event.currentTarget.getAttribute("data-col")!, 10);
-    if (!items[i][j].action) {
-      return;
-    }
-    items[i][j].action!(items[i][j].label, items[i][j].id);
-    state.hideMenu();
-  }, []);
+  const handleItemClick = React.useCallback(
+    (event: React.MouseEvent) => {
+      if (!childMenu) {
+        childState.hideMenu();
+      }
+      const i = parseInt(event.currentTarget.getAttribute("data-row")!, 10);
+      const j = parseInt(event.currentTarget.getAttribute("data-col")!, 10);
+      if (!items[i][j].action) {
+        return;
+      }
+      items[i][j].action!(items[i][j].label, items[i][j].id);
+      state.hideMenu();
+    },
+    [items]
+  );
 
-  const handleItemMouseEnter = React.useCallback((event: React.MouseEvent) => {
-    const element = event.currentTarget;
-    const i = parseInt(element.getAttribute("data-row")!, 10);
-    const j = parseInt(element.getAttribute("data-col")!, 10);
-    const childItems = items[i][j].children || [];
+  const handleItemMouseEnter = React.useCallback(
+    (event: React.MouseEvent) => {
+      const element = event.currentTarget;
+      const i = parseInt(element.getAttribute("data-row")!, 10);
+      const j = parseInt(element.getAttribute("data-col")!, 10);
+      const childItems = items[i][j].children || [];
 
-    if (childItems.length === 0) {
-      childState.hideMenu();
-      return;
-    }
-    childState.showMenu({
-      items: childItems,
-      left: element.getBoundingClientRect().right,
-      top: element.getBoundingClientRect().top,
-    });
-  }, []);
+      if (childItems.length === 0) {
+        childState.hideMenu();
+        return;
+      }
+      childState.showMenu({
+        items: childItems,
+        left: element.getBoundingClientRect().right,
+        top: element.getBoundingClientRect().top,
+      });
+    },
+    [items]
+  );
 
   React.useEffect(() => {
     childState.hideMenu();
@@ -121,4 +127,4 @@ const ContextMenu = ({ wrapperRef, items: dirtyItems, childMenu }: IProps) => {
   );
 };
 
-export default ContextMenu;
+export default React.memo(ContextMenu);
