@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as ReactDOM from "react-dom";
 
 import Menu from "./menu";
 import useGlobal from "./useGlobal";
@@ -91,27 +92,32 @@ const ContextMenu = ({ wrapperRef, items: dirtyItems, childMenu }: IProps) => {
   }, [state.show]);
 
   return (
-    <span ref={menuRef} onMouseLeave={childState.hideMenu}>
-      <Menu
-        test-id="context-menu"
-        itemAction={{
-          onClick: handleItemClick,
-          onMouseEnter: handleItemMouseEnter,
-        }}
-        show={state.show}
-        style={state.style}
-        items={items}
-      />
-      <Menu
-        test-id="child-context-menu"
-        itemAction={{
-          onClick: handleItemClick,
-        }}
-        show={childState.show}
-        style={childState.style}
-        items={childState.items}
-      />
-    </span>
+    <>
+      {ReactDOM.createPortal(
+        <span ref={menuRef} onMouseLeave={childState.hideMenu}>
+          <Menu
+            test-id="context-menu"
+            itemAction={{
+              onClick: handleItemClick,
+              onMouseEnter: handleItemMouseEnter,
+            }}
+            show={state.show}
+            style={state.style}
+            items={items}
+          />
+          <Menu
+            test-id="child-context-menu"
+            itemAction={{
+              onClick: handleItemClick,
+            }}
+            show={childState.show}
+            style={childState.style}
+            items={childState.items}
+          />
+        </span>,
+        document.body
+      )}
+    </>
   );
 };
 

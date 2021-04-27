@@ -4,6 +4,7 @@ const theme = {
     plainHover: "gray",
     acrylic: "rgba(255, 255, 255, 0.6)",
     offWhite: "rgb(248,248,248)",
+    black: "black",
   },
   borderRadius: 4,
   zIndex: {

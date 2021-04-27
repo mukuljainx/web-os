@@ -1,11 +1,9 @@
 import styled from "styled-components";
 import * as React from "react";
 
-// import { MoveHandler, ElementHandler } from "./interfaces";
 import { IFile } from "apps/folder/interfaces";
 import { interpolate } from "utils/string";
 import { getPath } from "apps/folder/helper";
-// import { isInside } from "utils/dom";
 import useDraggable from "utils/hooks/useDraggable";
 import Icon from "atoms/icons";
 
@@ -19,11 +17,11 @@ interface IProps {
   files: IFile[];
   user: string;
   fileAction?: (path: string) => void;
+  desktop?: boolean;
 }
 
-const IconLayout = ({ files, user, fileAction }: IProps) => {
+const IconLayout = ({ desktop, files, user, fileAction }: IProps) => {
   const wrapperRef = React.useRef<HTMLDivElement>(null);
-
   const { store, handleMouseDown } = useDraggable({ wrapperRef });
 
   return (
@@ -34,8 +32,9 @@ const IconLayout = ({ files, user, fileAction }: IProps) => {
         const dragId = file.id + index;
         return (
           <Icon
+            desktop={desktop}
             tabIndex={0}
-            type="DESKTOP"
+            path={path}
             onMouseDown={(event) => {
               handleMouseDown(event, dragId);
             }}

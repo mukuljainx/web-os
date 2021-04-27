@@ -104,7 +104,11 @@ const Base = ({}: IProps) => {
             </>
           );
         })}
-        <IconInterface user={user!.name} files={desktopRoutes?.files || []} />
+        <IconInterface
+          desktop
+          user={user!.name}
+          files={desktopRoutes?.files || []}
+        />
         <AppBar toggleMenu={toggleStartMenu} apps={openedApps} />
       </Wrapper>
     </Desktop>

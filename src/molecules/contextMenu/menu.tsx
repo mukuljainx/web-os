@@ -114,7 +114,7 @@ const ContextMenu = ({
                   >
                     {item.icon ? <Icon iconName={item.icon} /> : <span></span>}
                     <Text weight="light">{item.label}</Text>
-                    {item.icon ? (
+                    {item.children ? (
                       <Icon iconName="ChevronRightMed" />
                     ) : (
                       <span></span>

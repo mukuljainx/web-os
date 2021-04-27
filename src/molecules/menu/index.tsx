@@ -1,7 +1,7 @@
 import { Stack, StackItem } from "atoms/styled";
 import * as React from "react";
 import { IContextualMenuProps, CommandButton } from "@fluentui/react";
-import { useConst } from "@fluentui/react-hooks";
+// import { useConst } from "@fluentui/react-hooks";
 import styled from "styled-components";
 
 const MenuWrapper = styled(StackItem)`
@@ -18,13 +18,11 @@ interface IProps {
 }
 
 const Menu = ({ items }: IProps) => {
-  const menuProps = useConst<IContextualMenuProps[]>(() => {
-    return items.map((item) => ({
-      shouldFocusOnMount: true,
-      shouldFocusOnContainer: false,
-      items: item.options,
-    }));
-  });
+  const menuProps = items.map((item) => ({
+    shouldFocusOnMount: true,
+    shouldFocusOnContainer: false,
+    items: item.options,
+  }));
 
   return (
     <Stack fullWidth gap={24} paddingX={16} paddingTop={8}>

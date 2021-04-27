@@ -30,11 +30,17 @@ const Navigation = ({
   history,
   push,
 }: IProps) => {
+  console.log(history);
   const dispatch = useDispatch();
   const user = useSelector(
     (state) => state.auth.user?.name || "",
     shallowEqual
   );
+  const action = () => {
+    console.log(history);
+    dispatch(createFolder({ route: history.history[history.position], user }));
+  };
+
   const menuItems = [
     {
       label: "File",
@@ -47,10 +53,7 @@ const Navigation = ({
         {
           key: "new-folder",
           text: "New Folder",
-          onClick: () =>
-            dispatch(
-              createFolder({ route: history.history[history.position], user })
-            ),
+          onClick: action,
         },
       ],
     },

@@ -111,6 +111,7 @@ const Folder = ({ path, app, id, onMouseDown }: IProps) => {
     },
     [navigate, push, getCurrent]
   );
+  handleKeyDown;
 
   const handleKeyUp = React.useCallback((event: React.KeyboardEvent) => {
     event.preventDefault();
@@ -118,6 +119,7 @@ const Folder = ({ path, app, id, onMouseDown }: IProps) => {
       isMetaKey.current = false;
     }
   }, []);
+  handleKeyUp;
 
   return (
     <Container

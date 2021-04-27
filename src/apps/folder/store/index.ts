@@ -1,16 +1,40 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getRoutes } from "../helper";
+import { getRoutes, updatePath, updateTree } from "../helper";
 import { IFile, IFolderRoutes } from "../interfaces";
 import { getDefaultRoutes } from "./routes";
+import { Draft } from "immer";
 
 interface IBaseState {
   root: IFile;
   routes: IFolderRoutes[];
+  user: string;
 }
+
+const goToPath = (root: Draft<IBaseState["root"]>, route: string) => {
+  const splits = route.split("/");
+  let x = root;
+  let parent = root;
+  splits.forEach((dSplit) => {
+    let split = dSplit;
+    if (split === "") {
+      x = root!;
+      return;
+    }
+    parent = x;
+    x = x.files![split];
+  });
+
+  if (!x.files) {
+    x.files = {};
+  }
+
+  return { currentFile: x, parent };
+};
 
 const initialState: IBaseState = {
   root: getDefaultRoutes(),
   routes: [],
+  user: "",
 };
 
 const folderSlice = createSlice({
@@ -18,36 +42,24 @@ const folderSlice = createSlice({
   initialState,
   reducers: {
     initRoutes: (state, action: PayloadAction<string>) => {
+      state.root["files"]!["users"]["files"]![action.payload] = {
+        ...state.root["files"]!["users"]["files"]!["home"],
+        id: action.payload,
+      };
+      delete state.root["files"]!["users"]["files"]!["home"];
       state.routes = getRoutes(state.root, action.payload);
+      state.user = action.payload;
     },
     createFolder: (
       state,
       { payload }: PayloadAction<{ route: string; user: string }>
     ) => {
-      // const path = getPath(payload);
-      const splits = payload.route.split("/");
-      let x = state.root;
-      splits.forEach((dSplit) => {
-        let split = dSplit;
-        if (split === payload.user.replace(" ", "-")) {
-          debugger;
-          split = "home";
-        }
-        if (split === "") {
-          x = state.root!;
-          return;
-        }
-        x = x.files![split];
-      });
-
-      if (!x.files) {
-        x.files = {};
-      }
+      let { currentFile } = goToPath(state.root, payload.route);
 
       let i = 0;
       let name = "new folder";
       let found = false;
-      let files = Object.values(x.files);
+      let files = Object.values(currentFile.files!);
       while (!found) {
         const tempName = name + (i === 0 ? "" : " " + i);
         const x = files.filter(
@@ -60,7 +72,7 @@ const folderSlice = createSlice({
         i++;
       }
 
-      x.files[name] = {
+      currentFile.files![name] = {
         name,
         id: name,
         appName: "folder",
@@ -72,12 +84,23 @@ const folderSlice = createSlice({
       };
       state.routes = getRoutes(state.root, payload.user);
     },
-    // renameFolder: (
-    //   state,
-    //   { payload }: PayloadAction<{ name: string; id: string; route: string }>
-    // ) => {},
+    renameFolder: (
+      state,
+      { payload }: PayloadAction<{ name: string; route: string }>
+    ) => {
+      let { currentFile, parent } = goToPath(state.root, payload.route);
+      const oldName = currentFile.name;
+      currentFile.name = payload.name;
+      currentFile.path = updatePath(currentFile.path, -1, currentFile.name);
+
+      currentFile = updateTree(currentFile);
+      parent.files![currentFile.name] = currentFile;
+      delete parent.files![oldName];
+
+      state.routes = getRoutes(state.root, state.user);
+    },
   },
 });
 
-export const { initRoutes, createFolder } = folderSlice.actions;
+export const { initRoutes, createFolder, renameFolder } = folderSlice.actions;
 export default folderSlice.reducer;

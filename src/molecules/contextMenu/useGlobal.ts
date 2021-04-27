@@ -11,6 +11,7 @@ const useGlobal = (
 
   const handleContextMenuClick = React.useCallback((event: MouseEvent) => {
     event.preventDefault();
+    event.stopPropagation();
     setState({
       style: { left: event.clientX + 8, top: event.clientY + 8 },
       show: true,
@@ -43,9 +44,9 @@ const useGlobal = (
 
   React.useEffect(() => {
     if (state.show) {
-      wrapperRef.current?.addEventListener("click", hideMenu);
+      document.addEventListener("click", hideMenu);
     } else {
-      wrapperRef.current?.removeEventListener("click", hideMenu);
+      document.removeEventListener("click", hideMenu);
     }
   }, [state.show]);
 
