@@ -1,4 +1,5 @@
 import * as React from "react";
+import { dispatchEvent, useEvent } from "utils/events";
 
 const useGlobal = (
   wrapperRef: React.RefObject<HTMLDivElement | null>,
@@ -12,6 +13,7 @@ const useGlobal = (
   const handleContextMenuClick = React.useCallback((event: MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
+    dispatchEvent("CONTEXT_MENU_OEPN");
     setState({
       style: { left: event.clientX + 8, top: event.clientY + 8 },
       show: true,
@@ -31,6 +33,8 @@ const useGlobal = (
       show: false,
     }));
   }, []);
+
+  useEvent("CONTEXT_MENU_OEPN", hideMenu);
 
   React.useEffect(() => {
     wrapperRef.current?.addEventListener("contextmenu", handleContextMenuClick);
