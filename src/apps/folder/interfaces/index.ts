@@ -20,6 +20,7 @@ export interface IFile {
   files?: Record<string, IFile>;
   // app type, a folder, setting, video-player etc
   appName: string;
+  safe?: boolean;
 }
 
 export interface IFolderRoutes {

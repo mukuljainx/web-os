@@ -33,6 +33,7 @@ const IconLayout = ({ desktop, files, user, fileAction }: IProps) => {
         return (
           <Icon
             desktop={desktop}
+            safe={file.safe}
             tabIndex={0}
             path={path}
             onMouseDown={(event) => {

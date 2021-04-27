@@ -12,6 +12,7 @@ export const getDefaultRoutes = (): IFile => ({
   name: "/",
   path: "/",
   appName: "folder",
+  safe: true,
   files: {
     system: {
       parent: "/",
@@ -22,6 +23,7 @@ export const getDefaultRoutes = (): IFile => ({
       path: "/system",
       appName: "folder",
       files: {},
+      safe: true,
     },
     applications: {
       parent: "/",
@@ -32,6 +34,7 @@ export const getDefaultRoutes = (): IFile => ({
       path: "/applications",
       appName: "folder",
       files: {},
+      safe: true,
     },
     users: {
       parent: "/",
@@ -41,6 +44,7 @@ export const getDefaultRoutes = (): IFile => ({
       name: "users",
       path: "/users",
       appName: "folder",
+      safe: true,
       files: {
         home: {
           parent: "/users",
@@ -50,6 +54,7 @@ export const getDefaultRoutes = (): IFile => ({
           name: "${user}",
           path: "/users/${user}",
           appName: "folder",
+          safe: true,
           files: {
             Pictures: {
               parent: "/users/${user}",
@@ -59,6 +64,7 @@ export const getDefaultRoutes = (): IFile => ({
               name: "Pictures",
               path: "/users/${user}/Pictures",
               appName: "folder",
+              safe: true,
               files: {},
             },
             Documents: {
@@ -69,6 +75,7 @@ export const getDefaultRoutes = (): IFile => ({
               name: "Documents",
               path: "/users/${user}/Documents",
               appName: "folder",
+              safe: true,
               files: {},
             },
             Downloads: {
@@ -79,6 +86,7 @@ export const getDefaultRoutes = (): IFile => ({
               name: "Downloads",
               path: "/users/${user}/Downloads",
               appName: "folder",
+              safe: true,
               files: {},
             },
             Desktop: {
@@ -89,6 +97,7 @@ export const getDefaultRoutes = (): IFile => ({
               name: "Desktop",
               path: "/users/${user}/Desktop",
               appName: "folder",
+              safe: true,
               files: {
                 "Desktop 1": {
                   parent: "/users/${user}/Desktop",

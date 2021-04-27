@@ -1,12 +1,11 @@
 import * as React from "react";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
 
 import ContextMenu from "molecules/contextMenu";
 import "./icons.scss";
 import { AppImage } from "atoms/styled";
 import Label from "./label";
-import { renameFolder } from "apps/folder/store";
+import useActions from "./useActions";
 
 const Wrapper = styled.div<{ highlight?: boolean; desktop?: boolean }>`
   .icon__image {
@@ -44,16 +43,26 @@ type IProps = ReactHTMLElement<
     label?: string;
     innnerRef?: any;
     highlight?: boolean;
+    safe?: boolean;
     path: string;
   }
 >;
 
 export const sizeChart = { DESKTOP: 64 };
 
-const Icon = ({ desktop, name, path, label, innnerRef, ...rest }: IProps) => {
+const Icon = ({
+  safe,
+  desktop,
+  name,
+  path,
+  label,
+  innnerRef,
+  ...rest
+}: IProps) => {
   const folderName = React.useRef(label);
-  const dispatch = useDispatch();
   const iconRef = React.useRef<HTMLDivElement>(null);
+
+  const actions = useActions(iconRef, folderName.current || "", path);
 
   return (
     <>
@@ -62,15 +71,18 @@ const Icon = ({ desktop, name, path, label, innnerRef, ...rest }: IProps) => {
         wrapperRef={iconRef}
         items={[
           {
+            disabled: safe,
             label: "Rename",
-            action: () => {
-              const pElement = iconRef.current!.children[1] as HTMLElement;
-              pElement.classList.remove("ellipsis");
-              pElement.contentEditable = "true";
-              pElement.focus();
-            },
+            action: actions.initRename,
             id: "rename",
             icon: "Rename",
+          },
+          {
+            disabled: safe,
+            label: "Delete",
+            action: actions.deleteFolder,
+            id: "delete",
+            icon: "Delete",
           },
         ]}
       />
@@ -87,20 +99,7 @@ const Icon = ({ desktop, name, path, label, innnerRef, ...rest }: IProps) => {
           desktop={desktop}
           onKeyDown={(e) => e?.stopPropagation()}
           onKeyUp={(e) => e?.stopPropagation()}
-          onBlur={(event) => {
-            if (folderName.current === (event.target.textContent || "")) {
-              return;
-            }
-            folderName.current = event.target.textContent || "";
-            dispatch(
-              renameFolder({
-                route: path,
-                name: folderName.current,
-              })
-            );
-            event.target.classList.add("ellipsis");
-            event.target.contentEditable = "false";
-          }}
+          onBlur={actions.renameFolder}
           name={label || ""}
         />
       </Wrapper>

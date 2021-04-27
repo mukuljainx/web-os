@@ -99,8 +99,23 @@ const folderSlice = createSlice({
 
       state.routes = getRoutes(state.root, state.user);
     },
+    deleteFolder: (
+      state,
+      { payload }: PayloadAction<{ name: string; route: string }>
+    ) => {
+      let { parent } = goToPath(state.root, payload.route);
+      if (parent["files"]) {
+        delete parent["files"][payload.name];
+        state.routes = getRoutes(state.root, state.user);
+      }
+    },
   },
 });
 
-export const { initRoutes, createFolder, renameFolder } = folderSlice.actions;
+export const {
+  initRoutes,
+  createFolder,
+  renameFolder,
+  deleteFolder,
+} = folderSlice.actions;
 export default folderSlice.reducer;
