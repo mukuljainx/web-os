@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 
 import ContextMenu from "molecules/contextMenu";
 import "./icons.scss";
-import Image from "./image";
+import { AppImage } from "atoms/styled";
 import Label from "./label";
 import { renameFolder } from "apps/folder/store";
 
@@ -54,6 +54,7 @@ const Icon = ({ desktop, name, path, label, innnerRef, ...rest }: IProps) => {
   const folderName = React.useRef(label);
   const dispatch = useDispatch();
   const iconRef = React.useRef<HTMLDivElement>(null);
+
   return (
     <>
       <ContextMenu
@@ -81,7 +82,7 @@ const Icon = ({ desktop, name, path, label, innnerRef, ...rest }: IProps) => {
           rest.className || ""
         }`}
       >
-        <Image name={name} size={64} />
+        <AppImage name={name} size={64} />
         <Label
           desktop={desktop}
           onKeyDown={(e) => e?.stopPropagation()}

@@ -100,3 +100,4 @@ export const Image = styled.img<Pick<React.CSSProperties, "width" | "height">>`
 
 export { default as Text } from "./text";
 export { default as Icon } from "./icon";
+export { default as AppImage } from "./appImage";

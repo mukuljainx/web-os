@@ -1,4 +1,4 @@
-import DesktopIcon from "atoms/icons/image";
+import DesktopIcon from "atoms/styled/appImage";
 import { IAppGroup } from "base/interfaces";
 import * as React from "react";
 import styled from "styled-components";

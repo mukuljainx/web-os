@@ -4,7 +4,7 @@ import { groupBy } from "lodash-es";
 
 import { Stack, StackItem } from "atoms/styled";
 import Text from "atoms/styled/text";
-import Image, { availableIcons } from "atoms/icons/image";
+import Image, { availableIcons } from "atoms/styled/appImage";
 
 interface IProps {}
 

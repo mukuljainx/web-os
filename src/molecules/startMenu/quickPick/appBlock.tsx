@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 
-import Image from "atoms/icons/image";
+import Image from "atoms/styled/appImage";
 import { Stack, Text } from "atoms/styled";
 
 const Block = styled(Stack)`

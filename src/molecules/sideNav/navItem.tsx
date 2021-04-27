@@ -1,4 +1,4 @@
-import Image from "atoms/icons/image";
+import Image from "atoms/styled/appImage";
 import { Stack, StackItem, Text, Icon } from "atoms/styled";
 
 import * as React from "react";

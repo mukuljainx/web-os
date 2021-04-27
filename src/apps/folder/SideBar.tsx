@@ -4,7 +4,7 @@ import styled from "styled-components";
 import SideNav from "molecules/sideNav";
 import { Stack, Text } from "atoms/styled";
 import { IApp } from "base/interfaces";
-import Image from "atoms/icons/image";
+import Image from "atoms/styled/appImage";
 
 const Wrapper = styled(Stack)`
   width: 240px;
