@@ -22,6 +22,25 @@ const baseSlice = createSlice({
   name: "base",
   initialState,
   reducers: {
+    bringToTop: (
+      state,
+      {
+        payload: { appName, instanceId },
+      }: PayloadAction<{ appName: string; instanceId: string }>
+    ) => {
+      const runningApp = state.apps[appName];
+      runningApp.weight = state.currentWeight;
+      const index = runningApp.instances.findIndex(
+        (instance) => instance.id === instanceId
+      );
+      // instance is already mounted, bring it to top
+      if (index !== -1) {
+        const temp = runningApp.instances.splice(index, 1);
+        runningApp.instances.push(temp[0]);
+        return;
+      }
+      state.currentWeight++;
+    },
     openApp(state, action: PayloadAction<IApp>) {
       const newApp = action.payload;
       const instanceId = `${newApp.appName}-${newApp.id}`;
@@ -75,5 +94,10 @@ const baseSlice = createSlice({
   },
 });
 
-export const { openApp, closeApp, toggleStartMenu } = baseSlice.actions;
+export const {
+  openApp,
+  closeApp,
+  toggleStartMenu,
+  bringToTop,
+} = baseSlice.actions;
 export default baseSlice.reducer;

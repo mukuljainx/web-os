@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import SideBar from "./SideBar";
 import TopBar from "./topbar";
@@ -10,6 +10,7 @@ import { interpolate } from "utils/string";
 import { IApp, IMetaData } from "base/interfaces";
 import { Acrylic } from "atoms/styled";
 import NavigationBar from "./navigationBar";
+import { bringToTop } from "base/store";
 
 const Wrapper = styled.div`
   height: 100%;
@@ -111,7 +112,6 @@ const Folder = ({ path, app, id, onMouseDown }: IProps) => {
     },
     [navigate, push, getCurrent]
   );
-  handleKeyDown;
 
   const handleKeyUp = React.useCallback((event: React.KeyboardEvent) => {
     event.preventDefault();
@@ -119,10 +119,22 @@ const Folder = ({ path, app, id, onMouseDown }: IProps) => {
       isMetaKey.current = false;
     }
   }, []);
-  handleKeyUp;
+
+  const handleTopBarMouseDown = React.useCallback(
+    (event: React.MouseEvent) => {
+      onMouseDown(event);
+      dispatch(bringToTop({ appName: app.appName, instanceId: app.id }));
+    },
+    [onMouseDown]
+  );
+
+  const dispatch = useDispatch();
 
   return (
     <Container
+      onMouseDown={() => {
+        dispatch(bringToTop({ appName: app.appName, instanceId: app.id }));
+      }}
       ref={wrapperRef}
       tabIndex={0}
       onKeyUp={handleKeyUp}
@@ -133,7 +145,7 @@ const Folder = ({ path, app, id, onMouseDown }: IProps) => {
         <Wrapper className="flex flex-column flex-grow">
           <TopBar
             name={getPathName(getCurrent())}
-            onMouseDown={onMouseDown}
+            onMouseDown={handleTopBarMouseDown}
             onCloseClick={handleClose}
           ></TopBar>
           <NavigationBar
