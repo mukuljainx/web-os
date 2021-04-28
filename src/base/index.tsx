@@ -12,6 +12,7 @@ import AppBar from "molecules/appBar";
 import Menu from "molecules/startMenu";
 import { toggleStartMenu as toggleStartMenuAction } from "base/store";
 import { createFolder, initRoutes } from "apps/folder/store";
+import useFolderAction from "apps/folder/hooks/useFolderAction";
 createFolder;
 
 interface IProps {}
@@ -43,28 +44,10 @@ const Base = ({}: IProps) => {
     [routes]
   );
 
-  const MenuItemAction = React.useCallback(
-    (__: string, id: string) => {
-      switch (id) {
-        case "new-folder": {
-          dispatch(
-            createFolder({ route: desktopRoute?.path!, user: user!.name })
-          );
-          return;
-        }
-      }
-    },
-    [routes]
-  );
-
-  const menuItems = [
-    {
-      label: "New Folder",
-      action: MenuItemAction,
-      id: "new-folder",
-      icon: "ViewAll",
-    },
-  ];
+  const { menuItems } = useFolderAction({
+    route: desktopRoute?.path,
+    user: user.name,
+  });
 
   React.useEffect(() => {
     window.os = {

@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { IApp } from "base/interfaces";
 import { IFile } from "apps/folder/interfaces";
 import IconLayout from "molecules/iconInterface";
+import ContextMenu from "molecules/contextMenu";
+import useFolderAction from "../hooks/useFolderAction";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -16,13 +18,24 @@ interface IProps {
   user: string;
   fileAction: (path: string) => void;
   app: IApp;
+  route: string;
 }
 
-const Content = ({ files, user, fileAction }: IProps) => {
+const Content = ({ files, user, fileAction, route }: IProps) => {
+  const wrapperRef = React.useRef<HTMLDivElement>(null);
+
+  const { menuItems } = useFolderAction({
+    route,
+    user,
+  });
+
   return (
-    <Wrapper>
-      <IconLayout fileAction={fileAction} user={user} files={files} />
-    </Wrapper>
+    <>
+      <ContextMenu wrapperRef={wrapperRef} items={menuItems} />
+      <Wrapper ref={wrapperRef}>
+        <IconLayout fileAction={fileAction} user={user} files={files} />
+      </Wrapper>
+    </>
   );
 };
 

@@ -61,7 +61,7 @@ type IProps = ReactHTMLElement<
   }
 >;
 
-const ContextMenu = ({
+const Menu = ({
   items: itemGroup,
   show,
   itemAction,
@@ -129,4 +129,4 @@ const ContextMenu = ({
   );
 };
 
-export default ContextMenu;
+export default Menu;

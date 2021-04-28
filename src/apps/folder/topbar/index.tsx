@@ -5,7 +5,7 @@ import { Stack, Text, Icon } from "atoms/styled";
 import { StackItem } from "@fluentui/react";
 
 const WrapperStack = styled(Stack)`
-  height: 40px;
+  height: 54px;
   flex-grow: 0;
   position: relative;
 `;

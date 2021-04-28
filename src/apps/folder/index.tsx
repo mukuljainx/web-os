@@ -157,6 +157,7 @@ const Folder = ({ path, app, id, onMouseDown }: IProps) => {
             push={push}
           />
           <Content
+            route={currentRoute.path}
             app={app}
             fileAction={fileAction}
             user={userName}
