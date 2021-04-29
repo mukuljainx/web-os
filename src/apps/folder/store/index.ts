@@ -3,6 +3,7 @@ import { getRoutes, updatePath, updateTree } from "../helper";
 import { IFile, IFolderRoutes } from "../interfaces";
 import { getDefaultRoutes } from "./routes";
 import { Draft } from "immer";
+import { sortBy } from "lodash-es";
 
 interface IBaseState {
   root: IFile;
@@ -73,10 +74,12 @@ const folderSlice = createSlice({
       }
 
       currentFile.files![name] = {
+        order: Object.keys(currentFile.files || {}).length,
         name,
         id: name,
         appName: "folder",
         icon: "",
+        sortBy: "NAME",
         isFolder: true,
         parent: payload.route,
         path: payload.route + "/" + name,
@@ -109,6 +112,26 @@ const folderSlice = createSlice({
         state.routes = getRoutes(state.root, state.user);
       }
     },
+    sortFolder: (
+      state,
+      {
+        payload,
+      }: PayloadAction<{
+        route: string;
+        sortKey: "NAME" | "DATE_CREATED";
+      }>
+    ) => {
+      let { currentFile } = goToPath(state.root, payload.route);
+      let files = currentFile.files;
+      if (files) {
+        currentFile.sortBy = payload.sortKey;
+        const sorted = sortBy(files, [payload.sortKey]);
+        sorted.forEach((f, i) => {
+          files![f.name].order = i;
+        });
+      }
+      state.routes = getRoutes(state.root, state.user);
+    },
   },
 });
 
@@ -117,5 +140,6 @@ export const {
   createFolder,
   renameFolder,
   deleteFolder,
+  sortFolder,
 } = folderSlice.actions;
 export default folderSlice.reducer;

@@ -45,11 +45,6 @@ const Navigation = ({
       label: "File",
       options: [
         {
-          key: "new-file",
-          text: "New File",
-          onClick: console.log,
-        },
-        {
           key: "new-folder",
           text: "New Folder",
           onClick: action,

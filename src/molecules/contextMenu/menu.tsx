@@ -57,6 +57,7 @@ type IProps = ReactHTMLElement<
       onMouseLeave?: (event: React.MouseEvent) => void;
     };
     show: boolean;
+    childMenu?: boolean;
     style: React.CSSProperties;
   }
 >;
@@ -67,6 +68,7 @@ const Menu = ({
   itemAction,
   style,
   ref,
+  childMenu,
   ...rest
 }: IProps) => {
   const menuLenght = React.useMemo(() => {
@@ -102,6 +104,7 @@ const Menu = ({
               <ItemGroupWrapper key={i}>
                 {group.map((item, j) => (
                   <ItemWrapper
+                    data-childmenu={childMenu ? "true" : "false"}
                     disabled={item.disabled}
                     data-id="context-menu-item"
                     paddingX={8}

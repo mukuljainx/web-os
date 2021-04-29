@@ -21,6 +21,8 @@ export interface IFile {
   // app type, a folder, setting, video-player etc
   appName: string;
   safe?: boolean;
+  sortBy: "NAME" | "DATE_CREATED";
+  order: number;
 }
 
 export interface IFolderRoutes {

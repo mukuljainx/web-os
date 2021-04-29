@@ -4,14 +4,7 @@ import * as ReactDOM from "react-dom";
 import Menu from "./menu";
 import useGlobal from "./useGlobal";
 import useLocal from "./useLocal";
-import { MenuItemsType } from "./interface";
-
-export interface IMenuItem {
-  icon?: string;
-  label: string;
-  action?: (label: string, id: string) => void;
-  id: string;
-}
+import { MenuItemsType, IMenuItem } from "./interface";
 
 interface IProps {
   wrapperRef: React.RefObject<HTMLDivElement | null>;
@@ -62,15 +55,23 @@ const ContextMenu = ({ wrapperRef, items: dirtyItems, childMenu }: IProps) => {
       if (!childMenu) {
         childState.hideMenu();
       }
-      const i = parseInt(event.currentTarget.getAttribute("data-row")!, 10);
-      const j = parseInt(event.currentTarget.getAttribute("data-col")!, 10);
-      if (!items[i][j].action) {
+      const element = event.currentTarget;
+      const isChildMenu = element.getAttribute("data-childmenu") === "true";
+      const i = parseInt(element.getAttribute("data-row")!, 10);
+      const j = parseInt(element.getAttribute("data-col")!, 10);
+
+      let item: IMenuItem = items[i][j];
+      if (isChildMenu) {
+        item = childState.items[i][j];
+      }
+
+      if (!item.action) {
         return;
       }
-      items[i][j].action!(items[i][j].label, items[i][j].id);
+      item.action!(item.label, item.id);
       state.hideMenu();
     },
-    [items]
+    [items, childState]
   );
 
   const handleItemMouseEnter = React.useCallback(
@@ -116,6 +117,7 @@ const ContextMenu = ({ wrapperRef, items: dirtyItems, childMenu }: IProps) => {
             itemAction={{
               onClick: handleItemClick,
             }}
+            childMenu
             show={childState.show}
             style={childState.style}
             items={childState.items}

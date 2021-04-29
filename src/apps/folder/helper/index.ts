@@ -1,6 +1,7 @@
 import { IFolderRoutes, IFile } from "../interfaces";
 import { interpolate } from "utils/string";
 import { Draft } from "immer";
+import { sortBy } from "lodash-es";
 
 export const getPath = (file: IFile, user: string) => {
   const path = `${file.parent === "/" ? "" : file.parent}/${file.name}`;
@@ -30,11 +31,12 @@ export const updateTree = (root: Draft<IFile>) => {
 export const getRoutes = (root: IFile, user: string): IFolderRoutes[] => {
   const inner = (root: IFile, user: string) => {
     let routes: IFolderRoutes[] = [];
+
     Object.values(root.files || {}).forEach((file: IFile) => {
       if (file.isFolder) {
         routes.push({
           path: getPath(file, user),
-          files: Object.values(file.files || {}),
+          files: Object.values(sortBy(file.files, ["order"]) || {}),
           file,
         });
         routes.push(...inner(file, user));

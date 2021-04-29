@@ -33,7 +33,7 @@ const useActions = (
       element.classList.add("ellipsis");
       element.contentEditable = "false";
     },
-    [dispatch, actions.renameFolder]
+    [dispatch, actions.renameFolder, path]
   );
 
   const deleteFolder = React.useCallback(() => {

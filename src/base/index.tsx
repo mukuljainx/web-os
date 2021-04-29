@@ -7,12 +7,12 @@ import Desktop from "base/desktop";
 import App from "apps";
 import styled from "styled-components";
 import useDraggable from "utils/hooks/useDraggable";
-import ContextMenu from "molecules/contextMenu";
+// import ContextMenu from "molecules/contextMenu";
 import AppBar from "molecules/appBar";
 import Menu from "molecules/startMenu";
 import { toggleStartMenu as toggleStartMenuAction } from "base/store";
 import { createFolder, initRoutes } from "apps/folder/store";
-import useFolderAction from "apps/folder/hooks/useFolderAction";
+// import useFolderAction from "molecules/iconInterface/useFolderAction";
 createFolder;
 
 interface IProps {}
@@ -44,10 +44,10 @@ const Base = ({}: IProps) => {
     [routes]
   );
 
-  const { menuItems } = useFolderAction({
-    route: desktopRoute?.path,
-    user: user.name,
-  });
+  // const { menuItems } = useFolderAction({
+  //   route: desktopRoute?.path,
+  //   user: user.name,
+  // });
 
   React.useEffect(() => {
     window.os = {
@@ -61,7 +61,7 @@ const Base = ({}: IProps) => {
     <Desktop>
       <Wrapper ref={wrapperRef}>
         <Menu />
-        <ContextMenu wrapperRef={wrapperRef} items={menuItems} />
+        {/* <ContextMenu wrapperRef={wrapperRef} items={menuItems} /> */}
         {Object.values(openedApps).map((app) => {
           return (
             <>
@@ -88,6 +88,7 @@ const Base = ({}: IProps) => {
           );
         })}
         <IconInterface
+          route={desktopRoute?.path || ""}
           desktop
           user={user!.name}
           files={desktopRoute?.files || []}

@@ -29,6 +29,12 @@ const baseSlice = createSlice({
       }: PayloadAction<{ appName: string; instanceId: string }>
     ) => {
       const runningApp = state.apps[appName];
+      if (
+        runningApp.instances[runningApp.instances.length - 1].id === instanceId
+      ) {
+        // already on top
+        return;
+      }
       runningApp.weight = state.currentWeight;
       const index = runningApp.instances.findIndex(
         (instance) => instance.id === instanceId
