@@ -19,7 +19,7 @@ const Nested = ({ items, expanded }: IProps) => {
   return transition(
     (style, item) =>
       item && (
-        <animated.div id="ttt" style={{ ...style, overflow: "auto" }}>
+        <animated.div style={{ ...style, overflow: "auto" }}>
           <Stack flexDirection="column" marginLeft={16}>
             {items.map((item, i) => (
               <NavItem key={i} {...item} />

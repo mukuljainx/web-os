@@ -30,6 +30,16 @@ const useFolderAction = ({
           clearStore();
           return;
         }
+        case "sort-date-created": {
+          dispatch(sortFolder({ route, sortKey: "createdOn" }));
+          clearStore();
+          return;
+        }
+        case "sort-date-updated": {
+          dispatch(sortFolder({ route, sortKey: "updateOn" }));
+          clearStore();
+          return;
+        }
       }
     },
     [route]
@@ -55,6 +65,11 @@ const useFolderAction = ({
           label: "Date Created",
           action: MenuItemAction,
           id: "sort-date-created",
+        },
+        {
+          label: "Date Modified",
+          action: MenuItemAction,
+          id: "sort-date-updated",
         },
       ],
     },

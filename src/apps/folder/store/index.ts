@@ -84,6 +84,8 @@ const folderSlice = createSlice({
         parent: payload.route,
         path: payload.route + "/" + name,
         files: {},
+        createdOn: new Date().getTime(),
+        updatedOn: new Date().getTime(),
       };
       state.routes = getRoutes(state.root, payload.user);
     },
@@ -94,6 +96,7 @@ const folderSlice = createSlice({
       let { currentFile, parent } = goToPath(state.root, payload.route);
       const oldName = currentFile.name;
       currentFile.name = payload.name;
+      currentFile.updatedOn = new Date().getTime();
       currentFile.path = updatePath(currentFile.path, -1, currentFile.name);
 
       currentFile = updateTree(currentFile);
@@ -118,7 +121,7 @@ const folderSlice = createSlice({
         payload,
       }: PayloadAction<{
         route: string;
-        sortKey: "NAME" | "DATE_CREATED";
+        sortKey: IFile["sortBy"];
       }>
     ) => {
       let { currentFile } = goToPath(state.root, payload.route);

@@ -7,18 +7,27 @@ import { INavItem } from "./interface";
 interface IProps extends INavItem {
   expandable?: boolean;
   expanded?: boolean;
-  onExpandClick?: () => void;
+  onExpandClick?: (event: React.MouseEvent) => void;
 }
 
 const NavItem = ({
   name,
   icon,
+  id,
+  action,
   expandable,
   expanded,
   onExpandClick,
 }: IProps) => {
   return (
-    <Stack justifyContent="space-between" marginTop={16} alignItems="center">
+    <Stack
+      justifyContent="space-between"
+      marginTop={16}
+      alignItems="center"
+      onClick={(event) => {
+        action(event, id);
+      }}
+    >
       <Stack alignItems="center" gap={8}>
         <StackItem>
           <Image name={icon} height={20} />

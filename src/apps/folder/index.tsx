@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 
 import SideBar from "./SideBar";
 import TopBar from "./topbar";
@@ -48,8 +48,9 @@ const Folder = ({ path, app, id, onMouseDown }: IProps) => {
   const { getCurrent, push, navigate, state: history } = useHistory(path);
   const isMetaKey = React.useRef(false);
   const wrapperRef = React.useRef<HTMLDivElement>(null);
-  const routes = useSelector((state) => state.folder.routes);
-  const userName = useSelector((state) => state.auth.user!.name);
+  const routes = useSelector((state) => state.folder.routes, shallowEqual);
+  const rootFile = useSelector((state) => state.folder.root, shallowEqual);
+  const userName = useSelector((state) => state.auth.user!.name, shallowEqual);
 
   const currentRoute = routes.find((r) => r.path === getCurrent());
 
@@ -141,7 +142,13 @@ const Folder = ({ path, app, id, onMouseDown }: IProps) => {
       onKeyDown={handleKeyDown}
     >
       <Wrapper className="flex">
-        <SideBar app={app} />
+        <SideBar
+          user={userName}
+          app={app}
+          onMouseDown={handleTopBarMouseDown}
+          rootFile={rootFile}
+          push={push}
+        />
         <Wrapper className="flex flex-column flex-grow">
           <TopBar
             name={getPathName(getCurrent())}

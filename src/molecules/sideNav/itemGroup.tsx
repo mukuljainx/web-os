@@ -4,23 +4,23 @@ import { INavItem } from "./interface";
 import NavItem from "./navItem";
 import Nested from "./nested";
 
-interface IProps {
-  name: string;
-  icon: string;
+interface IProps extends INavItem {
   children?: INavItem[];
 }
 
-const ItemGroup = ({ name, icon, children }: IProps) => {
+const ItemGroup = ({ children, ...rest }: IProps) => {
   const [expanded, setExpanded] = React.useState(false);
 
   return (
     <Stack flexDirection="column">
       <NavItem
-        name={name}
-        icon={icon}
+        {...rest}
         expanded={expanded}
         expandable={!!children}
-        onExpandClick={() => setExpanded((e) => !e)}
+        onExpandClick={(event) => {
+          event.stopPropagation();
+          setExpanded((e) => !e);
+        }}
       />
       <Stack flexDirection="column" marginLeft={16}>
         {children && <Nested expanded={expanded} items={children} />}

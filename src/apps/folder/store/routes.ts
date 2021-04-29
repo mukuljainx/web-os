@@ -10,6 +10,8 @@ export const getDefaultRoutes = (): IFile => ({
   appName: "folder",
   sortBy: "NAME",
   order: 0,
+  createdOn: 0,
+  updatedOn: 0,
   safe: true,
   files: {
     system: {
@@ -24,6 +26,8 @@ export const getDefaultRoutes = (): IFile => ({
       safe: true,
       sortBy: "NAME",
       order: 1,
+      createdOn: 0,
+      updatedOn: 0,
     },
     applications: {
       parent: "/",
@@ -37,10 +41,12 @@ export const getDefaultRoutes = (): IFile => ({
       safe: true,
       sortBy: "NAME",
       order: 2,
+      createdOn: 0,
+      updatedOn: 0,
     },
     users: {
       parent: "/",
-      icon: "users",
+      icon: "user",
       id: "users",
       isFolder: true,
       name: "users",
@@ -49,6 +55,8 @@ export const getDefaultRoutes = (): IFile => ({
       safe: true,
       sortBy: "NAME",
       order: 3,
+      createdOn: 0,
+      updatedOn: 0,
       files: {
         home: {
           parent: "/users",
@@ -61,10 +69,12 @@ export const getDefaultRoutes = (): IFile => ({
           safe: true,
           sortBy: "NAME",
           order: 0,
+          createdOn: 0,
+          updatedOn: 0,
           files: {
             Pictures: {
               parent: "/users/${user}",
-              icon: "Pictures",
+              icon: "pictures",
               id: "Pictures",
               isFolder: true,
               name: "Pictures",
@@ -74,10 +84,12 @@ export const getDefaultRoutes = (): IFile => ({
               files: {},
               sortBy: "NAME",
               order: 0,
+              createdOn: 0,
+              updatedOn: 0,
             },
             Documents: {
               parent: "/users/${user}",
-              icon: "Documents",
+              icon: "document",
               id: "Documents",
               isFolder: true,
               name: "Documents",
@@ -87,10 +99,12 @@ export const getDefaultRoutes = (): IFile => ({
               files: {},
               sortBy: "NAME",
               order: 1,
+              createdOn: 0,
+              updatedOn: 0,
             },
             Downloads: {
               parent: "/users/${user}",
-              icon: "Downloads",
+              icon: "download",
               id: "Downloads",
               isFolder: true,
               name: "Downloads",
@@ -100,10 +114,12 @@ export const getDefaultRoutes = (): IFile => ({
               files: {},
               sortBy: "NAME",
               order: 2,
+              createdOn: 0,
+              updatedOn: 0,
             },
             Desktop: {
               parent: "/users/${user}",
-              icon: "Desktop",
+              icon: "desktop",
               id: "Desktop",
               isFolder: true,
               name: "Desktop",
@@ -112,6 +128,8 @@ export const getDefaultRoutes = (): IFile => ({
               safe: true,
               sortBy: "NAME",
               order: 3,
+              createdOn: 0,
+              updatedOn: 0,
               files: {
                 "Desktop 1": {
                   parent: "/users/${user}/Desktop",
@@ -124,6 +142,8 @@ export const getDefaultRoutes = (): IFile => ({
                   files: {},
                   sortBy: "NAME",
                   order: 0,
+                  createdOn: 0,
+                  updatedOn: 0,
                 },
                 "Desktop 2": {
                   parent: "/users/${user}/Desktop",
@@ -136,6 +156,8 @@ export const getDefaultRoutes = (): IFile => ({
                   files: {},
                   sortBy: "NAME",
                   order: 1,
+                  createdOn: 0,
+                  updatedOn: 0,
                 },
               },
             },

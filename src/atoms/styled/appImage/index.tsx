@@ -5,8 +5,6 @@ export const availableIcons: Record<string, string> = {
   desktop: "desktop.png",
   library: "library.png",
   music: "music.png",
-  system: "system.png",
-  // "folder" : "folder.png",
   user: "user.png",
   applications: "applications.png",
   windows: "windows.svg",
@@ -18,6 +16,11 @@ export const availableIcons: Record<string, string> = {
   settings: "settings.png",
   partlyCloudy: "partly-cloudy.png",
   myPc: "my-pc.png",
+  star: "star.png",
+  generic: "generic.svg",
+  download: "download.png",
+  document: "document.png",
+  pictures: "pictures.png",
 };
 
 type IProps = ReactHTMLElement<
@@ -29,7 +32,7 @@ type IProps = ReactHTMLElement<
 >;
 
 const Image = ({ name, size, ref, height, width, ...rest }: IProps) => {
-  const iconName = availableIcons[name] || "generic.png";
+  const iconName = availableIcons[name] || "generic.svg";
 
   return (
     <img

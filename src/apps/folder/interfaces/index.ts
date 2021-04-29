@@ -21,8 +21,10 @@ export interface IFile {
   // app type, a folder, setting, video-player etc
   appName: string;
   safe?: boolean;
-  sortBy: "NAME" | "DATE_CREATED";
+  sortBy: "NAME" | "updateOn" | "createdOn";
   order: number;
+  createdOn: number;
+  updatedOn: number;
 }
 
 export interface IFolderRoutes {
