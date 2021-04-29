@@ -5,7 +5,8 @@ import { useDispatch } from "react-redux";
 const useActions = (
   iconRef: React.RefObject<HTMLElement>,
   label: string,
-  path: string
+  path: string,
+  fileId: string
 ) => {
   const folderName = React.useRef(label);
   const dispatch = useDispatch();
@@ -40,10 +41,10 @@ const useActions = (
     dispatch(
       actions.deleteFolder({
         route: path,
-        name: folderName.current,
+        fileId,
       })
     );
-  }, [dispatch, actions.deleteFolder]);
+  }, [dispatch, actions.deleteFolder, fileId]);
 
   return { renameFolder, initRename, deleteFolder };
 };

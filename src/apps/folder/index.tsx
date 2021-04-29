@@ -6,11 +6,11 @@ import SideBar from "./SideBar";
 import TopBar from "./topbar";
 import Content from "./Content";
 import useHistory from "utils/hooks/useHistory";
-import { interpolate } from "utils/string";
 import { IApp, IMetaData } from "base/interfaces";
 import { Acrylic } from "atoms/styled";
 import NavigationBar from "./navigationBar";
 import { bringToTop } from "base/store";
+import { IFile } from "./interfaces";
 
 const Wrapper = styled.div`
   height: 100%;
@@ -49,16 +49,34 @@ const Folder = ({ path, app, id, onMouseDown }: IProps) => {
   const isMetaKey = React.useRef(false);
   const wrapperRef = React.useRef<HTMLDivElement>(null);
   const routes = useSelector((state) => state.folder.routes, shallowEqual);
-  const rootFile = useSelector((state) => state.folder.root, shallowEqual);
-  const userName = useSelector((state) => state.auth.user!.name, shallowEqual);
 
+  const userName = useSelector((state) => state.auth.user!.name, shallowEqual);
   const currentRoute = routes.find((r) => r.path === getCurrent());
+  const folderToRoute = useSelector((state) => state.folder.folderToRoute);
 
   const fileAction = React.useCallback(
-    (path: string) => {
-      push(interpolate(path, { user: userName }));
+    (event: React.MouseEvent, file: IFile) => {
+      event;
+      if (file.appName === "folder") {
+        push(folderToRoute[file.data.id]);
+      } else {
+        // window.os.openApp({
+        //   appName: file.appName,
+        //   id: file.id,
+        //   icon: file.icon,
+        //   name: file.name,
+        //   sleepTimeout: 1000,
+        //   data: { path },
+        //   metaData: {
+        //     mousePosition: {
+        //       x: event.clientX,
+        //       y: event.clientY,
+        //     },
+        //   },
+        // });
+      }
     },
-    [push]
+    [push, folderToRoute]
   );
 
   React.useEffect(() => {
@@ -146,7 +164,6 @@ const Folder = ({ path, app, id, onMouseDown }: IProps) => {
           user={userName}
           app={app}
           onMouseDown={handleTopBarMouseDown}
-          rootFile={rootFile}
           push={push}
         />
         <Wrapper className="flex flex-column flex-grow">
@@ -168,7 +185,7 @@ const Folder = ({ path, app, id, onMouseDown }: IProps) => {
             app={app}
             fileAction={fileAction}
             user={userName}
-            files={currentRoute.files}
+            files={currentRoute.files!}
           ></Content>
         </Wrapper>
       </Wrapper>

@@ -2,7 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 
 import { IApp } from "base/interfaces";
-import { IFile } from "apps/folder/interfaces";
+import { IFile } from "../interfaces";
 import IconLayout from "molecules/iconInterface";
 
 const Wrapper = styled.div`
@@ -14,7 +14,7 @@ const Wrapper = styled.div`
 interface IProps {
   files: IFile[];
   user: string;
-  fileAction: (path: string) => void;
+  fileAction: (event: React.MouseEvent, file: IFile) => void;
   app: IApp;
   route: string;
 }

@@ -26,7 +26,7 @@ const useFolderAction = ({
           return;
         }
         case "sort-name": {
-          dispatch(sortFolder({ route, sortKey: "NAME" }));
+          dispatch(sortFolder({ route, sortKey: "name" }));
           clearStore();
           return;
         }
@@ -36,7 +36,7 @@ const useFolderAction = ({
           return;
         }
         case "sort-date-updated": {
-          dispatch(sortFolder({ route, sortKey: "updateOn" }));
+          dispatch(sortFolder({ route, sortKey: "updatedOn" }));
           clearStore();
           return;
         }

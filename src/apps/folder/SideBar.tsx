@@ -1,13 +1,12 @@
 import * as React from "react";
 import styled from "styled-components";
+import { sortBy } from "lodash-es";
+import { shallowEqual, useSelector } from "react-redux";
 
 import SideNav from "molecules/sideNav";
 import { Stack, Text } from "atoms/styled";
 import { IApp } from "base/interfaces";
 import Image from "atoms/styled/appImage";
-import { IFile } from "./interfaces";
-import { sortBy } from "lodash-es";
-import { getPath } from "./helper";
 
 const Wrapper = styled(Stack)`
   width: 240px;
@@ -17,15 +16,24 @@ type IProps = ReactHTMLElement<
   "div",
   {
     app: IApp;
-    rootFile: IFile;
     push: (route: string) => void;
     user: string;
   }
 >;
 
-const SideBar = ({ app, rootFile, push, user, ref, ...rest }: IProps) => {
+const SideBar = ({ app, push, user, ref, ...rest }: IProps) => {
+  const rootFile = useSelector((state) => state.folder.root, shallowEqual);
+  const folderPool = useSelector(
+    (state) => state.folder.folderPool,
+    shallowEqual
+  );
+  const folderToRoute = useSelector(
+    (state) => state.folder.folderToRoute,
+    shallowEqual
+  );
+
   const homeRoot = Object.values(rootFile.files!["users"].files!).find(
-    (f) => f.icon === "home"
+    (f) => f.data.id === "home"
   )!;
 
   const items = [
@@ -33,24 +41,24 @@ const SideBar = ({ app, rootFile, push, user, ref, ...rest }: IProps) => {
       name: "My PC",
       icon: "myPc",
       id: "mypc",
-      action: () => push(getPath(rootFile, user)),
+      action: () => push(folderToRoute[rootFile.data.id]),
       children: sortBy(Object.values(rootFile.files!), ["name"]).map((f) => ({
-        name: f.name,
-        id: f.id,
-        icon: f.icon,
-        action: () => push(f.path),
+        name: folderPool[f.data.id].name,
+        id: f.data.id,
+        icon: folderPool[f.data.id].icon,
+        action: () => push(folderToRoute[f.data.id]),
       })),
     },
     {
       name: "Quick Access",
       icon: "star",
       id: "favorite",
-      action: () => push(getPath(homeRoot, user)),
+      action: () => push(folderToRoute[homeRoot.data.id]),
       children: sortBy(Object.values(homeRoot.files!), ["name"]).map((f) => ({
-        name: f.name,
-        id: f.id,
-        icon: f.icon,
-        action: () => push(getPath(f, user)),
+        name: folderPool[f.data.id].name,
+        id: f.data.id,
+        icon: folderPool[f.data.id].icon,
+        action: () => push(folderToRoute[f.data.id]),
       })),
     },
   ];

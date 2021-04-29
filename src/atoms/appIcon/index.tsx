@@ -39,30 +39,32 @@ type IProps = ReactHTMLElement<
   "div",
   {
     desktop?: boolean;
-    name: string;
-    label?: string;
     innnerRef?: any;
     highlight?: boolean;
     safe?: boolean;
     path: string;
+    icon: string;
+    name: string;
+    fileId: string;
   }
 >;
 
 export const sizeChart = { DESKTOP: 64 };
 
-const Icon = ({
+const AppIcon = ({
   safe,
   desktop,
-  name,
   path,
-  label,
+  name,
+  icon,
   innnerRef,
+  fileId,
   ...rest
 }: IProps) => {
-  const folderName = React.useRef(label);
+  const folderName = React.useRef(name);
   const iconRef = React.useRef<HTMLDivElement>(null);
 
-  const actions = useActions(iconRef, folderName.current || "", path);
+  const actions = useActions(iconRef, folderName.current || "", path, fileId);
 
   return (
     <>
@@ -94,17 +96,17 @@ const Icon = ({
           rest.className || ""
         }`}
       >
-        <AppImage name={name} size={64} />
+        <AppImage name={icon} size={64} />
         <Label
           desktop={desktop}
           onKeyDown={(e) => e?.stopPropagation()}
           onKeyUp={(e) => e?.stopPropagation()}
           onBlur={actions.renameFolder}
-          name={label || ""}
+          name={name || ""}
         />
       </Wrapper>
     </>
   );
 };
 
-export default Icon;
+export default AppIcon;

@@ -24,9 +24,11 @@ const Wrapper = styled.div`
 
 const Base = ({}: IProps) => {
   const wrapperRef = React.useRef<HTMLDivElement>(null);
-  let user = useSelector((state) => state.auth.user);
 
+  let user = useSelector((state) => state.auth.user);
   const openedApps = useSelector((state) => state.base.apps);
+  const routes = useSelector((state) => state.folder.routes, shallowEqual);
+
   const { store, handleMouseDown } = useDraggable({ wrapperRef });
   const dispatch = useDispatch();
   const toggleStartMenu = React.useCallback(() => {
@@ -37,10 +39,8 @@ const Base = ({}: IProps) => {
     return <Redirect to="/auth" />;
   }
 
-  const routes = useSelector((state) => state.folder.routes, shallowEqual);
-
   let desktopRoute = React.useMemo(
-    () => routes.find((route) => route.file.id === "Desktop"),
+    () => routes.find((route) => route.file.data.id === "Desktop"),
     [routes]
   );
 

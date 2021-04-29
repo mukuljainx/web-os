@@ -6,29 +6,26 @@
 
 // base file (root) will behave as base for OS to run
 export interface IFile {
-  parent: string | null;
-  id: string;
-  // current path
-  path: string;
-  // is copy/duplicate of
+  data: Record<string, any>;
   symlink?: string;
-  name: string;
-  icon: string;
-  // useful for drag files/folder into folder
-  // default behavoiur of opening other layout
-  isFolder: boolean;
+  appName: "folder" | "photo";
   files?: Record<string, IFile>;
-  // app type, a folder, setting, video-player etc
-  appName: string;
-  safe?: boolean;
-  sortBy: "NAME" | "updateOn" | "createdOn";
+  sortBy: "name" | "updatedOn" | "createdOn";
   order: number;
-  createdOn: number;
-  updatedOn: number;
 }
 
 export interface IFolderRoutes {
   path: string;
-  files: IFile[];
+  files?: IFile[];
   file: IFile;
+}
+
+export interface IFolder {
+  parent: string | null;
+  id: string;
+  name: string;
+  icon: string;
+  safe?: boolean;
+  createdOn: number;
+  updatedOn: number;
 }
