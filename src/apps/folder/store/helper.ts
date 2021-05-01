@@ -27,28 +27,34 @@ export const getRoutes = (
     let routes: IFolderRoutes[] = [];
 
     Object.values(root.files || {}).forEach((file: IFile) => {
+      const name =
+        file.appName === "folder"
+          ? folderPool[file.data.id].name
+          : file.data.name;
       const path = interpolate(
-        (parentPath === "/" ? parentPath : parentPath + "/") +
-          folderPool[file.data.id].name,
+        (parentPath === "/" ? parentPath : parentPath + "/") + name,
         {
           user,
         }
       );
-      routes.push({
-        path,
-        files: Object.values(sortBy(file.files, ["order"]) || {}),
-        file,
-      });
 
-      if (file.symlink) {
-        return;
+      if (!file.symlink) {
+        routeToFolder[path] = `${treePath === "" ? "" : treePath + "."}files.${
+          file.data.id
+        }`;
+        folderToRoute[file.data.id] = path;
       }
 
-      routeToFolder[path] = `${treePath === "" ? "" : treePath + "."}files.${
-        file.data.id
-      }`;
-      folderToRoute[file.data.id] = path;
-      routes.push(...inner(file, user, path, routeToFolder[path]));
+      if (file.appName === "folder") {
+        // if file is not a folder type return from here as it can't act
+        // as a route
+        routes.push({
+          path,
+          files: Object.values(sortBy(file.files, ["order"]) || {}),
+          file,
+        });
+        routes.push(...inner(file, user, path, routeToFolder[path]));
+      }
     });
 
     return routes;

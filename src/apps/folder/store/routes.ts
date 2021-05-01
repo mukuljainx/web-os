@@ -140,18 +140,20 @@ export const folderMap: IFile = {
             Pictures: {
               sortBy: "name",
               order: 0,
-              // path: "/users/${user}/Pictures",
               data: { id: "Pictures" },
               appName: "folder",
-              // childSymlinks: [
-              //   "files.users.files.home.files.Desktop.files.Pictures",
-              // ],
-              // files: [
-              //   {
-              //     data: { id: "Pictures", sortBy: 'name', sortBy: 'name',
-              //     appName: "photo",
-              //   },
-              // ],
+              files: {
+                img1: {
+                  data: {
+                    id: "img1",
+                    name: "temple.jpg",
+                    icon: "image",
+                    path: "assests/images/temple.jpg",
+                  },
+                  appName: "photo",
+                  order: 0,
+                },
+              },
             },
             Documents: {
               data: { id: "Documents" },

@@ -42,20 +42,39 @@ const IconLayout = ({ desktop, files, user, fileAction, route }: IProps) => {
     user,
     clearStore,
   });
+  console.log(99, files);
 
   return (
     <>
       <ContextMenu wrapperRef={wrapperRef} items={menuItems} />
       <Wrapper data-id="icon-interface" ref={wrapperRef}>
         {files.map((file: IFile, index) => {
-          const fileDetail = folderPool[file.data.id];
-          const fileName = interpolate(fileDetail.name, { user });
+          let fileDetail = { name: "", icon: "", id: "", path: "", safe: true };
+          if (file.appName === "folder") {
+            const details = folderPool[file.data.id];
+            fileDetail = {
+              name: interpolate(details.name, { user }),
+              icon: details.icon,
+              id: file.data.id,
+              path: folderToRoute[file.data.id],
+              safe: !!details.safe,
+            };
+          } else {
+            fileDetail = {
+              name: file.data.name,
+              icon: file.data.icon,
+              id: file.data.id,
+              path: folderToRoute[file.data.id],
+              safe: false,
+            };
+          }
+
           const path = folderToRoute[file.data.id];
           const dragId = fileDetail.id + index;
           return (
             <AppIcon
               symlink={!!file.symlink}
-              name={fileName}
+              name={fileDetail.name}
               path={path}
               icon={fileDetail.icon}
               desktop={desktop}
@@ -78,7 +97,7 @@ const IconLayout = ({ desktop, files, user, fileAction, route }: IProps) => {
                     appName: file.appName,
                     id: fileDetail.id,
                     icon: fileDetail.icon,
-                    name: fileName,
+                    name: fileDetail.name,
                     sleepTimeout: 1000,
                     data: { path },
                     metaData: {
@@ -100,4 +119,4 @@ const IconLayout = ({ desktop, files, user, fileAction, route }: IProps) => {
   );
 };
 
-export default IconLayout;
+export default React.memo(IconLayout);

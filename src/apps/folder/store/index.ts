@@ -147,13 +147,21 @@ const folderSlice = createSlice({
         state.routeToFolder[payload.route]
       ) as IFile;
 
+      if (currentFile.appName !== "folder") {
+        console.error(
+          `Current file: ${currentFile.data.id} is not a folder but a ${currentFile.appName}`
+        );
+        return;
+      }
+
       let filesArray = Object.values(currentFile.files || {});
       if (filesArray.length) {
         currentFile.sortBy = payload.sortKey;
         const sorted = sortBy(
           filesArray.map((f) => state.folderPool[f.data.id]),
-          [payload.sortKey]
+          [payload.sortKey!]
         );
+
         sorted.forEach((f, i) => {
           currentFile.files![f.id].order = i;
         });

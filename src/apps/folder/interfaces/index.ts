@@ -10,7 +10,8 @@ export interface IFile {
   symlink?: string;
   appName: "folder" | "photo";
   files?: Record<string, IFile>;
-  sortBy: "name" | "updatedOn" | "createdOn";
+  // will exist on folder only
+  sortBy?: "name" | "updatedOn" | "createdOn";
   order: number;
 }
 

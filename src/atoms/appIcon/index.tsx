@@ -79,7 +79,6 @@ const AppIcon = ({
   return (
     <>
       <ContextMenu
-        test-id={`menux-${path}`}
         wrapperRef={iconRef}
         items={[
           {
