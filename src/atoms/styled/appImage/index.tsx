@@ -20,6 +20,8 @@ export const availableIcons: Record<string, string> = {
   generic: "generic.svg",
   download: "download.png",
   document: "document.png",
+  symlink: "symlink.png",
+  system: "system.png",
   pictures: "pictures.png",
 };
 
@@ -39,7 +41,6 @@ const Image = ({ name, size, ref, height, width, ...rest }: IProps) => {
       {...rest}
       height={height || size}
       width={width || size}
-      className="icon__image"
       src={require(`./assets/${iconName}`).default}
     />
   );

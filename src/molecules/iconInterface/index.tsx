@@ -54,6 +54,7 @@ const IconLayout = ({ desktop, files, user, fileAction, route }: IProps) => {
           const dragId = fileDetail.id + index;
           return (
             <AppIcon
+              symlink={!!file.symlink}
               name={fileName}
               path={path}
               icon={fileDetail.icon}

@@ -7,7 +7,15 @@ import { AppImage } from "atoms/styled";
 import Label from "./label";
 import useActions from "./useActions";
 
+const SymlinkIcon = styled(AppImage)`
+  position: absolute;
+  height: 24px;
+  bottom: 24px;
+  left: 2px;
+`;
+
 const Wrapper = styled.div<{ highlight?: boolean; desktop?: boolean }>`
+  position: relative;
   .icon__image {
     padding: 2px;
     margin-bottom: 4px;
@@ -46,12 +54,14 @@ type IProps = ReactHTMLElement<
     icon: string;
     name: string;
     fileId: string;
+    symlink?: boolean;
   }
 >;
 
 export const sizeChart = { DESKTOP: 64 };
 
 const AppIcon = ({
+  symlink,
   safe,
   desktop,
   path,
@@ -96,7 +106,7 @@ const AppIcon = ({
           rest.className || ""
         }`}
       >
-        <AppImage name={icon} size={64} />
+        <AppImage className="icon__image" name={icon} size={64} />
         <Label
           desktop={desktop}
           onKeyDown={(e) => e?.stopPropagation()}
@@ -104,6 +114,7 @@ const AppIcon = ({
           onBlur={actions.renameFolder}
           name={name || ""}
         />
+        {symlink && <SymlinkIcon name="symlink" />}
       </Wrapper>
     </>
   );
