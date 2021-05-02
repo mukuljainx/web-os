@@ -19,7 +19,7 @@ interface IProps {
   route: string;
 }
 
-const Content = ({ files, user, fileAction, route }: IProps) => {
+const Content = ({ files, user, fileAction, route, app }: IProps) => {
   return (
     <>
       <Wrapper>
@@ -28,6 +28,7 @@ const Content = ({ files, user, fileAction, route }: IProps) => {
           route={route}
           user={user}
           files={files}
+          instanceId={app.id}
         />
       </Wrapper>
     </>

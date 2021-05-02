@@ -32,8 +32,14 @@ const baseSlice = createSlice({
       if (
         runningApp.instances[runningApp.instances.length - 1].id === instanceId
       ) {
-        // already on top
-        return;
+        // instance is at top
+        if (runningApp.weight === state.currentWeight - 1) {
+          return;
+        } else {
+          runningApp.weight++;
+          state.currentWeight++;
+          return;
+        }
       }
       runningApp.weight = state.currentWeight;
       const index = runningApp.instances.findIndex(

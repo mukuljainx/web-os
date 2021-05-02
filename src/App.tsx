@@ -9,7 +9,7 @@ import store from "store";
 import theme from "theme";
 import Auth from "auth";
 import Base from "base";
-import { openApp, closeApp } from "base/store";
+import { openApp, closeApp, bringToTop } from "base/store";
 
 const App = () => {
   // move to more apporpiate place
@@ -19,6 +19,7 @@ const App = () => {
       ...window.os,
       openApp: (param) => store.dispatch(openApp(param)),
       closeApp: (param) => store.dispatch(closeApp(param)),
+      bringToTop: (param) => store.dispatch(bringToTop(param)),
       events: {},
     };
 

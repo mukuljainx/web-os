@@ -44,11 +44,6 @@ const Base = ({}: IProps) => {
     [routes]
   );
 
-  // const { menuItems } = useFolderAction({
-  //   route: desktopRoute?.path,
-  //   user: user.name,
-  // });
-
   React.useEffect(() => {
     window.os = {
       ...window.os,
@@ -61,7 +56,6 @@ const Base = ({}: IProps) => {
     <Desktop>
       <Wrapper ref={wrapperRef}>
         <Menu />
-        {/* <ContextMenu wrapperRef={wrapperRef} items={menuItems} /> */}
         {Object.values(openedApps).map((app) => {
           return (
             <>

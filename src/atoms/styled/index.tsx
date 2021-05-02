@@ -94,6 +94,7 @@ export const Stack = styled.div<
 `;
 
 export const Image = styled.img<Pick<React.CSSProperties, "width" | "height">>`
+  -webkit-user-drag: none;
   ${({ width }) => width && `width: ${getPixel(width)}`};
   ${({ height }) => height && `height: ${getPixel(height)}`};
 `;

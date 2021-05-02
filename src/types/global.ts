@@ -6,6 +6,8 @@ export {};
 declare global {
   type Noop = () => void;
 
+  type IData = Record<string, any>;
+
   /**
    * ReactHTMLElement<T,S>
    * T can be any key from JSX.IntrinsicElements and S will be interface to merge
@@ -21,6 +23,7 @@ declare global {
     os: {
       openApp: (param: IApp) => void;
       closeApp: (param: { appName: string; instanceId: string }) => void;
+      bringToTop: (param: { appName: string; instanceId: string }) => void;
       wrapper: HTMLElement;
       // to keep track of events
       events: Record<string, number>;

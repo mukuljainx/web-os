@@ -11,6 +11,8 @@ import { Acrylic } from "atoms/styled";
 import NavigationBar from "./navigationBar";
 import { bringToTop } from "base/store";
 import { IFile } from "./interfaces";
+import { dispatchEvent } from "utils/events";
+import useDidUpdate from "utils/hooks/useDidUpdate";
 
 const Wrapper = styled.div`
   height: 100%;
@@ -45,6 +47,14 @@ const getPathName = (path: string) => {
 };
 
 const Folder = ({ path, app, id, onMouseDown }: IProps) => {
+  const { firstRender } = useDidUpdate();
+  const dispatchFolderLoadEvent = React.useCallback(() => {
+    // dispatch a fake animation complete event so dependent can do their work on route change
+    dispatchEvent("ANIMATED_FOLDER_ANIMATION_COMPLETED", {
+      appName: app.appName,
+      id,
+    });
+  }, [app, id]);
   const { getCurrent, push, navigate, state: history } = useHistory(path);
   const isMetaKey = React.useRef(false);
   const wrapperRef = React.useRef<HTMLDivElement>(null);
@@ -82,6 +92,9 @@ const Folder = ({ path, app, id, onMouseDown }: IProps) => {
   React.useEffect(() => {
     // to focus on path change so keyboard shortcut will work
     wrapperRef.current?.focus();
+    if (!firstRender) {
+      dispatchFolderLoadEvent();
+    }
   }, [getCurrent()]);
 
   const previousRoute = React.useCallback(() => {

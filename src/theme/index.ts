@@ -12,7 +12,7 @@ const theme = {
   borderRadius: 4,
   zIndex: {
     contextMenu: 2147483001,
-    app: 11,
+    app: 51,
     menu: 2147483000,
     appBar: 2147483001,
   },

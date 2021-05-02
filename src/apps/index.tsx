@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import Folder from "apps/folder";
+import Photo from "apps/photo";
 import { IApp, IMetaData } from "base/interfaces";
 import AnimatedFileWrapper from "atoms/animatedFileWrapper";
 
@@ -40,6 +41,24 @@ const App = ({
             app={app}
             id={id}
             {...data}
+          />
+        </AnimatedFileWrapper>
+      );
+    }
+    case "photo": {
+      return (
+        <AnimatedFileWrapper
+          appName={app.appName}
+          id={id}
+          style={style}
+          metaData={metaData}
+          weight={weight}
+        >
+          <Photo
+            {...(data as any)}
+            instanceId={id}
+            appName={app.appName}
+            onMouseDown={onMouseDown}
           />
         </AnimatedFileWrapper>
       );

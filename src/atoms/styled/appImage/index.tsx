@@ -12,7 +12,7 @@ export const availableIcons: Record<string, string> = {
   calendar: "calendar.png",
   edge: "edge.png",
   mail: "mail.png",
-  photos: "photos.png",
+  photo: "photo.svg",
   settings: "settings.png",
   partlyCloudy: "partly-cloudy.png",
   myPc: "my-pc.png",

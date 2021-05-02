@@ -6,6 +6,7 @@ import "./icons.scss";
 import { AppImage } from "atoms/styled";
 import Label from "./label";
 import useActions from "./useActions";
+import CustomIcon from "./customIcon";
 
 const SymlinkIcon = styled(AppImage)`
   position: absolute;
@@ -55,6 +56,9 @@ type IProps = ReactHTMLElement<
     name: string;
     fileId: string;
     symlink?: boolean;
+    appName: "folder" | "photo";
+    data: Record<string, any>;
+    instanceId?: string;
   }
 >;
 
@@ -68,6 +72,9 @@ const AppIcon = ({
   name,
   icon,
   innnerRef,
+  appName,
+  data,
+  instanceId,
   fileId,
   ...rest
 }: IProps) => {
@@ -105,7 +112,11 @@ const AppIcon = ({
           rest.className || ""
         }`}
       >
-        <AppImage className="icon__image" name={icon} size={64} />
+        {appName === "folder" ? (
+          <AppImage className="icon__image" name={icon} size={64} />
+        ) : (
+          <CustomIcon instanceId={instanceId} appName={appName} data={data} />
+        )}
         <Label
           desktop={desktop}
           onKeyDown={(e) => e?.stopPropagation()}

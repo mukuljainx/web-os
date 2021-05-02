@@ -23,9 +23,17 @@ interface IProps {
   fileAction?: (event: React.MouseEvent, file: IFile) => void;
   desktop?: boolean;
   route: string;
+  instanceId?: string;
 }
 
-const IconLayout = ({ desktop, files, user, fileAction, route }: IProps) => {
+const IconLayout = ({
+  desktop,
+  files,
+  user,
+  fileAction,
+  route,
+  instanceId,
+}: IProps) => {
   const wrapperRef = React.useRef<HTMLDivElement>(null);
   const { store, handleMouseDown, clearStore } = useDraggable({ wrapperRef });
   const folderPool = useSelector(
@@ -42,7 +50,6 @@ const IconLayout = ({ desktop, files, user, fileAction, route }: IProps) => {
     user,
     clearStore,
   });
-  console.log(99, files);
 
   return (
     <>
@@ -50,6 +57,10 @@ const IconLayout = ({ desktop, files, user, fileAction, route }: IProps) => {
       <Wrapper data-id="icon-interface" ref={wrapperRef}>
         {files.map((file: IFile, index) => {
           let fileDetail = { name: "", icon: "", id: "", path: "", safe: true };
+          let data: IData = {};
+          const path = folderToRoute[file.data.id];
+          const dragId = fileDetail.id + index;
+
           if (file.appName === "folder") {
             const details = folderPool[file.data.id];
             fileDetail = {
@@ -59,6 +70,7 @@ const IconLayout = ({ desktop, files, user, fileAction, route }: IProps) => {
               path: folderToRoute[file.data.id],
               safe: !!details.safe,
             };
+            data = { path };
           } else {
             fileDetail = {
               name: file.data.name,
@@ -67,12 +79,13 @@ const IconLayout = ({ desktop, files, user, fileAction, route }: IProps) => {
               path: folderToRoute[file.data.id],
               safe: false,
             };
+            data = { ...file.data };
           }
 
-          const path = folderToRoute[file.data.id];
-          const dragId = fileDetail.id + index;
           return (
             <AppIcon
+              instanceId={instanceId}
+              data={file.data}
               symlink={!!file.symlink}
               name={fileDetail.name}
               path={path}
@@ -80,6 +93,7 @@ const IconLayout = ({ desktop, files, user, fileAction, route }: IProps) => {
               desktop={desktop}
               safe={fileDetail.safe}
               tabIndex={0}
+              appName={file.appName}
               onMouseDown={(event) => {
                 handleMouseDown(event, dragId);
               }}
@@ -90,7 +104,7 @@ const IconLayout = ({ desktop, files, user, fileAction, route }: IProps) => {
               }}
               highlight={store.elements[dragId]?.selected}
               onDoubleClick={(event) => {
-                if (fileAction) {
+                if (fileAction && file.appName === "folder") {
                   fileAction(event, file);
                 } else {
                   window.os.openApp({
@@ -99,7 +113,7 @@ const IconLayout = ({ desktop, files, user, fileAction, route }: IProps) => {
                     icon: fileDetail.icon,
                     name: fileDetail.name,
                     sleepTimeout: 1000,
-                    data: { path },
+                    data: data,
                     metaData: {
                       mousePosition: {
                         x: event.clientX,
