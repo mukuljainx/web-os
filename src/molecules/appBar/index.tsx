@@ -2,8 +2,7 @@ import DesktopIcon from "atoms/styled/appImage";
 import { IAppGroup } from "base/interfaces";
 import * as React from "react";
 import styled from "styled-components";
-import { Acrylic, Stack, Image, StackItem } from "atoms/styled";
-import { Icon } from "@fluentui/react";
+import { Acrylic, Stack, Image, StackItem, Icon } from "atoms/styled";
 import useDate from "utils/hooks/useDate";
 
 const Wrapper = styled(Acrylic)`
@@ -26,9 +25,10 @@ const Absolute = styled.div<{ right?: boolean }>`
 interface IProps {
   apps: Record<string, IAppGroup>;
   toggleMenu: () => void;
+  toggleQuickActions: () => void;
 }
 
-const AppBar = ({ apps, toggleMenu }: IProps) => {
+const AppBar = ({ apps, toggleMenu, toggleQuickActions }: IProps) => {
   const sortedApps = Object.values(apps).sort((a, b) =>
     a.initialWeight > b.initialWeight ? 1 : -1
   );
@@ -52,7 +52,11 @@ const AppBar = ({ apps, toggleMenu }: IProps) => {
         <Absolute right>
           <Stack alignItems="center" gap={16} fullHeight paddingRight={16}>
             <StackItem>
-              <Icon style={{ fontWeight: "bold" }} iconName="ChevronUp" />
+              <Icon
+                onClick={toggleQuickActions}
+                style={{ fontWeight: "bold" }}
+                iconName="ChevronUp"
+              />
             </StackItem>
             <StackItem>
               <Image

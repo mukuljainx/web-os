@@ -85,22 +85,6 @@ const Menu = ({}: IProps) => {
         </Wrapper>
       )
   );
-
-  return (
-    <Wrapper>
-      <Stack fullHeight>
-        <Partial flexShrink={0}>
-          <QuickAction />
-        </Partial>
-        <Partial>
-          <AppList />
-        </Partial>
-        <Partial flexGrow={2}>
-          <QuickPick />
-        </Partial>
-      </Stack>
-    </Wrapper>
-  );
 };
 
 export default React.memo(Menu);

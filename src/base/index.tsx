@@ -9,7 +9,10 @@ import styled from "styled-components";
 import useDraggable from "utils/hooks/useDraggable";
 import AppBar from "molecules/appBar";
 import Menu from "molecules/startMenu";
-import { toggleStartMenu as toggleStartMenuAction } from "base/store";
+import {
+  toggleStartMenu as toggleStartMenuAction,
+  toggleQuickActions,
+} from "base/store";
 import { initRoutes } from "apps/folder/store";
 import ActionCenter from "apps/actionCenter";
 
@@ -32,6 +35,10 @@ const Base = ({}: IProps) => {
   const toggleStartMenu = React.useCallback(() => {
     dispatch(toggleStartMenuAction());
   }, [toggleStartMenuAction, dispatch]);
+
+  const dispatchToggleQuickActions = React.useCallback(() => {
+    dispatch(toggleQuickActions());
+  }, [toggleQuickActions, dispatch]);
 
   if (!user) {
     return <Redirect to="/auth" />;
@@ -86,7 +93,11 @@ const Base = ({}: IProps) => {
           user={user!.name}
           files={desktopRoute?.files || []}
         />
-        <AppBar toggleMenu={toggleStartMenu} apps={openedApps} />
+        <AppBar
+          toggleQuickActions={dispatchToggleQuickActions}
+          toggleMenu={toggleStartMenu}
+          apps={openedApps}
+        />
       </Wrapper>
     </Desktop>
   );

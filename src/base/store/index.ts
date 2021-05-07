@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { INotification } from "apps/actionCenter/interface";
 import { IApp, IAppGroup } from "base/interfaces";
 
 interface IBaseState {
@@ -8,6 +9,10 @@ interface IBaseState {
   menu: {
     show: boolean;
   };
+  quickActions: {
+    show: boolean;
+    notifications: INotification[];
+  };
 }
 
 const initialState: IBaseState = {
@@ -15,6 +20,23 @@ const initialState: IBaseState = {
   currentWeight: 0,
   menu: {
     show: false,
+  },
+  quickActions: {
+    show: false,
+    notifications: [
+      {
+        title: "Budget Book",
+        desciption: "Just got installed, check it out.",
+        date: new Date().getTime(),
+        id: 1,
+      },
+      {
+        title: "Ping Pong",
+        desciption: "Just got installed, check it out.",
+        date: new Date().getTime() - 23134,
+        id: 2,
+      },
+    ],
   },
 };
 
@@ -103,6 +125,9 @@ const baseSlice = createSlice({
     toggleStartMenu: (state) => {
       state.menu.show = !state.menu.show;
     },
+    toggleQuickActions: (state) => {
+      state.quickActions.show = !state.quickActions.show;
+    },
   },
 });
 
@@ -111,5 +136,6 @@ export const {
   closeApp,
   toggleStartMenu,
   bringToTop,
+  toggleQuickActions,
 } = baseSlice.actions;
 export default baseSlice.reducer;
