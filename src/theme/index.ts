@@ -8,6 +8,7 @@ const theme = {
     blackRGB: "0,0,0",
     plainRGB: "255,255,255",
     blueRGB: "0,0,255",
+    blue: "rgb(64, 149, 219)",
   },
   borderRadius: 4,
   zIndex: {

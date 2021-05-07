@@ -4,6 +4,7 @@ import * as React from "react";
 import styled from "styled-components";
 import { Acrylic, Stack, Image, StackItem, Icon } from "atoms/styled";
 import useDate from "utils/hooks/useDate";
+import { shallowEqual, useSelector } from "react-redux";
 
 const Wrapper = styled(Acrylic)`
   display: flex;
@@ -32,6 +33,10 @@ const AppBar = ({ apps, toggleMenu, toggleQuickActions }: IProps) => {
   const sortedApps = Object.values(apps).sort((a, b) =>
     a.initialWeight > b.initialWeight ? 1 : -1
   );
+  const actionCenterShow = useSelector(
+    (state) => state.actionCenter.show,
+    shallowEqual
+  );
   const date = useDate("hh:mm A");
 
   return (
@@ -55,7 +60,7 @@ const AppBar = ({ apps, toggleMenu, toggleQuickActions }: IProps) => {
               <Icon
                 onClick={toggleQuickActions}
                 style={{ fontWeight: "bold" }}
-                iconName="ChevronUp"
+                iconName={actionCenterShow ? "ChevronDown" : "ChevronUp"}
               />
             </StackItem>
             <StackItem>

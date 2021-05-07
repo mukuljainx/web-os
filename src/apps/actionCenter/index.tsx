@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 import { useBoolean } from "@fluentui/react-hooks";
-import { useTransition, animated, useTrail } from "react-spring";
+import { useTransition, animated } from "react-spring";
 import { shallowEqual, useSelector } from "react-redux";
 
 import Notifications from "./notifications";
@@ -18,12 +18,12 @@ const Wrapper = styled(animated.div)`
 interface IProps {}
 
 const ActionCenter = ({}: IProps) => {
-  const quickActionProps = useSelector(
-    (state) => state.base.quickActions,
+  const actionCenterProps = useSelector(
+    (state) => state.actionCenter,
     shallowEqual
   );
   const [showNotification, { setFalse }] = useBoolean(
-    quickActionProps.notifications.length > 0
+    actionCenterProps.notifications.length > 0
   );
 
   const notificationTranstion = useTransition(showNotification, {
@@ -39,7 +39,7 @@ const ActionCenter = ({}: IProps) => {
     delay: 0,
   });
 
-  const transition = useTrail(2, {
+  const transition = useTransition(actionCenterProps.show, {
     from: {
       opacity: 0,
       y: 500,
@@ -54,26 +54,29 @@ const ActionCenter = ({}: IProps) => {
     },
   });
 
-  if (!quickActionProps.show) {
+  if (!actionCenterProps.show) {
     return null;
   }
 
-  return transition.map((style, index) => (
-    <Wrapper style={style}>
-      {notificationTranstion(
-        (notificationStyle, notificationItem) =>
-          notificationItem && (
-            <animated.div style={notificationStyle}>
-              <Notifications
-                items={quickActionProps.notifications}
-                hideNotifications={setFalse}
-              />
-            </animated.div>
-          )
-      )}
-      <QuickSettings />
-    </Wrapper>
-  ));
+  return transition(
+    (style, item) =>
+      item && (
+        <Wrapper style={style}>
+          {notificationTranstion(
+            (notificationStyle, notificationItem) =>
+              notificationItem && (
+                <animated.div style={notificationStyle}>
+                  <Notifications
+                    items={actionCenterProps.notifications}
+                    hideNotifications={setFalse}
+                  />
+                </animated.div>
+              )
+          )}
+          <QuickSettings />
+        </Wrapper>
+      )
+  );
 };
 
 export default React.memo(ActionCenter);

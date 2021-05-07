@@ -2,8 +2,9 @@ import * as React from "react";
 import styled from "styled-components";
 
 import { Stack, Icon, Text, Image } from "atoms/styled";
+import { IButtonAction } from "../interface";
 
-const ButtonWrapper = styled.button`
+const ButtonWrapper = styled.button<{ selected?: boolean }>`
   background: ${({ theme }) => theme.colors.plain};
   border-radius: ${({ theme }) => theme.borderRadius}px;
   width: 91px;
@@ -13,18 +14,28 @@ const ButtonWrapper = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+
+  ${({ selected, theme }) =>
+    selected &&
+    `background: ${theme.colors.blue} !important;
+    color: ${theme.colors.plain} !important;`}
 `;
 
-export type ButtonType = "NESTED" | "WITH_OPTIONS";
-
-interface IProps {
-  type?: "NESTED" | "WITH_OPTIONS";
-  label: string;
-  icon: string;
-  id: string;
+interface IProps extends IButtonAction {
+  toggleButton: (index: number, id: string) => void;
+  index: number;
 }
 
-const Button = ({ type, label, icon }: IProps) => {
+const Button = ({
+  type,
+  label,
+  icon,
+  selected,
+  toggleButton,
+  index,
+  id,
+}: IProps) => {
   switch (type) {
     case "NESTED": {
       return (
@@ -34,7 +45,12 @@ const Button = ({ type, label, icon }: IProps) => {
           flexDirection="column"
           alignItems="center"
         >
-          <ButtonWrapper>
+          <ButtonWrapper
+            selected={selected}
+            onClick={() => {
+              toggleButton(index, id);
+            }}
+          >
             <Icon iconName={icon} />
           </ButtonWrapper>
           <Text variant="small" textAlign="center">
@@ -51,10 +67,19 @@ const Button = ({ type, label, icon }: IProps) => {
           flexDirection="column"
           alignItems="center"
         >
-          <ButtonWrapper>
+          <ButtonWrapper
+            selected={selected}
+            onClick={() => {
+              toggleButton(index, id);
+            }}
+          >
             <Image
               height={16}
-              src={require(`../assests/${icon}-dark.png`).default}
+              src={
+                require(`../assests/${icon}-${
+                  !selected ? "black" : "white"
+                }.png`).default
+              }
             />
           </ButtonWrapper>
           <Text variant="small" textAlign="center">
@@ -71,7 +96,12 @@ const Button = ({ type, label, icon }: IProps) => {
           flexDirection="column"
           alignItems="center"
         >
-          <ButtonWrapper>
+          <ButtonWrapper
+            selected={selected}
+            onClick={() => {
+              toggleButton(index, id);
+            }}
+          >
             <Icon iconName={icon} />
           </ButtonWrapper>
           <Text variant="small" textAlign="center">

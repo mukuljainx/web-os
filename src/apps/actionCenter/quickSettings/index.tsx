@@ -1,72 +1,34 @@
 import * as React from "react";
 import { useBoolean } from "@fluentui/react-hooks";
 import { animated, useSpring } from "react-spring";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 
 import { Acrylic, Stack, Text, Slider, Icon, StackItem } from "atoms/styled";
-import Button, { ButtonType } from "./button";
+import Button from "./button";
+import { toggleButton, sliderOnChange } from "../store/index";
 
 interface IProps {}
 
-const items: Array<{
-  type?: ButtonType;
-  label: string;
-  icon: string;
-  id: string;
-}> = [
-  {
-    type: "WITH_OPTIONS",
-    label: "WiFi",
-    icon: "wifi",
-    id: "wifi",
-  },
-  {
-    type: "WITH_OPTIONS",
-    label: "Bluetooth",
-    icon: "bluetooth",
-    id: "bluetooth",
-  },
-  {
-    type: "NESTED",
-    label: "Not Connected",
-    icon: "TVMonitor",
-    id: "external-monitor",
-  },
-  {
-    id: "theme",
-    type: "NESTED",
-    label: "Light Mode",
-    icon: "Lightbulb",
-  },
-  {
-    id: "tablet-mode",
-    label: "Tablet mode",
-    icon: "TabletMode",
-  },
-  {
-    id: "dnd",
-    label: "Do not distrub",
-    icon: "Blocked2",
-  },
-  {
-    id: "airplane",
-    label: "Airplane",
-    icon: "Airplane",
-  },
-  {
-    id: "location",
-    label: "Location",
-    icon: "MapPin",
-  },
-  {
-    id: "ease-of-access",
-    label: "Ease of Access",
-    icon: "EaseOfAccess",
-    type: "NESTED",
-  },
-];
-
 const QuickSettings = ({}: IProps) => {
   const [expanded, { toggle: toggleExpanded }] = useBoolean(true);
+
+  const state = useSelector((state) => state.actionCenter, shallowEqual);
+
+  const dispatch = useDispatch();
+
+  const toggleButtonHandler = React.useCallback(
+    (index: number, id: string) => {
+      dispatch(toggleButton({ index, id }));
+    },
+    [dispatch]
+  );
+
+  const handleSliderChange = React.useCallback(
+    (value: number, target: any) => {
+      dispatch(sliderOnChange({ value, target }));
+    },
+    [dispatch, sliderOnChange]
+  );
 
   const expandStyles = useSpring({
     height: expanded ? 325 : 0,
@@ -81,13 +43,14 @@ const QuickSettings = ({}: IProps) => {
           paddingY={12}
           justifyContent="space-between"
           alignItems="center"
+          onClick={toggleExpanded}
+          style={{ cursor: "pointer" }}
         >
           <Text variant="smallPlus" weight={700}>
             Quick Settings
           </Text>
           <Icon
             cursor="pointer"
-            onClick={toggleExpanded}
             iconName={expanded ? "ChevronUpSmall" : "ChevronDownSmall"}
             size={10}
           />
@@ -95,8 +58,13 @@ const QuickSettings = ({}: IProps) => {
       </Acrylic>
       <animated.div style={expandStyles}>
         <Stack paddingLeft={16} marginTop={16} flexWrap="wrap">
-          {items.map((item) => (
-            <Button {...item}></Button>
+          {state.buttonActions.map((item, index) => (
+            <Button
+              {...item}
+              index={index}
+              toggleButton={toggleButtonHandler}
+              key={index}
+            ></Button>
           ))}
         </Stack>
         <Stack paddingX={16} paddingY={8} fullWidth alignItems="center">
@@ -104,7 +72,15 @@ const QuickSettings = ({}: IProps) => {
             <Icon iconName="Lightbulb" />
           </StackItem>
           <StackItem flexGrow={2}>
-            <Slider min={1} max={100} defaultValue={40} showValue={false} />
+            <Slider
+              min={1}
+              max={100}
+              value={state.slider.brigthness}
+              onChange={(value) => {
+                handleSliderChange(value, "brigthness");
+              }}
+              showValue={false}
+            />
           </StackItem>
         </Stack>
         <Stack
@@ -118,7 +94,15 @@ const QuickSettings = ({}: IProps) => {
             <Icon iconName="Volume3" />
           </StackItem>
           <StackItem flexGrow={2}>
-            <Slider min={1} max={100} defaultValue={40} showValue={false} />
+            <Slider
+              value={state.slider.volume}
+              min={1}
+              max={100}
+              onChange={(value) => {
+                handleSliderChange(value, "volume");
+              }}
+              showValue={false}
+            />
           </StackItem>
         </Stack>
       </animated.div>

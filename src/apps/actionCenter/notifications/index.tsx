@@ -66,13 +66,14 @@ const Notifications = ({ hideNotifications, items }: IProps) => {
           paddingY={12}
           justifyContent="space-between"
           alignItems="center"
+          onClick={toggleExpanded}
+          style={{ cursor: "pointer" }}
         >
           <Text variant="smallPlus" weight={700}>
             Notificaitons
           </Text>
           <Icon
             cursor="pointer"
-            onClick={toggleExpanded}
             iconName={expanded ? "ChevronUpSmall" : "ChevronDownSmall"}
             size={10}
           />

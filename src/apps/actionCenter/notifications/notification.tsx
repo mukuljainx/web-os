@@ -56,7 +56,7 @@ const Notification = ({ onClear, item }: IProps) => {
         </Stack>
         <Stack justifyContent="space-between" alignItems="center">
           <Text className="text-line-height" variant="smallPlus">
-            {item.desciption}
+            {item.description}
           </Text>
           <Text
             onClick={() => {

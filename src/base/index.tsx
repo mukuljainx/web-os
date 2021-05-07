@@ -9,10 +9,8 @@ import styled from "styled-components";
 import useDraggable from "utils/hooks/useDraggable";
 import AppBar from "molecules/appBar";
 import Menu from "molecules/startMenu";
-import {
-  toggleStartMenu as toggleStartMenuAction,
-  toggleQuickActions,
-} from "base/store";
+import { toggleStartMenu as toggleStartMenuAction } from "base/store";
+import { toggleQuickActions } from "apps/actionCenter/store";
 import { initRoutes } from "apps/folder/store";
 import ActionCenter from "apps/actionCenter";
 

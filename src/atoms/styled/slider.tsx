@@ -5,12 +5,12 @@ import styled from "styled-components";
 const Wrapper = styled.div`
   width: 100%;
   span {
-    background: rgb(64, 149, 219) !important;
-    border-color: rgb(64, 149, 219) !important;
+    background: ${({ theme }) => theme.colors.blue} !important;
+    border-color: ${({ theme }) => theme.colors.blue} !important;
   }
 
   span:last-child {
-    background: white !important;
+    background: ${({ theme }) => theme.colors.plain} !important;
   }
 `;
 
