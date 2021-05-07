@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 
-export const Acrylic = styled.div`
+export const Acrylic = styled.div<{ smooth?: boolean }>`
   background: ${({ theme }) => theme.colors.acrylic};
   backdrop-filter: blur(10px);
+  ${({ smooth, theme }) => smooth && `border-radius: ${theme.borderRadius}px`};
 `;
 
 export const getNotLastChild = () =>
@@ -50,6 +51,7 @@ export const Stack = styled.div<
     | "marginRight"
     | "marginTop"
     | "marginBottom"
+    | "flexWrap"
   >
 >`
   display: flex;
@@ -91,6 +93,7 @@ export const Stack = styled.div<
 
   ${({ fullHeight }) => fullHeight && `height: 100%`};
   ${({ fullWidth }) => fullWidth && `width: 100%`};
+  ${({ flexWrap }) => flexWrap && `flex-wrap: ${flexWrap}`};
 `;
 
 export const Image = styled.img<Pick<React.CSSProperties, "width" | "height">>`
@@ -102,3 +105,4 @@ export const Image = styled.img<Pick<React.CSSProperties, "width" | "height">>`
 export { default as Text } from "./text";
 export { default as Icon } from "./icon";
 export { default as AppImage } from "./appImage";
+export { default as Slider } from "./slider";

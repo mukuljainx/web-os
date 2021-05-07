@@ -7,13 +7,11 @@ import Desktop from "base/desktop";
 import App from "apps";
 import styled from "styled-components";
 import useDraggable from "utils/hooks/useDraggable";
-// import ContextMenu from "molecules/contextMenu";
 import AppBar from "molecules/appBar";
 import Menu from "molecules/startMenu";
 import { toggleStartMenu as toggleStartMenuAction } from "base/store";
-import { createFolder, initRoutes } from "apps/folder/store";
-// import useFolderAction from "molecules/iconInterface/useFolderAction";
-createFolder;
+import { initRoutes } from "apps/folder/store";
+import ActionCenter from "apps/actionCenter";
 
 interface IProps {}
 
@@ -56,6 +54,7 @@ const Base = ({}: IProps) => {
     <Desktop>
       <Wrapper ref={wrapperRef}>
         <Menu />
+        <ActionCenter />
         {Object.values(openedApps).map((app) => {
           return (
             <>
