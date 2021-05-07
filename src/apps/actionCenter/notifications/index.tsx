@@ -1,7 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
 import { ActionButton } from "@fluentui/react";
-import { useSprings, animated } from "react-spring";
 
 import { Acrylic, Stack, Text, Icon } from "atoms/styled";
 import { useEvent } from "utils/events";
@@ -10,17 +9,9 @@ import Notification from "./notification";
 interface IProps {}
 
 const Wrapper = styled.div`
+  max-height: 132px;
   overflow: auto;
-  position: relative;
 `;
-
-const AnimatedDiv = styled(animated.div)`
-  position: absolute;
-`;
-
-const animate = (index: number) => {
-  return { y: index * 64 + index * 2 };
-};
 
 const Notifications = ({}: IProps) => {
   const fakeNotification = [
@@ -67,11 +58,6 @@ const Notifications = ({}: IProps) => {
     [setNotifications]
   );
 
-  const [springs, setSprings] = useSprings(notifications.length, animate);
-  setSprings;
-
-  console.log(notifications);
-
   return (
     <Acrylic smooth style={{ marginTop: 16 }}>
       <Acrylic smooth style={{ marginBottom: 8 }}>
@@ -88,14 +74,11 @@ const Notifications = ({}: IProps) => {
         </Stack>
       </Acrylic>
       <Wrapper data-id="wrapper">
-        {springs.map((style, index) => {
-          const n = notifications[index];
-          return (
-            <AnimatedDiv style={style} key={n.id}>
-              <Notification item={n} onClear={clear} />
-            </AnimatedDiv>
-          );
-        })}
+        {notifications.map((n) => (
+          // <span key={n.id}>
+          <Notification item={n} onClear={clear} />
+          // </span>
+        ))}
       </Wrapper>
       <Stack justifyContent="center">
         <ActionButton onClick={clearAll}>Clear All</ActionButton>
