@@ -5,6 +5,7 @@
     "target": "es5",
     "jsx": "react",
     "module": "commonjs",
+    "allowJs": true,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -22,7 +23,5 @@
     "esModuleInterop": true
   },
   "include": ["src"],
-  "exclude": [
-    "src/**/*.test.ts"
-  ],
+  "exclude": ["src/**/*.test.ts"]
 }

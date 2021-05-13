@@ -13,6 +13,7 @@ import { openApp, closeApp, bringToTop } from "base/store";
 
 const App = () => {
   // move to more apporpiate place
+
   React.useEffect(() => {
     // init global object
     window.os = {
