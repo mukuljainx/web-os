@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Redirect } from "react-router-dom";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 
 import IconInterface from "molecules/iconInterface";
@@ -38,9 +37,9 @@ const Base = ({}: IProps) => {
     dispatch(toggleQuickActions());
   }, [toggleQuickActions, dispatch]);
 
-  if (!user) {
-    return <Redirect to="/auth" />;
-  }
+  // if (!user) {
+  //   return <Redirect to="/auth" />;
+  // }
 
   let desktopRoute = React.useMemo(
     () => routes.find((route) => route.file.data.id === "Desktop"),

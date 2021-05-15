@@ -88,8 +88,8 @@ export const Stack = styled.div<
   ${({ gap, flexDirection }) =>
     gap &&
     (flexDirection === "column"
-      ? `>${StackItem}{margin-bottom: ${gap}px}`
-      : `>${StackItem}{margin-right: ${gap}px}`)};
+      ? `>${StackItem}:not(:last-child){margin-bottom: ${gap}px}`
+      : `>${StackItem}:not(:last-child){margin-right: ${gap}px}`)};
 
   ${({ fullHeight }) => fullHeight && `height: 100%`};
   ${({ fullWidth }) => fullWidth && `width: 100%`};

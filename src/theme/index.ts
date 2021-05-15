@@ -24,8 +24,8 @@ const theme = {
     textBackground: " blue",
   },
   input: {
-    borderRadius: 16,
-    height: 24,
+    borderRadius: 4,
+    height: 32,
     fontSize: 14,
     actionButton: {
       borderRadius: "50%",

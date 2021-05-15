@@ -23,6 +23,7 @@ export const availableIcons: Record<string, string> = {
   symlink: "symlink.png",
   system: "system.png",
   pictures: "pictures.png",
+  avatar: "avatar.png",
 };
 
 type IProps = ReactHTMLElement<
