@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IApp, IAppGroup } from "base/interfaces";
 
 interface IBaseState {
-  apps: Record<string, IAppGroup>;
+  runningApp: Record<string, IAppGroup>;
 
   currentWeight: number;
   menu: {
@@ -11,7 +11,7 @@ interface IBaseState {
 }
 
 const initialState: IBaseState = {
-  apps: {},
+  runningApp: {},
   currentWeight: 0,
   menu: {
     show: false,
@@ -28,7 +28,7 @@ const baseSlice = createSlice({
         payload: { appName, instanceId },
       }: PayloadAction<{ appName: string; instanceId: string }>
     ) => {
-      const runningApp = state.apps[appName];
+      const runningApp = state.runningApp[appName];
       if (
         runningApp.instances[runningApp.instances.length - 1].id === instanceId
       ) {
@@ -56,7 +56,7 @@ const baseSlice = createSlice({
     openApp(state, action: PayloadAction<IApp>) {
       const newApp = action.payload;
       const instanceId = `${newApp.appName}-${newApp.id}`;
-      const runningApp = state.apps[newApp.appName];
+      const runningApp = state.runningApp[newApp.appName];
 
       if (runningApp) {
         runningApp.weight = state.currentWeight;
@@ -71,7 +71,7 @@ const baseSlice = createSlice({
         }
         runningApp.instances.push({ ...newApp, id: instanceId });
       } else {
-        state.apps[newApp.appName] = {
+        state.runningApp[newApp.appName] = {
           initialWeight: state.currentWeight,
           weight: state.currentWeight,
           id: newApp.id,
@@ -79,7 +79,7 @@ const baseSlice = createSlice({
           instances: [{ ...newApp, id: instanceId }],
         };
       }
-      // relying on this to never cross the css z-index limit - 10000
+      // relying on this, to never cross the css z-index limit - 10000
       // TODO: if does, have to reset every app weight that's all
       state.currentWeight++;
     },
@@ -87,13 +87,13 @@ const baseSlice = createSlice({
       state,
       action: PayloadAction<{ appName: string; instanceId: string }>
     ) => {
-      const app = state.apps[action.payload.appName];
+      const app = state.runningApp[action.payload.appName];
       if (!app) {
         return;
       }
 
       if (app.instances.length === 1) {
-        delete state.apps[action.payload.appName];
+        delete state.runningApp[action.payload.appName];
       } else {
         app.instances = app.instances.filter(
           (instance) => instance.id !== action.payload.instanceId

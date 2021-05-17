@@ -12,6 +12,7 @@ import { toggleStartMenu as toggleStartMenuAction } from "base/store";
 import { toggleQuickActions } from "apps/actionCenter/store";
 import { initRoutes } from "apps/folder/store";
 import ActionCenter from "apps/actionCenter";
+import { getAppsAsync } from "apps/appManager/store";
 
 interface IProps {}
 
@@ -24,7 +25,7 @@ const Base = ({}: IProps) => {
   const wrapperRef = React.useRef<HTMLDivElement>(null);
 
   let user = useSelector((state) => state.auth.user);
-  const openedApps = useSelector((state) => state.base.apps);
+  const runningApp = useSelector((state) => state.base.runningApp);
   const routes = useSelector((state) => state.folder.routes, shallowEqual);
 
   const { store, handleMouseDown } = useDraggable({ wrapperRef });
@@ -52,6 +53,7 @@ const Base = ({}: IProps) => {
       wrapper: wrapperRef.current!,
     };
     dispatch(initRoutes(user?.name || "Guest user"));
+    dispatch(getAppsAsync());
   }, []);
 
   const handleMouseDownEvent = React.useCallback(
@@ -66,7 +68,7 @@ const Base = ({}: IProps) => {
       <Wrapper ref={wrapperRef}>
         <Menu />
         <ActionCenter />
-        {Object.values(openedApps).map((app) => {
+        {Object.values(runningApp).map((app) => {
           return (
             <>
               {app.instances.map((instance, index) => {
@@ -101,7 +103,7 @@ const Base = ({}: IProps) => {
         <AppBar
           toggleQuickActions={dispatchToggleQuickActions}
           toggleMenu={toggleStartMenu}
-          apps={openedApps}
+          apps={runningApp}
         />
       </Wrapper>
     </Desktop>

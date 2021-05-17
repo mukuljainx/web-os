@@ -36,13 +36,18 @@ type IProps = ReactHTMLElement<
 
 const Image = ({ name, size, ref, height, width, ...rest }: IProps) => {
   const iconName = availableIcons[name] || "generic.svg";
+  let href = "";
+
+  if (name && name.includes("http")) {
+    href = name;
+  }
 
   return (
     <img
       {...rest}
       height={height || size}
       width={width || size}
-      src={require(`./assets/${iconName}`).default}
+      src={href ? href : require(`./assets/${iconName}`).default}
     />
   );
 };

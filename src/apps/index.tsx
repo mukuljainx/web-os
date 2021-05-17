@@ -5,6 +5,7 @@ import Photo from "apps/photo";
 import AppManager from "apps/appManager";
 import { IApp, IMetaData } from "base/interfaces";
 import AnimatedFileWrapper from "atoms/animatedFileWrapper";
+import ExternalAppShell from "apps/externalAppShell";
 
 interface IProps {
   app: IApp;
@@ -79,6 +80,26 @@ const App = (props: IProps) => {
         </AnimatedFileWrapper>
       );
     }
+  }
+
+  if (app.data.appType === "EXTERNAL") {
+    return (
+      <AnimatedFileWrapper
+        appName={app.appName}
+        id={id}
+        style={style}
+        metaData={metaData}
+        weight={weight}
+      >
+        <ExternalAppShell
+          data={app.data}
+          instanceId={id}
+          dragId={dragId}
+          appName={app.appName}
+          onMouseDown={onMouseDown}
+        />
+      </AnimatedFileWrapper>
+    );
   }
 
   return null;

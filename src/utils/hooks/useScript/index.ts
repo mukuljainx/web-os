@@ -1,8 +1,12 @@
 import * as React from "react";
 
-function useScript(src: string) {
+export type StatusTypes = "loading" | "idle" | "error" | "ready";
+
+function useScript(src: string, remove?: boolean) {
   // Keep track of script status ("idle", "loading", "ready", "error")
-  const [status, setStatus] = React.useState(src ? "loading" : "idle");
+  const [status, setStatus] = React.useState<StatusTypes>(
+    src ? "loading" : "idle"
+  );
   React.useEffect(
     () => {
       // Allow falsy src value if waiting on other data needed for
@@ -36,7 +40,7 @@ function useScript(src: string) {
         script.addEventListener("error", setAttributeFromEvent);
       } else {
         // Grab existing script status from attribute and set to state.
-        setStatus(script!.getAttribute("data-status")!);
+        setStatus(script!.getAttribute("data-status")! as StatusTypes);
       }
       // Script event handler to update status in state
       // Note: Even if the script already exists we still need to add
@@ -52,6 +56,12 @@ function useScript(src: string) {
         if (script) {
           script.removeEventListener("load", setStateFromEvent);
           script.removeEventListener("error", setStateFromEvent);
+        }
+        if (remove) {
+          let script = document.querySelector(
+            `script[src="${src}"]`
+          ) as HTMLScriptElement;
+          script.parentNode?.removeChild(script);
         }
       };
     },

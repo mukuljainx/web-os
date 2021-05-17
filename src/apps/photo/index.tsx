@@ -13,7 +13,7 @@ interface IProps {
   path: string;
   instanceId: string;
   appName: string;
-  onMouseDown: (event: React.MouseEvent) => void;
+  onMouseDown: (event: React.MouseEvent, dragId: string) => void;
   dragId: string;
 }
 

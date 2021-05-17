@@ -3,6 +3,8 @@ import { deleteChildren, refreshRoutes } from "./helper";
 import { IFolder, IFolderRoutes, IFile } from "../interfaces";
 import { folderPool, folderMap } from "./routes";
 import { sortBy, get } from "lodash-es";
+import { getAppsAsync } from "apps/appManager/store";
+import { IApp } from "apps/appManager/interface";
 
 export interface IBaseState {
   folderPool: Record<string, IFolder>;
@@ -166,6 +168,40 @@ const folderSlice = createSlice({
           currentFile.files![f.id].order = i;
         });
       }
+      refreshRoutes(state);
+    },
+  },
+  extraReducers: {
+    [getAppsAsync.fulfilled.type]: (
+      state,
+      { payload }: PayloadAction<IApp[]>
+    ) => {
+      //data: {
+      //   id: "img2",
+      //   name: "lady.jpg",
+      //   icon: "image",
+      //   path: "lady.jpg",
+      // },
+      // appName: "photo",
+      // order: 1,
+      const applicationsFolder = get(
+        state.root,
+        state.routeToFolder["/applications"]
+      ).files;
+      const startingOrder = Object.keys(applicationsFolder).length;
+      payload.forEach((customApp, index) => {
+        applicationsFolder[customApp.appId] = {
+          data: {
+            appId: customApp.appId,
+            icon: customApp.icon,
+            name: customApp.name,
+            appType: "EXTERNAL",
+            options: customApp.options,
+          },
+          appName: customApp.appId,
+          order: startingOrder + index,
+        };
+      });
       refreshRoutes(state);
     },
   },
