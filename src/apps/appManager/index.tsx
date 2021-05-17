@@ -23,10 +23,11 @@ interface IProps {
   path: string;
   instanceId: string;
   appName: string;
-  onMouseDown: (event: React.MouseEvent) => void;
+  dragId: string;
+  onMouseDown: (event: React.MouseEvent, dragId: string) => void;
 }
 
-const AppManager = ({ onMouseDown, appName, instanceId }: IProps) => {
+const AppManager = ({ onMouseDown, appName, instanceId, dragId }: IProps) => {
   const [apps, setApps] = React.useState<IApp[]>([]);
   const [selectedApp, setSelectedApp] = React.useState(-1);
   const [view, setView] =
@@ -61,6 +62,7 @@ const AppManager = ({ onMouseDown, appName, instanceId }: IProps) => {
       instanceId={instanceId}
       icon="photo"
       name="App Manager"
+      dragId={dragId}
     >
       <Wrapper>
         <If condition={localHistory.getCurrent() === "/list"}>

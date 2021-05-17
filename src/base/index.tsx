@@ -54,6 +54,13 @@ const Base = ({}: IProps) => {
     dispatch(initRoutes(user?.name || "Guest user"));
   }, []);
 
+  const handleMouseDownEvent = React.useCallback(
+    (event: React.MouseEvent, dragId: string) => {
+      handleMouseDown(event, dragId);
+    },
+    []
+  );
+
   return (
     <Desktop>
       <Wrapper ref={wrapperRef}>
@@ -67,12 +74,13 @@ const Base = ({}: IProps) => {
                 return (
                   <App
                     weight={app.weight + index}
-                    onMouseDown={(event) => handleMouseDown(event, dragId)}
+                    onMouseDown={handleMouseDownEvent}
                     style={{
                       transform: store.elements[dragId]?.translate.x
                         ? `translate(${store.elements[dragId]?.translate.x}px, ${store.elements[dragId]?.translate.y}px)`
                         : undefined,
                     }}
+                    dragId={dragId}
                     key={dragId}
                     app={instance}
                     data={instance.data}

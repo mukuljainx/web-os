@@ -14,13 +14,15 @@ interface IProps {
   instanceId: string;
   appName: string;
   onMouseDown: (event: React.MouseEvent) => void;
+  dragId: string;
 }
 
-const Photo = ({ path, appName, instanceId, onMouseDown }: IProps) => {
+const Photo = ({ path, appName, instanceId, onMouseDown, dragId }: IProps) => {
   const { render } = useAnimationEndRender({ instanceId });
 
   return (
     <AppShell
+      dragId={dragId}
       onMouseDown={onMouseDown}
       appName={appName}
       instanceId={instanceId}

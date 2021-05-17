@@ -34,6 +34,8 @@ type IProps = ReactHTMLElement<
     children: React.ReactChild;
     width?: React.CSSProperties["width"];
     height?: React.CSSProperties["height"];
+    onMouseDown: (event: React.MouseEvent, dragId: string) => void;
+    dragId: string;
   }
 >;
 
@@ -48,8 +50,16 @@ const AppShell = ({
   width,
   height,
   style,
+  dragId,
   ...rest
 }: IProps) => {
+  const handleMouseDownDrag = React.useCallback(
+    (event: React.MouseEvent) => {
+      onMouseDown(event, dragId);
+    },
+    [onMouseDown, dragId]
+  );
+
   return (
     <Wrapper
       {...rest}
@@ -61,7 +71,7 @@ const AppShell = ({
     >
       <Stack fullWidth fullHeight flexDirection="column">
         <StackItem flexShrink={0} data-test="topbar">
-          <TopBar data-id="app-shell-top-bar" onMouseDown={onMouseDown}>
+          <TopBar data-id="app-shell-top-bar" onMouseDown={handleMouseDownDrag}>
             <Stack
               alignItems="center"
               justifyContent="space-between"

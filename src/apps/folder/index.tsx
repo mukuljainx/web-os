@@ -39,14 +39,15 @@ interface IProps {
   app: IApp;
   id: string;
   metaData: IMetaData;
-  onMouseDown: (event: React.MouseEvent) => void;
+  dragId: string;
+  onMouseDown: (event: React.MouseEvent, dragId: string) => void;
 }
 
 const getPathName = (path: string) => {
   return path.split("/").pop() || "/";
 };
 
-const Folder = ({ path, app, id, onMouseDown }: IProps) => {
+const Folder = ({ path, app, id, dragId, onMouseDown }: IProps) => {
   const { firstRender } = useDidUpdate();
   const dispatchFolderLoadEvent = React.useCallback(() => {
     // dispatch a fake animation complete event so dependent can do their work on route change
@@ -154,7 +155,7 @@ const Folder = ({ path, app, id, onMouseDown }: IProps) => {
 
   const handleTopBarMouseDown = React.useCallback(
     (event: React.MouseEvent) => {
-      onMouseDown(event);
+      onMouseDown(event, dragId);
       dispatch(bringToTop({ appName: app.appName, instanceId: app.id }));
     },
     [onMouseDown]
@@ -205,4 +206,4 @@ const Folder = ({ path, app, id, onMouseDown }: IProps) => {
     </Container>
   );
 };
-export default Folder;
+export default React.memo(Folder);

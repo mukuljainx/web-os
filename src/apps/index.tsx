@@ -12,19 +12,13 @@ interface IProps {
   data: any;
   metaData: IMetaData;
   style: React.CSSProperties;
-  onMouseDown: (event: React.MouseEvent) => void;
+  onMouseDown: (event: React.MouseEvent, dragId: string) => void;
+  dragId: string;
   weight: number;
 }
 
-const App = ({
-  app,
-  data,
-  id,
-  metaData,
-  style,
-  weight,
-  onMouseDown,
-}: IProps) => {
+const App = (props: IProps) => {
+  const { app, data, id, metaData, style, weight, dragId, onMouseDown } = props;
   switch (app.appName) {
     case "folder": {
       return (
@@ -41,6 +35,7 @@ const App = ({
             key={id}
             app={app}
             id={id}
+            dragId={dragId}
             {...data}
           />
         </AnimatedFileWrapper>
@@ -58,6 +53,7 @@ const App = ({
           <Photo
             {...(data as any)}
             instanceId={id}
+            dragId={dragId}
             appName={app.appName}
             onMouseDown={onMouseDown}
           />
@@ -76,6 +72,7 @@ const App = ({
           <AppManager
             {...(data as any)}
             instanceId={id}
+            dragId={dragId}
             appName={app.appName}
             onMouseDown={onMouseDown}
           />
@@ -87,4 +84,4 @@ const App = ({
   return null;
 };
 
-export default App;
+export default React.memo(App);
