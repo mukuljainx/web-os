@@ -6,9 +6,9 @@ import AppImage from "atoms/styled/appImage";
 
 const Wrapper = styled(Acrylic)`
   width: 720px;
+  height: 480px;
   min-width: 240px;
   min-height: 240px;
-  height: 480px;
   border-radius: ${({ theme }) => theme.borderRadius}px;
   resize: both;
   overflow: auto;
@@ -32,6 +32,8 @@ type IProps = ReactHTMLElement<
     appName: string;
     instanceId: string;
     children: React.ReactChild;
+    width?: React.CSSProperties["width"];
+    height?: React.CSSProperties["height"];
   }
 >;
 
@@ -43,11 +45,15 @@ const AppShell = ({
   children,
   onMouseDown,
   ref,
+  width,
+  height,
+  style,
   ...rest
 }: IProps) => {
   return (
     <Wrapper
       {...rest}
+      style={{ ...style, width, height }}
       data-id="app-shell-wrapper"
       onMouseDown={() => {
         window.os.bringToTop({ appName, instanceId });

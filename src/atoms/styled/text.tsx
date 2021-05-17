@@ -5,6 +5,7 @@ interface IProps extends ITextProps {
   weight?: keyof typeof FontWeights | number;
   textTransform?: React.CSSProperties["textTransform"];
   textAlign?: React.CSSProperties["textAlign"];
+  ellipsis?: boolean;
 }
 
 const StyledText = ({
@@ -12,6 +13,7 @@ const StyledText = ({
   textTransform,
   className,
   textAlign,
+  ellipsis,
   style,
   ...rest
 }: IProps) => {
@@ -25,7 +27,7 @@ const StyledText = ({
         width: "100%",
         ...style,
       }}
-      className={`ellipsis ${className || ""}`}
+      className={`${ellipsis ? "ellipsis " : ""}${className || ""}`}
     />
   );
 };

@@ -214,6 +214,12 @@ export const folderMap: IFile = {
                   // path: "/users/${user}/Desktop/Pictures",
                   symlink: "files.users.files.home.files.Pictures",
                 },
+                appManager: {
+                  data: { id: "appManager", name: "App Manager" },
+                  appName: "appManager",
+                  sortBy: "name",
+                  order: 2,
+                },
                 "Desktop 2": {
                   data: { id: "Desktop 2" },
                   appName: "folder",

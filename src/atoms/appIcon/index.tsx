@@ -56,7 +56,7 @@ type IProps = ReactHTMLElement<
     name: string;
     fileId: string;
     symlink?: boolean;
-    appName: "folder" | "photo";
+    appName: "folder" | "photo" | "appManager";
     data: Record<string, any>;
     instanceId?: string;
   }
@@ -112,10 +112,10 @@ const AppIcon = ({
           rest.className || ""
         }`}
       >
-        {appName === "folder" ? (
-          <AppImage className="icon__image" name={icon} size={64} />
-        ) : (
+        {appName === "photo" ? (
           <CustomIcon instanceId={instanceId} appName={appName} data={data} />
+        ) : (
+          <AppImage className="icon__image" name={icon} size={64} />
         )}
         <Label
           desktop={desktop}

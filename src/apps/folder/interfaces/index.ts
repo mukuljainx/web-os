@@ -8,7 +8,7 @@
 export interface IFile {
   data: Record<string, any>;
   symlink?: string;
-  appName: "folder" | "photo";
+  appName: "folder" | "photo" | "appManager";
   files?: Record<string, IFile>;
   // will exist on folder only
   sortBy?: "name" | "updatedOn" | "createdOn";

@@ -106,10 +106,6 @@ const baseSlice = createSlice({
   },
 });
 
-export const {
-  openApp,
-  closeApp,
-  toggleStartMenu,
-  bringToTop,
-} = baseSlice.actions;
+export const { openApp, closeApp, toggleStartMenu, bringToTop } =
+  baseSlice.actions;
 export default baseSlice.reducer;
