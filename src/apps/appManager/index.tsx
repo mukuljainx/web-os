@@ -4,15 +4,14 @@ import { PrimaryButton, ProgressIndicator } from "@fluentui/react";
 
 import { Stack, Text, StackItem } from "atoms/styled";
 import AppShell from "apps/shell";
-import api from "utils/api";
-import useMount from "utils/hooks/useMount";
 import AddApp from "./addApp";
 import List from "./list";
 import Empty from "./empty";
-import { IApp } from "./interface";
 import useHistory from "utils/hooks/useHistory";
 import If from "atoms/If";
 import ListItem from "./listItem";
+import { getAppsAsync } from "./store";
+import { useDispatch, useSelector } from "react-redux";
 
 const Wrapper = styled.div`
   background: ${({ theme }) => theme.colors.plain};
@@ -28,32 +27,16 @@ interface IProps {
 }
 
 const AppManager = ({ onMouseDown, appName, instanceId, dragId }: IProps) => {
-  const [apps, setApps] = React.useState<IApp[]>([]);
   const [selectedApp, setSelectedApp] = React.useState(-1);
-  const [view, setView] =
-    React.useState<"LIST" | "LOADING" | "ERROR" | "EMPTY">("LOADING");
+  const { apps, loading, error } = useSelector((state) => state.appManager);
+  const dispatch = useDispatch();
 
   //| "UPLOAD"  |"LISITEM"
   const localHistory = useHistory("/list");
 
   const fetchApps = () => {
-    api
-      .get("/manager/apps/")
-      .then(({ data }) => {
-        setApps(data);
-        setView("LIST");
-        if (data.length === 0) {
-          setView("EMPTY");
-        }
-      })
-      .catch(() => {
-        setView("ERROR");
-      });
+    dispatch(getAppsAsync());
   };
-
-  useMount(() => {
-    fetchApps();
-  });
 
   return (
     <AppShell
@@ -67,7 +50,7 @@ const AppManager = ({ onMouseDown, appName, instanceId, dragId }: IProps) => {
       <Wrapper>
         <If condition={localHistory.getCurrent() === "/list"}>
           <>
-            {view === "ERROR" && (
+            {error && (
               <Stack
                 fullHeight
                 gap={12}
@@ -83,7 +66,7 @@ const AppManager = ({ onMouseDown, appName, instanceId, dragId }: IProps) => {
                 </StackItem>
               </Stack>
             )}
-            {view === "LOADING" && (
+            {loading && (
               <Stack
                 fullHeight
                 justifyContent="center"
@@ -96,8 +79,11 @@ const AppManager = ({ onMouseDown, appName, instanceId, dragId }: IProps) => {
                 />
               </Stack>
             )}
-            {view === "LIST" && (
+            {apps.length > 0 && (
               <List
+                onAddAppClick={() => {
+                  localHistory.push("/upload");
+                }}
                 onItemClick={(index) => {
                   setSelectedApp(index);
                   localHistory.push("/list-item");
@@ -105,7 +91,7 @@ const AppManager = ({ onMouseDown, appName, instanceId, dragId }: IProps) => {
                 items={apps}
               />
             )}
-            {view === "EMPTY" && (
+            {apps.length === 0 && (
               <Empty changeView={() => localHistory.push("/upload")} />
             )}
           </>

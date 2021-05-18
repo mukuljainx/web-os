@@ -176,14 +176,10 @@ const folderSlice = createSlice({
       state,
       { payload }: PayloadAction<IApp[]>
     ) => {
-      //data: {
-      //   id: "img2",
-      //   name: "lady.jpg",
-      //   icon: "image",
-      //   path: "lady.jpg",
-      // },
-      // appName: "photo",
-      // order: 1,
+      if (!payload || !Array.isArray(payload)) {
+        return;
+      }
+
       const applicationsFolder = get(
         state.root,
         state.routeToFolder["/applications"]
@@ -197,6 +193,7 @@ const folderSlice = createSlice({
             name: customApp.name,
             appType: "EXTERNAL",
             options: customApp.options,
+            safe: true,
           },
           appName: customApp.appId,
           order: startingOrder + index,

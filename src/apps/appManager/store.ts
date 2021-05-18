@@ -17,7 +17,7 @@ const getAppsAsync = createAsyncThunk(
       .get("/manager/apps/")
       .then(({ data }) => data)
       .catch((e) => {
-        thunkAPI.rejectWithValue(e);
+        return thunkAPI.rejectWithValue(e);
       });
   }
 );
@@ -31,8 +31,17 @@ const authSlice = createSlice({
   extraReducers: {
     // Add reducers for additional action types here, and handle loading state as needed
     [getAppsAsync.fulfilled.type]: (state, action) => {
-      state.apps.push(action.payload);
+      if (!action.payload || !Array.isArray(action.payload)) {
+        state.error = "Unable to fetch";
+        return;
+      }
+      const apps: Record<string, IApp> = {};
+      [...state.apps, ...action.payload].forEach((a) => {
+        apps[a._id] = a;
+      });
+      state.apps = [...Object.values(apps)];
       state.loading = false;
+      state.error = undefined;
     },
     [getAppsAsync.rejected.type]: (state, action) => {
       state.loading = false;

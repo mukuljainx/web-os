@@ -3,6 +3,7 @@ import * as React from "react";
 import { Stack, StackItem, Text } from "atoms/styled";
 import { PrimaryButton, TextField, ProgressIndicator } from "@fluentui/react";
 import api from "utils/api";
+import { useSelector } from "react-redux";
 
 interface IAppStatus {
   status: string;
@@ -22,6 +23,7 @@ const AddApp = ({ onSuccess }: IProps) => {
   const [id, setId] = React.useState("");
   const [totalStages, setTotalStages] = React.useState(7);
   const timer = React.useRef<NodeJS.Timeout>();
+  const user = useSelector((state) => state.auth.user);
 
   const onSubmit = (e: any) => {
     e.preventDefault();
@@ -65,6 +67,16 @@ const AddApp = ({ onSuccess }: IProps) => {
 
     return () => timer.current && clearInterval(timer.current);
   }, [id]);
+
+  if (!user.token) {
+    return (
+      <Stack flexDirection="column" gap={16} style={{ width: 360 }}>
+        <StackItem>
+          <Text>You need to login before performing this operation</Text>
+        </StackItem>
+      </Stack>
+    );
+  }
 
   if (loading) {
     return (

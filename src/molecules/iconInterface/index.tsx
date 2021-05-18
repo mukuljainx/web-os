@@ -77,7 +77,7 @@ const IconLayout = ({
               icon: file.data.icon,
               id: file.data.id,
               path: folderToRoute[file.data.id],
-              safe: false,
+              safe: file.data.safe,
             };
             data = { ...file.data };
           }

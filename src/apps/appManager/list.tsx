@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import { Image, Stack, StackItem, Text } from "atoms/styled";
 import { IApp } from "./interface";
 import styled from "styled-components";
+import { PrimaryButton } from "@fluentui/react";
 
 const ImageContainer = styled(StackItem)`
   background: rgba(${({ theme }) => theme.colors.blackRGB}, 0.1);
@@ -41,17 +42,23 @@ const ItemsWrapper = styled(StackItem)`
 interface IProps {
   items: IApp[];
   onItemClick: (index: number) => void;
+  onAddAppClick: () => void;
 }
 
-const List = ({ items, onItemClick }: IProps) => {
+const List = ({ items, onItemClick, onAddAppClick }: IProps) => {
   return (
     <Stack flexDirection="column" paddingY={16} fullHeight id="txx">
-      <StackItem
-        style={{ padding: "0 16px", textAlign: "center", marginBottom: 16 }}
-      >
-        <Text variant="mediumPlus" weight={600}>
-          Installed Apps
-        </Text>
+      <StackItem style={{ padding: "0 16px", marginBottom: 16 }}>
+        <Stack justifyContent="space-between" alignItems="center">
+          <StackItem>
+            <Text variant="mediumPlus" weight={600}>
+              Installed Apps
+            </Text>
+          </StackItem>
+          <StackItem>
+            <PrimaryButton onClick={onAddAppClick}>Add App</PrimaryButton>
+          </StackItem>
+        </Stack>
       </StackItem>
       <ItemsWrapper>
         <Stack id="txx" flexDirection="column">
