@@ -2,6 +2,7 @@ export const isInside = (
   element: HTMLElement,
   coordinate: { left: number; right?: number; top: number; bottom?: number }
 ) => {
+  if (!element) return false;
   const { left, right, bottom, top } = element.getBoundingClientRect();
   // if bottom and right not exist then it's a point
   if (!coordinate.right || !coordinate.bottom) {
@@ -30,6 +31,7 @@ export const getOverflowAdjust = (
   element: HTMLElement,
   coordinate: { left: number; right: number; top: number; bottom: number }
 ) => {
+  if (!element) return { left: 0, top: 0 };
   const { left, right, bottom, top } = element.getBoundingClientRect();
 
   let horizontallyAdjustable = true;
