@@ -1,5 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
+import { capitalize } from "lodash-es";
 
 import Image from "atoms/styled/appImage";
 import { Stack, Text } from "atoms/styled";
@@ -28,7 +29,7 @@ const QucikPick = ({ icon, name, ref, ...rest }: IProps) => {
   return (
     <Block {...rest} alignItems="center" justifyContent="center">
       <Image name={icon} size={48} />
-      <StyledText className="ellipsis">{name}</StyledText>
+      <StyledText className="ellipsis">{capitalize(name)}</StyledText>
     </Block>
   );
 };

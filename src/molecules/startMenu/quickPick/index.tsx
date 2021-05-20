@@ -30,6 +30,7 @@ const AppWrapper = styled(Stack)`
   overflow: auto;
   flex-wrap: wrap;
   position: relative;
+  overflow-x: hidden;
 `;
 
 const AnimatedWrapper = styled(animated.div)`
@@ -231,7 +232,7 @@ const QucikPick = ({}: IProps) => {
                   width: 128 * apps[i].width - 8,
                   height: 120,
                 }}
-                name={apps[i].name + " " + i}
+                name={apps[i].name}
                 icon={apps[i].name}
               />
             </AnimatedWrapper>

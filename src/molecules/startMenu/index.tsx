@@ -36,7 +36,7 @@ const Wrapper = styled(animated.div)`
   }
 
   ${Partial}:last-child {
-    width: ${120 * 4 + 32 + 16}px;
+    width: ${120 * 4 + 32 + 24}px;
   }
 
   ${Partial}:not(:last-child) {

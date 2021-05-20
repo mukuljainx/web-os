@@ -48,6 +48,7 @@ const Image = ({ name, size, ref, height, width, ...rest }: IProps) => {
       {...rest}
       height={height || size}
       width={width || size}
+      draggable={false}
       src={href ? href : require(`./assets/${iconName}`).default}
     />
   );
