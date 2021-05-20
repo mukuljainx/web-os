@@ -16,16 +16,9 @@ const config = {
     path: path.resolve("./dist"),
   },
   optimization: {
-    usedExports: true,
     splitChunks: {
-      cacheGroups: {
-        vendor: {
-          // just need to exclude these they will created by webpack as other chunk
-          test: /.?[\\/]node_modules[\\/](?!(react-pdf|pdfjs-dist|react-table|d3)).*?/,
-          name: "vendors",
-          chunks: "all",
-        },
-      },
+      // include all types of chunks
+      chunks: "all",
     },
   },
 
@@ -51,6 +44,10 @@ const config = {
       openAnalyzer: true,
     }),
   ],
+  externals: {
+    react: "React",
+    "react-dom": "ReactDOM",
+  },
 };
 
 module.exports = merge(common, config);
