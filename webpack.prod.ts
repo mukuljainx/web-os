@@ -12,8 +12,8 @@ const config = {
   entry: ["./src/index"],
   output: {
     filename: "[name].[hash].js",
-    publicPath: "patient/assets/",
-    path: path.resolve("./public/assets/"),
+    publicPath: "/",
+    path: path.resolve("./dist"),
   },
   optimization: {
     usedExports: true,
@@ -22,7 +22,7 @@ const config = {
         vendor: {
           // just need to exclude these they will created by webpack as other chunk
           test: /.?[\\/]node_modules[\\/](?!(react-pdf|pdfjs-dist|react-table|d3)).*?/,
-          name: "patientVendors",
+          name: "vendors",
           chunks: "all",
         },
       },
@@ -34,6 +34,9 @@ const config = {
   },
   devtool: false,
   plugins: [
+    new webpack.EnvironmentPlugin({
+      API: "https://agni-web-os.herokuapp.com",
+    }),
     new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
     new UglifyJsPlugin({
       sourceMap: true,

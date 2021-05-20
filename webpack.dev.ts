@@ -1,3 +1,4 @@
+const webpack = require("webpack");
 const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
 import merge from "webpack-merge";
 // @ts-ignore
@@ -11,7 +12,12 @@ const config = {
   entry: ["./src/index"],
   target: "web",
   devtool: "eval-cheap-module-source-map",
-  plugins: [new ReactRefreshWebpackPlugin()],
+  plugins: [
+    new ReactRefreshWebpackPlugin(),
+    new webpack.EnvironmentPlugin({
+      API: "http://localhost:8000",
+    }),
+  ],
   devServer: {
     before: (app: any) => {
       app.use("*", (req: any, res: any, next: any) => {

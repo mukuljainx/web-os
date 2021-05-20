@@ -43,7 +43,7 @@ const AppManager = ({ onMouseDown, appName, instanceId, dragId }: IProps) => {
       onMouseDown={onMouseDown}
       appName={appName}
       instanceId={instanceId}
-      icon="photo"
+      icon="appManager"
       name="App Manager"
       dragId={dragId}
     >

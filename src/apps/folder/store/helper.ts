@@ -1,6 +1,6 @@
 import { IFolderRoutes, IFile, IFolder } from "../interfaces";
 import { interpolate } from "utils/string";
-import { sortBy } from "lodash-es";
+import { get, sortBy } from "lodash-es";
 import { Draft } from "immer";
 import { IBaseState } from "./index";
 
@@ -26,7 +26,13 @@ export const getRoutes = (
   ) => {
     let routes: IFolderRoutes[] = [];
 
-    Object.values(root.files || {}).forEach((file: IFile) => {
+    Object.values(root.files || {}).forEach((fileX: IFile) => {
+      let file = fileX;
+      if (fileX.symlink && fileX.appName !== "folder") {
+        file = get(parent, fileX.symlink);
+      }
+      console.log(file);
+
       const name =
         file.appName === "folder"
           ? folderPool[file.data.id].name

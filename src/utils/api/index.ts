@@ -10,7 +10,7 @@ axios.interceptors.request.use((config) => {
 
   return {
     ...config,
-    baseURL: "http://localhost:8000/api",
+    baseURL: `http://${process.env.API}/api`,
     headers: {
       ...config.headers,
       Authorization: token,

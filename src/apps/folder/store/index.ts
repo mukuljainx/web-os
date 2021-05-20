@@ -184,7 +184,13 @@ const folderSlice = createSlice({
         state.root,
         state.routeToFolder["/applications"]
       ).files;
+      const desktop = get(
+        state.root,
+        state.routeToFolder[`/users/${state.user}/Desktop`]
+      ).files;
+
       const startingOrder = Object.keys(applicationsFolder).length;
+      const desktopStartingOrder = Object.keys(desktop).length;
       payload.forEach((customApp, index) => {
         applicationsFolder[customApp.appId] = {
           data: {
@@ -198,7 +204,15 @@ const folderSlice = createSlice({
           appName: customApp.appId,
           order: startingOrder + index,
         };
+
+        desktop[customApp.appId] = {
+          appName: customApp.appId,
+          order: desktopStartingOrder + index,
+          data: { id: customApp.appId },
+          symlink: `${state.routeToFolder["/applications"]}.files.${customApp.appId}`,
+        };
       });
+
       refreshRoutes(state);
     },
   },

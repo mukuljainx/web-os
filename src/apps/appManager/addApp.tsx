@@ -21,6 +21,7 @@ const AddApp = ({ onSuccess }: IProps) => {
   const [loading, setLoading] = React.useState(false);
   const [status, setStatus] = React.useState<IAppStatus>();
   const [id, setId] = React.useState("");
+  const [error, setError] = React.useState("");
   const [totalStages, setTotalStages] = React.useState(7);
   const timer = React.useRef<NodeJS.Timeout>();
   const user = useSelector((state) => state.auth.user);
@@ -29,6 +30,7 @@ const AddApp = ({ onSuccess }: IProps) => {
     e.preventDefault();
     const formData = new FormData(e!.target);
     setLoading(true);
+    setError("");
     setStatus({ status: "UPLOADING", activity: "uploading files", stage: 1 });
     api
       .post("/manager/build/react", formData, {
@@ -43,6 +45,7 @@ const AddApp = ({ onSuccess }: IProps) => {
       })
       .catch((error) => {
         console.error("Error:", error);
+        setError(JSON.stringify(error.message));
         setLoading(false);
       });
   };
@@ -68,11 +71,16 @@ const AddApp = ({ onSuccess }: IProps) => {
     return () => timer.current && clearInterval(timer.current);
   }, [id]);
 
-  if (!user.token) {
+  if (!user.token || error) {
     return (
       <Stack flexDirection="column" gap={16} style={{ width: 360 }}>
         <StackItem>
-          <Text>You need to login before performing this operation</Text>
+          <Text>
+            {error || "You need to login before performing this operation"}
+          </Text>
+        </StackItem>
+        <StackItem>
+          <PrimaryButton onClick={onSuccess}>Go Back</PrimaryButton>
         </StackItem>
       </Stack>
     );

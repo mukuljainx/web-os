@@ -52,7 +52,7 @@ const Auth = ({ user }: IProps) => {
             iconProps={{ iconName: "AddFriend" }}
             allowDisabledFocus
             onClick={() => {
-              window.location.href = "http://localhost:8000/auth/google";
+              window.location.href = `http://${process.env.API}/auth/google`;
             }}
           >
             Continue with Google

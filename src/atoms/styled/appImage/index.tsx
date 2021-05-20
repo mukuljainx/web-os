@@ -24,6 +24,7 @@ export const availableIcons: Record<string, string> = {
   system: "system.png",
   pictures: "pictures.png",
   avatar: "avatar.png",
+  appManager: "app-manager.png",
 };
 
 type IProps = ReactHTMLElement<

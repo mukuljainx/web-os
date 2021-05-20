@@ -10,6 +10,7 @@ import useFolderAction from "./useFolderAction";
 import ContextMenu from "molecules/contextMenu";
 import { IFile } from "apps/folder/interfaces";
 import { shallowEqual, useSelector } from "react-redux";
+import { get } from "lodash-es";
 
 const Wrapper = styled.div`
   overflow: hidden;
@@ -44,6 +45,7 @@ const IconLayout = ({
     (state) => state.folder.folderToRoute,
     shallowEqual
   );
+  const root = useSelector((state) => state.folder.root, shallowEqual);
 
   const { menuItems } = useFolderAction({
     route,
@@ -58,7 +60,7 @@ const IconLayout = ({
         {files.map((file: IFile, index) => {
           let fileDetail = { name: "", icon: "", id: "", path: "", safe: true };
           let data: IData = {};
-          const path = folderToRoute[file.data.id];
+
           const dragId = fileDetail.id + index;
 
           if (file.appName === "folder") {
@@ -70,16 +72,20 @@ const IconLayout = ({
               path: folderToRoute[file.data.id],
               safe: !!details.safe,
             };
-            data = { path };
+            data = { path: folderToRoute[file.data.id] };
           } else {
+            let targetFile = file;
+            if (file.symlink) {
+              targetFile = get(root, file.symlink);
+            }
             fileDetail = {
-              name: file.data.name,
-              icon: file.data.icon,
-              id: file.data.id,
-              path: folderToRoute[file.data.id],
-              safe: file.data.safe,
+              name: targetFile.data.name,
+              icon: targetFile.data.icon,
+              id: targetFile.data.id,
+              path: folderToRoute[targetFile.data.id],
+              safe: targetFile.data.safe,
             };
-            data = { ...file.data };
+            data = { ...targetFile.data };
           }
 
           return (
@@ -88,7 +94,7 @@ const IconLayout = ({
               data={file.data}
               symlink={!!file.symlink}
               name={fileDetail.name}
-              path={path}
+              path={folderToRoute[file?.data?.id] || ""}
               icon={fileDetail.icon}
               desktop={desktop}
               safe={fileDetail.safe}

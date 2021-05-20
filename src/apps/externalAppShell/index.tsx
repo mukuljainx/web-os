@@ -31,7 +31,7 @@ const ExternalAppShell = ({
 }: IProps) => {
   const { render } = useAnimationEndRender({ instanceId });
   const status = useScript(
-    `http://localhost:8000/api/manager/assests/${data.appId}/main.js`,
+    `http://${process.env.API}/api/manager/assests/${data.appId}/main.js`,
     true
   );
   console.log(data.options);

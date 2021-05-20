@@ -103,12 +103,10 @@ export const folderPool: Record<string, IFolder> = {
 export const folderMap: IFile = {
   data: { id: "root" },
   appName: "folder",
-  // path: "/",
   sortBy: "name",
   order: 0,
   files: {
     system: {
-      // path: "/system",
       data: { id: "system" },
       appName: "folder",
       sortBy: "name",
@@ -121,12 +119,10 @@ export const folderMap: IFile = {
       sortBy: "name",
       order: 1,
       files: {},
-      // path: "/applications",
     },
     users: {
       data: { id: "users" },
       appName: "folder",
-      // path: "/users",
       sortBy: "name",
       order: 2,
       files: {
@@ -135,7 +131,6 @@ export const folderMap: IFile = {
           order: 0,
           data: { id: "home" },
           appName: "folder",
-          // path: "/users/${user}",
           files: {
             Pictures: {
               sortBy: "name",
@@ -181,12 +176,10 @@ export const folderMap: IFile = {
               files: {},
               sortBy: "name",
               order: 1,
-              // path: "/users/${user}/Documents",
             },
             Downloads: {
               sortBy: "name",
               order: 2,
-              // path: "/users/${user}/Downloads",
               data: { id: "Downloads" },
               appName: "folder",
               files: {},
@@ -196,7 +189,6 @@ export const folderMap: IFile = {
               appName: "folder",
               sortBy: "name",
               order: 3,
-              // path: "/users/${user}/Desktop",
               files: {
                 "Desktop 1": {
                   data: { id: "Desktop 1" },
@@ -204,18 +196,20 @@ export const folderMap: IFile = {
                   files: {},
                   sortBy: "name",
                   order: 0,
-                  // path: "/users/${user}/Desktop/Desktop 1",
                 },
                 Pictures: {
                   data: { id: "Pictures" },
                   appName: "folder",
                   sortBy: "name",
                   order: 1,
-                  // path: "/users/${user}/Desktop/Pictures",
                   symlink: "files.users.files.home.files.Pictures",
                 },
                 appManager: {
-                  data: { id: "appManager", name: "App Manager" },
+                  data: {
+                    id: "appManager",
+                    name: "App Manager",
+                    icon: "appManager",
+                  },
                   appName: "appManager",
                   sortBy: "name",
                   order: 2,
