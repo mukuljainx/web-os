@@ -31,7 +31,6 @@ export const getRoutes = (
       if (fileX.symlink && fileX.appName !== "folder") {
         file = get(parent, fileX.symlink);
       }
-      console.log(file);
 
       const name =
         file.appName === "folder"
