@@ -61,7 +61,7 @@ const AddApp = ({ onSuccess }: IProps) => {
             }
             setStatus(data);
           })
-          .catch((e) => {
+          .catch(() => {
             clearInterval(timer.current!);
           });
       }, 1000);
